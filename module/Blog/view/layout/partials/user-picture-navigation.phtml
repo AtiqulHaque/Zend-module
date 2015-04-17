@@ -1,0 +1,77 @@
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="thumbnail">
+                <a href="<?php echo $this->url('profile-home') ?>">
+                    <img src="<?php echo $this->Profile()->getImage($this->userDetail) ?>"
+                         alt="" width="190px" height="170px" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+
+            <?php $socialMedia = array(
+                'facebook_link' => array('img' => 'facebook-icon.png', 'name' => 'ফেইসবুক  প্রোফাইল'),
+                'twitter_link' => array('img' => 'twitter-icon.png', 'name' => 'টুইটার  প্রোফাইল'),
+                'gtalk_link' => array('img' => 'gtalk-icon.png', 'name' => 'গুগল টক'),
+                'linkedin_link' => array('img' => 'linkedin-icon.png', 'name' => 'লিংক্ড-ইন')
+            );
+
+            foreach ($socialMedia AS $link => $detail) :
+                if (!empty($this->userDetail[$link])) : ?>
+
+                <hr />
+                <a href="<?php echo $this->userDetail[$link] ?>">
+                    <img src="<?php echo $this->basePath("img/social-media/{$detail['img']}") ?>" alt='social media' />
+                    <?php echo $detail['name'] ?>
+                </a>
+
+            <?php endif; endforeach ?>
+
+            <?php if ($this->sessionContainer()->getData('username') == $this->userDetail['username']) {
+                $userInfo = array('username' => 'me');
+                $mine = 'আমার ';
+            } else {
+                $userInfo = array('username' => $this->userDetail['username']);
+                $mine = '';
+            } ?>
+
+            <hr />
+            <a onClick="_gaq.push(['_trackEvent', 'UserProfile', 'Click', 'My Profile']);"
+               href="<?php echo $this->url('public-profile', $userInfo) ?>"><?php echo $mine ?>প্রোফাইল</a>
+
+            <hr/>
+            <a href="<?php echo $this->url('public-profile', $userInfo) ?>"><?php echo $mine ?>ব্লগ</a>
+
+            <?php if ($this->sessionContainer()->getData('username') == $this->userDetail['username']) : ?>
+            <hr/>
+            <a onClick="_gaq.push(['_trackEvent', 'UserProfile', 'Click', 'New Post']);"
+               href="<?php echo $this->url('add-my-post') ?>">নতুন পোস্ট</a>
+            <?php endif ?>
+
+<!--            <hr/>-->
+<!--            <a onClick="_gaq.push(['_trackEvent', 'UserProfile', 'Click', 'My Groups']);"-->
+<!--               href="--><?php //echo $this->url('my-groups') ?><!--">গ্রুপ</a>-->
+<!---->
+<!--            <hr/>-->
+<!--            <a href="--><?php //echo $this->url('my-discussions') ?><!--">আলোচনা</a>-->
+<!---->
+<!--            <hr/>-->
+<!--            <a href="--><?php //echo $this->url('my-novels') ?><!--">উপন্যাস</a>-->
+
+<!--            --><?php //if ($this->sessionContainer()->getData('username') == $this->userDetail['username']) : ?>
+<!--            <hr/>-->
+<!--            <a href="/user/photo/index">আমার যত ছবি</a>-->
+<!---->
+<!--            <hr/>-->
+<!--            <a href="/user/draft/index">সংরক্ষিত পোস্ট</a>-->
+<!---->
+<!--            <hr/>-->
+<!--            <a href="/user/trash/index">মুছে ফেলা পোস্ট</a>-->
+<!--            --><?php //endif ?>
+            <br /><br />
+        </div>
+    </div>

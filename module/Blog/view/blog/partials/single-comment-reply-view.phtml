@@ -1,0 +1,57 @@
+<div class="comments ans">
+    <img class="commentator" src="<?php echo $this->Profile()->getImage($this->reply) ?>" alt="">
+    <div class="comments-bubble">
+        <div class="comments-by">
+            <a href="<?php echo $this->url('public-profile', array('username' => $this->reply['username'])) ?>">
+                <?php echo $this->Post()->getNewUserInfoLinkWithPopUpPost($this->reply, 'right', $this->professions) ?></a>
+            <?php echo $this->translate('Has been commented') ?>
+            <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($this->reply['comment_created']) ?>">
+                <?php echo $this->DateTimeEnToBn()->timeSince($this->reply['comment_created']) ?></span>
+            <div class='post-hit-count'>
+                <?php echo $this->BlogPost()->getLinkToDealWithFavorite(
+                    $this->reply['comment_id'], \BlogUser\Model\FavoriteType::COMMENT, empty($this->reply['isFavorite'])) ?>
+                <a class='likeMeNow'>
+                    <i class='icon-thumbs-up-alt'></i><span class="commentLikeCount"><?php echo $this->number()->convert($this->reply['total_comment_favorited']);?></span>
+                </a>
+                <div class='dropdown'>
+                    <a class='dropdown-toggle' id='dropdownMenu1' data-toggle='dropdown'>
+                        <i class='icon-angle-down'></i>
+                    </a>
+                    <ul class='dropdown-menu pull-right' role='menu' >
+                        <?php if ($this->currentUser == $this->reply['user_id']):?>
+                            <li>
+                                <a rel="reply" id="comment_id_for_delete_<?php echo $this->reply['comment_id']?>" class='remove-it'>
+                                    <i class='icon-eraser'></i><span></span> মুছে ফেলুন
+                                    <input type="hidden" name="post" id="delete-url" value="<?php echo $this->reply['user_id'].'_'. $this->reply['comment_id']?>">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" class="edit-it">
+                                    <i class="icon-pencil"></i><?php echo $this->translate('Edit This') ?>
+                                    <input type="hidden" name="post" id="edit-url-<?php echo $this->reply['comment_id'];?>" value="<?php echo $this->url('edit-comment',array('id'=>$this->reply['comment_id']))?>">
+                                </a>
+                            </li>
+                        <?php endif ?>
+                        <li>
+                            <a class='hide-it' rel="<?php echo $this->reply['comment_id'] ?>" data-reported-on="<?php echo \NBlog\Model\WritingType::COMMENT ?>">
+                                <i class='icon-eye-close'></i> <?php echo $this->translate('Hide') ?>
+                            </a>
+                        </li>
+                        <?php if (!isset($this->reply['hasUserReported'])) : ?>
+                        <li>
+                            <a class='complain-it' rel="<?php echo $this->reply['comment_id'] ?>" data-reported-on="<?php echo \NBlog\Model\WritingType::COMMENT ?>">
+                                <i class='icon-shield'></i> <?php echo $this->translate('Make a complaint') ?>
+                            </a>
+                        </li>
+                        <?php endif ?>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="complain-here"></div>
+        <div class="comments-body">
+            <?php echo $this->NBEscapeHtml($this->reply['details'], true) ?>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<?php $privacyFieldset = $this->form->get('privacy') ?>
+<div id='educational_info_privacy_table'>
+<!-- <div class="form-group error-occurred"> -->
+<div class="form-group">
+    <label class="col-md-3 col-lg-3 control-label" for="degree"><?php echo $this->translate('Educational Degree') ?>:</label>
+    <div class="col-md-9 col-lg-9">
+        <?php $element = $this->educationalInfoFieldset->get('educational_degree_id'); ?>
+        <?php echo $this->formElement($element) ?>
+        <label class="control-label for-display display-show"> <?php echo $this->degrees[$this->userDetail['educational_degree_id']] ?></label>
+        <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+            'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::EDUCATION_DEGREE_PRIVACY),
+            'privacyOptions' => $this->privacyOptions
+        )) ?>
+        <label class="error" generated="true" for="degree"><?php echo $this->formElementErrors($element); ?></label>
+    </div>
+</div>
+
+<!-- <div class="form-group error-occurred"> -->
+<div class="form-group">
+    <label class="col-md-3 col-lg-3 control-label" for="degree"><?php echo $this->translate('Educational Institute') ?>: </label>
+    <div class="col-md-9 col-lg-9">
+        <?php $element = $this->educationalInfoFieldset->get('educational_institute'); ?>
+        <?php echo $this->formElement($element) ?>
+        <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->userDetail['educational_institute']) ?></label>
+        <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+            'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::EDUCATION_INSTITUTE_PRIVACY),
+            'privacyOptions' => $this->privacyOptions
+        )) ?>
+        <label class="error" generated="true" for="degree"><?php echo $this->formElementErrors($element); ?></label>
+    </div>
+</div>
+
+<!-- <div class="form-group error-occurred"> -->
+<div class="form-group">
+    <label class="col-md-3 col-lg-3 control-label" for="degree_from">সময়কাল :</label>
+    <div class="col-md-9 col-lg-9">
+        <?php $element = $this->educationalInfoFieldset->get('starting_year'); ?>
+        <?php echo $this->formElement($element) ?>
+
+        <?php $element = $this->educationalInfoFieldset->get('ending_year'); ?>
+        <?php echo $this->formElement($element) ?>
+
+        <label class="control-label for-display display-show">
+            <?php echo $this->Number()->convert($this->userDetail['starting_year']) ?> - <?php echo $this->Number()->convert($this->userDetail['ending_year']) ?>
+        </label>
+        <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+            'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::EDUCATION_FINISHED_PRIVACY),
+            'privacyOptions' => $this->privacyOptions
+        )) ?>
+        <label class="error" generated="true" for="degree_from"><?php echo $this->formElementErrors($element); ?></label>
+    </div>
+</div>
+
+    <div id="go-to-action" class="form-group display-hide">
+        <div class="col-md-offset-2 col-lg-offset-2 col-md-10 col-lg-10">
+            <?php echo $this->formSubmit($this->form->get('submit')->setAttributes(array(
+                'name' => $this->educationalInfoFieldset->getName().'_submit', 'onclick' => 'cancelDisabledField();'))) ?>
+            <?php echo $this->formElement($this->form->get('cancel')); ?>
+        </div>
+    </div>
+
+</div>

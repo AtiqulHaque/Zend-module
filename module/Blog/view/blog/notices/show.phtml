@@ -1,0 +1,86 @@
+<div class="row-fluid">
+
+    <?php echo $this->partial('blog/partials/left-sidebar-of-widgets', array(
+        'recentBlogPosts' => $this->recentBlogPosts,
+        'recentComments' => $this->recentComments
+    )) ?>
+
+    <div class="span12 notice-box">
+        <div class="box-header">
+
+            <div class="selected_post_bg">
+                <img src="<?php echo $this->basePath('img/user/widget_notice_bg.png')?>">
+                <div class="select_text">
+                    <h2><a href="#"><?php echo $this->translate('Notice Description') ?> </a></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-content">
+            <div class="single-notice">
+                <div class="notice-header">
+                    <img src="<?php echo $this->basePath('img/nblog-profile-icon.png') ?>" />
+                    <h4 class="notice-title"><?php echo $this->NBEscapeHtml($this->notice['title']) ?></h4>
+                    <div class="notice-details">
+                        <?php echo $this->translate('Blog Admin') ?><i class="icon icon-time"></i>
+                        <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($this->notice['notice_updated']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($this->notice['notice_updated']) ?></span>
+                    </div>
+                </div>
+
+                <div class="notice-body">
+                    <?php echo $this->NBEscapeHtml($this->notice['description'], true) ?>
+                </div>
+
+                <div class="notice-footer">
+                    <div class="notice-actions">
+                        <?php if ($this->sessionContainer()->getData('username')) : ?>
+                            <?php $currentUser = $this->sessionContainer()->getData('user_id') ?>
+                            <?php if (empty($this->notice['isBlocked'])) : ?>
+                                <a href='#' class='do-comment-for-writing'><?php echo $this->translate('Write Comment') ?></a>
+                            <?php endif ?>
+
+                            <?php if ($currentUser == $this->notice['notice_created_by']) : ?>
+                                <a href='<?php echo $this->url('edit-notice', array('permalink' => $this->notice['permalink'])) ?>'>
+                                    <?php echo $this->translate('Edit This') ?>
+                                </a>
+                                <a href='<?php echo $this->url('trash-my-blog-post', array('permalink' => $this->notice['permalink'])) ?>'>
+                                    <?php echo $this->translate('Delete This') ?>
+                                </a>
+                            <?php else : ?>
+                                <?php if (empty($this->notice['isHidden'])) : ?>
+                                    <a href='<?php echo $this->url('hide-my-blog-content', array('content_type'=>\NBlog\Model\WritingType::NOTICE, 'permalink' => $this->notice['permalink'])) ?>'><?php echo $this->translate('Hide') ?></a>
+                                <?php else : ?>
+                                    <a href='<?php echo $this->url('unhide-my-blog-content', array('content_type'=>\NBlog\Model\WritingType::NOTICE, 'permalink' => $this->notice['permalink'])) ?>'><?php echo $this->translate('Display again') ?></a>
+                                <?php endif ?>
+                            <?php endif ?>
+                        <?php else : ?>
+                            <a href='' class='to-open-login-box'><?php echo $this->translate('Write Comment') ?></a>
+                        <?php endif ?>
+                    </div>
+
+                    <div class="notice-summary">
+                        <i class="icon icon-comment"></i> <span class="commentCount"><?php echo $this->number()->convert($this->notice['total_comments']) ?></span>
+                    </div>
+                </div>
+
+                <?php echo $this->partial('blog/partials/all-comments-view', array(
+                    'commentOn' => $this->notice,
+                    'comments' => $this->comments,
+                    'creator' => $this->notice['notice_created_by'],
+                    'userDetails' => $this->userDetails,
+                    'commentFor' => \NBlog\Model\WritingType::NOTICE,
+                    'reportedOn' => \NBlog\Model\WritingType::NOTICE,
+                    'blockedBloggers' => $this->blockedBloggers,
+                    'isBlocked' => !empty($this->notice['isBlocked']),
+                    'commentForm' => $this->commentForm,
+                    'reportForm' => $this->reportForm
+                )) ?>
+            </div>
+        </div>
+    </div>
+    <?php echo $this->partial('blog/partials/right-sidebar-of-widgets', array(
+        'categoryLists' => $this->categoryLists, 'topBloggers' => $this->topBloggers,
+        'topCommentPosters' => $this->topCommentPosters, 'newBloggers' => $this->newBloggers,
+        'blogTrends' => $this->blogTrends , 'professions'=> $this->professions
+    )) ?>
+</div>

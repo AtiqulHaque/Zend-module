@@ -1,0 +1,39 @@
+<div class="row-fluid banner-all-holder">
+    <?php if (!empty($this->allBannerPic)): ?>
+        <?php foreach ($this->allBannerPic AS $key => $eachPic): ?>
+            <?php if ($this->objFileHandler->isFileExist("public" . $this->imagePath.$this->objFileHandler->renameFile($eachPic['name'],true,'thumb'))): ?>
+                <div class="each-banner-photo-holder">
+                    <div class="banner-photo">
+                        <div class="heading"></div>
+                        <a class="gallery" href="<?php echo $this->originalViewPath.$eachPic['name']?>">
+                            <img class="lazy" src="<?php echo $this->basePath('img/grey.gif'); ?>" data-original="<?php echo $this->Image()->albumThumbnail($this->picViewPath,$eachPic['name']);?>">
+                        </a>
+
+                        <?php if(empty($eachPic['is_active'])):?>
+                            <div class="caption" id="pic-id_<?php echo $eachPic['user_banners_id']; ?>">
+                                <li><a class="banner_delete_pic" href="#"><i class="icon-trash icon-white"></i> <?php echo $this->translate("Delete");?></a></li>
+                                <li><a class="add_as_banner_pic" href="#"><i class="icon-cog icon-white"></i> <?php echo $this->translate("Set as Banner");?> </a></li>
+                            </div>
+                        <?php endif;?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <?php else: ?>
+
+        <?php endif;?>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+

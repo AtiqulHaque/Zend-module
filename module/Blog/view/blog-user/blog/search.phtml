@@ -1,0 +1,73 @@
+<h3>
+    আমার পোস্টসমুহ
+    <?php echo $this->partial('blog-user/partials/search-my-posts.phtml') ?>
+</h3>
+
+<form action="<?php echo $this->url('do-bulk-action') ?>" method="POST">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th class="optional"></th>
+            <th>পোস্টের শিরোনাম</th>
+            <th class="optional">আংশিক বর্ণনা</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if (empty($this->blogPosts)) : ?>
+        <tr>
+            <td colspan="3"><p class="no-record-found"> কোন পোস্ট নেই </p></td>
+        </tr>
+        <?php else: foreach ($this->blogPosts AS $post) : ?>
+        <tr>
+            <td class="optional"><input type="checkbox" name='postIds[]' value="<?php echo $post['post_id'] ?>" /></td>
+            <td><?php echo $post['title'] ?> <span class="label label-inverse"><?php echo $this->statuses[$post['post_status']] ?></span></td>
+            <td>
+                <?php echo $this->Text()->word_limiter($this->Image()->removeImageTag($post['details'])) ?>
+                <?php echo $this->BlogPost()->getShowMoreLinkForLoggedInUser($post) ?> <br />
+                <span class="label label-inverse">
+                    <small style="font-size: 12px;">
+                        <?php echo $this->BlogPost()->getCategoryLink($post, $this->categories, ', ') ?> <?php echo $this->translate('Division') ?>
+                        <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($post['publicly_published_time']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($post['publicly_published_time']) ?></span>
+                         লেখা</small>
+                </span>
+                <small style="margin-left: 10px">
+                    <a href='<?php echo $this->url('edit-my-post', array('permalink' => $post['permalink'])) ?>'>
+                        <i class="icon icon-remove-sign"></i> সংশোধন করুন</a>
+                    <?php if ($post['post_status'] != \NBlog\Model\WritingStatus::PUBLISHED) : ?>
+
+                    <?php switch ($post['post_status']) :
+                        case \NBlog\Model\WritingStatus::DRAFT: ?>
+                            &raquo;
+                            <a href='<?php echo $this->url('trash-my-post', array('permalink' => $post['permalink'])) ?>' class="trash">
+                                <i class="icon icon-remove-sign"></i> <?php echo $this->translate('Make trash') ?></a>
+
+                            <?php break;
+
+                        case \NBlog\Model\WritingStatus::TRASH: ?>
+                            &raquo;<a href='<?php echo $this->url('restore-my-post', array('permalink' => $post['permalink'])) ?>'>Restore Post</a>
+                            &raquo;<a href='<?php echo $this->url('delete-my-post', array('permalink' => $post['permalink'])) ?>' class="delete">
+                                <i class="icon icon-remove-sign"></i> বাতিল করুন</a>
+                            <?php break;
+                    endswitch; endif ?>
+                </small>
+            </td>
+        </tr>
+        <?php endforeach; endif ?>
+        </tbody>
+    </table>
+
+    <?php if (!empty($this->blogPosts)) : ?>
+    <div class="pagination pagination-centered">
+        <?php echo $this->partial('blog-user/partials/bulk-actions.phtml') ?>
+        <?php echo $this->paginator()->slide($this->paginator, array_merge($this->paginatorOptions, array('linksOnly' => true, 'class' => 'pull-right'))) ?>
+    </div>
+    <?php endif ?>
+</form>
+<div>
+    <h3>কি-নোট: </h3>
+    <ul class="nav-list unstyled">
+        <li><span class="label label-info">অপ্রকাশিত:</span> যে পোস্টগুলি আপনি নিজে এখনো প্রকাশিত করেননি।</li>
+        <li><span class="label label-warning">ব্যানড্‌:</span> ব্লগ কর্তৃপক্ষ কোন না কোন কারণে পোস্টটি বাতিল করেছেন</li>
+        <li><span class="label label-inverse">রিপোর্টেড:</span> জনসাধারণ কর্তৃক পোস্টটি একাধিকবার রিপোর্ট করা হয়েছে</li>
+    </ul>
+</div>

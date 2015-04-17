@@ -1,0 +1,106 @@
+<h3>
+    <?php echo $this->pageTitle ?>
+    <?php echo $this->partial('blog-user/partials/search-my-posts') ?>
+</h3>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th class="optional"></th>
+        <th class="span4"><?php echo $this->translate('Post Title') ?></th>
+        <th class="span7 optional"><?php echo $this->translate('Comment') ?></th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <?php if (empty($this->comments)) : ?>
+    <tr>
+        <td colspan="3"><p class="no-record-found"><?php echo $this->translate('No comment found') ?></p></td>
+    </tr>
+    <?php else: foreach($this->comments AS $comment) : ?>
+    <tr>
+        <td class="optional"><input type="checkbox" value="<?php echo $comment['comment_id'] ?>"></td>
+        <td><?php echo $comment['post_title'] ?></td>
+        <td>
+            <?php echo $comment['details'] ?><br />
+            <span class="label label-inverse">
+                <small style="font-size: 12px;">
+                    <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($comment['comment_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($comment['comment_created']) ?></span>
+                     <?php echo $this->translate('Has commented') ?> &raquo;
+                    <a href="<?php echo $this->url('profile-home') ?>"><?php echo $comment['username']?> </a>
+                </small>
+            </span>
+            <small style="margin-left: 10px;">
+                <a href="<?php echo $this->url('delete-comment-from-post', array('username' => 'me', 'id' => $comment['comment_id'])) ?>"
+                   class="delete-comment" data-askForBlock='1' rel='<?php echo $comment['username'] ?>' data-permalink='<?php echo $comment['permalink'] ?>'>
+                    <i class="icon icon-remove-sign"></i>
+                    <?php echo $this->translate('Delete This') ?>
+                </a> &raquo;
+
+                <?php if (empty($this->reportStatuses[$comment['comment_id']])) : ?>
+                <a href="" class='report' rel='<?php echo $comment['comment_id'] ?>'><i class="icon icon-pencil"></i> <?php echo $this->translate('Report About This') ?></a>
+                <?php else : ?>
+                <i class="icon icon-flag"></i> <?php echo $this->translate('Already Reported') ?>
+                <?php endif ?>
+            </small>
+
+            <?php if (empty($this->reportStatuses[$comment['comment_id']])) : ?>
+            <div id="report-box-<?php echo $comment['comment_id'] ?>" style="display: none">
+                <form method="POST" class="report-form" action="<?php echo $this->url('report') ?>">
+                    <label for='detail'><?php echo $this->translate('Report here about the comment') ?>:</label>
+                    <textarea name='detail' id='detail' rows="3" cols="200" class="input-xxlarge" placeholder="<?php echo $this->translate('Report About This') ?>..."></textarea>
+
+                    <div class="form-actions">
+                        <input name="submit" type="submit" value="Submit" class="btn btn-primary<?php echo $this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms' ?>" />
+                        <input name="cancel" type="submit" value="Cancel" class="cancel-report btn" rel='<?php echo $comment['comment_id'] ?>' />
+                        <input name="comment_id" type="hidden" value="<?php echo $comment['comment_id'] ?>" />
+                        <input name="id_of_reported_on" type="hidden" value="<?php echo $comment['comment_id'] ?>" />
+                        <input name="reported_on" type="hidden" value="<?php echo \NBlog\Model\WritingType::COMMENT ?>" />
+                    </div>
+                </form>
+            </div>
+            <?php endif ?>
+        </td>
+    </tr>
+    <?php endforeach; endif ?>
+    </tbody>
+</table>
+
+<div class="pagination pagination-centered">
+    <div class="form-inline pull-left">
+        <select class="input-medium">
+            <option><?php echo $this->translate('Unpublish This') ?></option>
+            <option><?php echo $this->translate('Publish This') ?></option>
+            <option><?php echo $this->translate('Delete This') ?></option>
+            <option><?php echo $this->translate('Draft This') ?></option>
+        </select>
+        <input type="submit" value="সাবমিট" class="btn btn-primary">
+    </div>
+    <?php echo $this->paginator()->slide($this->paginator, array_merge($this->paginatorOptions, array('linksOnly' => true, 'class' => 'pull-right'))) ?>
+</div>
+
+<script type="text/javascript">
+    (function($) {
+        $('a.report').on('click', function() {
+            $('#report-box-'+$(this).attr('rel')).slideDown();
+            return false;
+        });
+
+        $('.cancel-report').attr('onClick', '').on('click', function() {
+            $('#report-box-'+$(this).attr('rel')).slideUp();
+            return false;
+        });
+
+        $(".report-form").on('submit', function() {
+            $.post($(this).attr('action'), $(this).serialize(), function(response) {
+                if (response.status == 'success') {
+                    window.location = '';
+                } else {
+                    alert('<?php echo $this->translate('Something went wrong. Please try again.') ?>');
+                }
+            }, 'json');
+            return false;
+        });
+    })(jQuery);
+</script>

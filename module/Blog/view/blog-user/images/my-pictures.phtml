@@ -1,0 +1,58 @@
+<div class="row-fluid" style="margin-left: 5px;margin-top: 0px;">
+    <button id="add-new-album" style="float: right;" class="btn"><i class="icon-plus"></i>Add New Album</button>
+
+    <div  id="album-create-box" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <?php
+        $form = $this->albumForm->setAttribute('action', "#")->prepare();?>
+        <?php echo $this->form()->openTag($form); ?>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel"><?php echo $this->translate("New Album Create Box.");?></h3>
+        </div>
+        <div class="modal-body">
+            <div class="span24">
+                <div class="row-fluid" style="margin-top: 0px;">
+                    <div class="row">
+                        <?php echo $this->NBFormRow($form->get('name'));?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div style="float: right;">
+                    <div style="display: inline-block;">
+                        <div id="loader-div" style="display: none;">Loading..</div>
+                    </div>
+                    <?php echo $this->formSubmit($form->get('submit')) ?>
+                    <?php echo $this->formButton($form->get('cancel')) ?>
+                </div>
+            </div>
+        </div>
+        <?php echo $this->form()->closeTag(); ?>
+    </div>
+
+
+</div>
+
+<div id="album_holder" class="row-fluid">
+    <?php if (!empty($this->userAllAlbum)) : ?>
+    <ul class="thumbnails">
+        <?php foreach($this->userAllAlbum AS $eachAlbum) : ?>
+            <li class="span6">
+                <a class="each_album thumbnail" href="album/<?php echo $eachAlbum['permalink'] ?>">
+                    <?php $albumImgLink = '';
+                    if ($this->objFileHandler->isFileExist("public" . $this->imagePath ."/".$eachAlbum['permalink'].'/'.'thumb'.'/'.$this->objFileHandler->renameFile($eachAlbum['name'],true,'thumb'))) : ?>
+                        <?php $albumImgLink = $this->Image()->albumThumbnail($this->imagePath ."/".$eachAlbum['permalink'].'/'.'thumb'.'/',$eachAlbum['name']) ?>
+                    <?php else : ?>
+                        <?php $albumImgLink = $this->basePath('img/user/default_album.png') ?>
+                    <?php endif ?>
+                    <img class="lazy" src="<?php echo $this->basePath('img/grey.gif'); ?>" data-original="<?php echo $albumImgLink ?>">
+                </a>
+                <span class="span21"><?php echo $eachAlbum['album_name']?>(<?php echo $eachAlbum['total']?>)</span>
+            </li>
+        <?php endforeach ?>
+    </ul>
+    <?php endif ?>
+</div>
+
+

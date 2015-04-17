@@ -1,0 +1,29 @@
+<style type="text/css">
+    #agree span {
+        display: inline-block;
+        margin: 0 0 0 10px;
+    }
+
+    #agree input[type="checkbox"]{
+        margin-top: 0;
+    }
+</style>
+<?php echo $this->partial('blog-user/partials/writing-links', array('nav'=>'episode')) ?>
+<h3><?php echo $this->translate('New Episode') ?></h3>
+
+<?php $form = $this->form;
+$form->setAttribute('action', $this->url('edit-my-episode'));
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->NBFormRow($form->get('title'));
+echo $this->NBFormRow($form->get('episodic_style_id'));
+echo $this->partial('blog-user/partials/category-list-in-form', array('form' => $form, 'categories' => $this->categories));
+echo $this->NBFormRow($form->get('agree'), 'append', true); ?>
+
+<div class="form-actions">
+    <?php $submit = $form->get('submit');
+    echo $this->formSubmit($submit->setAttribute('class', $submit->getAttribute('class').($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))); ?>
+    <?php echo $this->formSubmit($form->get('cancel')); ?>
+    <?php echo $this->formRow($form->get('episode_id')); ?>
+</div>
+<?php echo $this->form()->closeTag() ?>

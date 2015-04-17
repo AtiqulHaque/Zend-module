@@ -1,0 +1,59 @@
+<div class="writing-area">
+    <div class="blog-post-area">
+        <?php $form = $this->blogForm->setAttributes(array(
+            'action' => $this->url('edit-my-post',array('postId'=>$this->blogDetails['post_id']))
+        ))->prepare();
+        echo $this->form()->openTag($form) ?>
+
+        <div class="post-title-here" data-title="<?php echo $form->get('title')->getValue() ?>">
+            <?php echo $this->formInput($form->get('title')) ?>
+            <?php echo $this->formSelect($form->get('select-title')->setAttribute('data-populated', $this->blogDetails['type'] == \NBlog\Model\PostType::BLOG ? 0 : 1)) ?>
+            <div id="title-wrap-error" class="post-field-error"></div>
+        </div>
+
+        <div class="sequential-box" id="scb_2">
+            <?php echo $this->formCheckBox($form->get('type')->setAttributes(array(
+                'id'=>'seq-2'
+            ))) ?>
+            <label for="seq-2" class="set-seq"><i class="icon-"></i></label>
+            <?php echo $this->formInput($form->get('episode_tag')) ?>
+        </div>
+        <label class="from-old-post" style="display: <?php echo ($this->blogDetails['type'] == \NBlog\Model\PostType::BLOG) ? 'none' : 'inline-block' ?>">
+            <input class="continue-seq" type="checkbox" />
+            <i class="icon-"></i> <?php echo $this->translate('Next Episode') ?>
+        </label>
+
+        <div id="episode_tag-wrap-error" class="post-field-error"></div>
+        <div class="tinyMce-wrap bd bds2">
+            <?php echo $this->formTextarea($form->get('details')) ?>
+        </div>
+        <div id="details-wrap-error" class="post-field-error"></div>
+
+        <div id="categories_container" class="post-type col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div  class="title col-xs-12 col-sm-12 col-md-12 col-lg-12"><?php echo $this->translate('Blog Category') ?></div>
+            <?php echo $this->partial('blog-user/partials/category-list-in-form-new-ui', array(
+                'form' => $form,
+                'categories_for_form' => $this->categories_for_form,
+                'selectedCategories'=>(empty($this->blogDetails['category_id'])) ? array() : $this->blogDetails['category_id'],
+                'isEdit'=> true
+            )) ?>
+        </div>
+        <div id="category_id-wrap-error" class="post-field-error"></div>
+        <?php echo $this->formElement($form->get('note')) ?>
+        <div class="action-box">
+            <div class="pull-right">
+                <?php echo $this->formSelect($form->get('status')) ?>
+                <?php echo $this->formSubmit($form->get('submit')->setAttributes(array(
+                    'value'=>'Edit',
+                    'class'=> $form->get('submit')->getAttribute('class').' edit_submited'
+                ))) ?>
+                <?php echo $this->formButton($form->get('cancel')->setAttributes(array(
+                    'id'=>'cancel-edit-'.$this->blogDetails['post_id'],
+                    'class'=>$form->get('cancel')->getAttribute('class').' cancel-edit'
+                ))) ?>
+            </div>
+        </div>
+        <?php echo $this->formHidden($form->get('episode_id')) ?>
+        <?php echo $this->form()->closeTag() ?>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<h3>
+    আমার মন্তব্যের উত্তরসমূহ
+    <?php echo $this->partial('blog-user/partials/search-my-posts.phtml') ?>
+</h3>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th class="optional"></th>
+        <th>পোস্টের শিরোনাম</th>
+        <th class="optional">আমার মন্তব্য</th>
+        <th class="optional">মন্তব্য</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <?php if (empty($this->comments)) : ?>
+    <tr>
+        <td colspan="4"><p class="no-record-found"> কোন মন্তব্য নেই </p></td>
+    </tr>
+    <?php else: foreach($this->comments AS $comment) : ?>
+    <tr>
+        <td class="optional"><input type="checkbox"></td>
+        <td><?php echo $comment['post_title'] ?></td>
+        <td><?php echo $comment['comment'] ?></td>
+        <td>
+            <?php echo $comment['reply'] ?><br />
+            <span class="label label-inverse">
+                <small style="font-size: 12px;">
+                    <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($comment['reply_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($comment['reply_created']) ?></span>
+                     মন্তব্য করেছেন  &raquo;
+                    <a href="<?php echo $this->url('profile-home') ?>"><?php echo $comment['username']?> </a>
+                </small>
+            </span>
+            <small style="margin-left: 10px;">
+                <a href="<?php echo $this->url('delete-comment-from-post', array('username' => 'me', 'id' => $comment['comment_id'])) ?>"><i class="icon icon-remove-sign"></i> মুছুন</a> &raquo;
+                <a href="<?php echo $this->url('block-comment', array('username' => 'me', 'id' => $comment['comment_id'])) ?>"><i class="icon icon-remove-sign"></i> ব্লক করুন</a> &raquo;
+                <a href="" class='report' rel='<?php echo $comment['comment_id'] ?>'><i class="icon icon-remove-sign"></i> রিপোর্ট করুন</a>
+            </small>
+            <div id="report-box-<?php echo $comment['comment_id'] ?>" style="display: none">
+                <form method="POST" class="report-form" action="<?php echo $this->url('report') ?>">
+                    <label>Enter your report about the comment:</label>
+                    <textarea class="span8" name="detail" rows="5" cols="10"></textarea>
+
+                    <div class="form-actions">
+                        <input name="submit" type="submit" value="Submit" class="btn btn-primary<?php echo $this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms' ?>" />
+                        <input name="cancel" type="submit" value="Cancel" class="cancel-report btn" rel='<?php echo $comment['comment_id'] ?>' />
+                        <input name="comment_id" type="hidden" value="<?php echo $comment['comment_id'] ?>" />
+                        <input name="user_id" type="hidden" value="<?php echo $this->sessionContainer()->getData('user_id') ?>" />
+                        <input name="id_of_reported_on" type="hidden" value="<?php echo $comment['comment_id'] ?>" />
+                        <input name="reported_on" type="hidden" value="<?php echo \NBlog\Model\WritingType::COMMENT ?>" />
+                    </div>
+                </form>
+            </div>
+        </td>
+    </tr>
+    <?php endforeach; endif ?>
+    </tbody>
+</table>
+
+<div class="pagination pagination-centered">
+    <div class="form-inline pull-left">
+        <select class="input-medium">
+            <option>অপ্রকাশিত করুন</option>
+            <option>প্রকাশিত করুন</option>
+            <option>মুছে ফেলুন</option>
+            <option>সংরক্ষন করুন</option>
+        </select>
+        <input type="submit" value="সাবমিট" class="btn btn-primary">
+    </div>
+    <?php echo $this->paginator()->slide($this->paginator, array_merge($this->paginatorOptions, array('linksOnly' => true, 'class' => 'pull-right'))) ?>
+</div>

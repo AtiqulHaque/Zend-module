@@ -1,0 +1,96 @@
+<div class="competition content-wrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="row">
+        <div class="main-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="tile-header tab-holder">
+                    <h4 class="text-center">Competition List</h4>
+                </div><!--  End of tile-header  -->
+
+                <div class="tile-body">
+                    <div class="row" style="margin-top: 15px">
+                        <div class="col-sm-6 col-md-6">
+                            <div class="tile-container thumbnail">
+                                <a href="<?php echo $this->url('blog-competition/show', array('contest' => \NBlog\Model\VoteConfig::BOOK_FAIR_2014)) ?>">
+                                    <img alt="100%x200" style="height: 200px; width: 100%; display: block;" src="<?php echo $this->basePath('img/competition/vote-notice-right.jpg') ?>" />
+                                </a>
+
+                                <div class="caption">
+                                    <h3>
+                                        <a href="<?php echo $this->url('blog-competition/show', array('contest' => \NBlog\Model\VoteConfig::BOOK_FAIR_2014)) ?>">
+                                            <?php echo $this->translate('Creative Blogging Competition') . ' - ' . $this->Number()->convert('2014') ?>
+                                        </a>
+                                    </h3>
+                                    <p>
+                                        <?php echo $this->translate('Duration') ?>:
+                                        <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->durations[\NBlog\Model\VoteConfig::BOOK_FAIR_2014]['start']) ?> ~
+                                        <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->durations[\NBlog\Model\VoteConfig::BOOK_FAIR_2014]['end']) ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="tile-container thumbnail">
+                                <a href="<?php echo $this->url('blog-competition/show', array('contest' => \NBlog\Model\VoteConfig::VoteForIndependent)) ?>">
+                                    <img alt="100%x200" style="height: 200px; width: 100%; display: block;" src="<?php echo $this->basePath('img/competition/independence-day.jpg') ?>" />
+                                </a>
+                                <div class="caption">
+                                    <h3>
+                                        <a href="<?php echo $this->url('blog-competition/show', array('contest' => \NBlog\Model\VoteConfig::VoteForIndependent)) ?>">
+                                            <?php echo $this->translate('Independence Day Competition') . ' - ' . $this->Number()->convert('2014') ?>
+                                        </a>
+                                    </h3>
+                                    <p>
+                                        <?php echo $this->translate('Duration') ?>:
+                                        <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->durations[\NBlog\Model\VoteConfig::VoteForIndependent]['start']) ?> ~
+                                        <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->durations[\NBlog\Model\VoteConfig::VoteForIndependent]['end']) ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 15px;margin-bottom: 15px">
+                        <div class="col-sm-6 col-md-6">
+                            <div class="tile-container thumbnail">
+                                <a href="<?php echo $this->url('blog-competition/show', array('contest' => \NBlog\Model\VoteConfig::RAIN_COMPETITION)) ?>">
+                                    <img alt="100%x200" style="height: 200px; width: 100%; display: block;" src="<?php echo $this->basePath('img/competition/rainy-season.jpg') ?>" />
+                                </a>
+                                <div class="caption">
+                                    <h3>
+                                        <a href="<?php echo $this->url('blog-competition/show', array('contest' => \NBlog\Model\VoteConfig::RAIN_COMPETITION)) ?>">
+                                            <?php echo $this->translate('Rain writing competition') . ' - ' . $this->Number()->convert('2014') ?>
+                                        </a>
+                                    </h3>
+                                    <p>
+                                        <?php echo $this->translate('Duration') ?>:
+                                        <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->durations[\NBlog\Model\VoteConfig::RAIN_COMPETITION]['start']) ?> ~
+                                        <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->durations[\NBlog\Model\VoteConfig::RAIN_COMPETITION]['end']) ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="tile-container thumbnail">
+                                <a href="<?php echo $this->url('blog-competition/show', array('contest' => \NBlog\Model\VoteConfig::BOOK_FAIR_2015)) ?>">
+                                    <img alt="100%x200" style="height: 200px; width: 100%; display: block;" src="<?php echo $this->basePath('img/competition/blog-competition-2015.jpg') ?>" />
+                                </a>
+                                <div class="caption">
+                                    <h3>
+                                        <a href="<?php echo $this->url('blog-competition/show', array('contest' => \NBlog\Model\VoteConfig::BOOK_FAIR_2015)) ?>">
+                                            <?php echo $this->translate('Creative Blogging Competition') . ' - ' . $this->Number()->convert('2015') ?>
+                                        </a>
+                                    </h3>
+                                    <p>
+                                        <?php echo $this->translate('Duration') ?>:
+                                        <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->durations[\NBlog\Model\VoteConfig::BOOK_FAIR_2015]['start']) ?> ~
+                                        <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->durations[\NBlog\Model\VoteConfig::BOOK_FAIR_2015]['end']) ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--  End of tile-body  -->
+            </div><!--    End of tile    -->
+        </div><!--  End of main-container  -->
+    </div>
+</div><!--  End Of content-wrap  -->

@@ -1,0 +1,81 @@
+<div class="competition content-wrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="row">
+        <div class="main-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="tile-header tab-holder">
+                    <span></span>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li<?php echo (empty($this->tab) || $this->tab == 1) ? ' class="active"' : '' ?>><a href="#rules" data-toggle="tab"><?php echo $this->translate('Rules') ?></a></li>
+                        <?php if (!(empty($this->blogPosts) && empty($this->isVotingEnabled))) : ?>
+                        <li<?php echo ($this->tab == 2) ? ' class="active"' : '' ?>><a href="#voting-list" data-toggle="pill"><?php echo $this->translate('Selected posts for voting') ?></a></li>
+                        <?php endif ?>
+                        <?php if (!empty($this->votingResult)) : ?>
+                        <li<?php echo ($this->tab == 3) ? ' class="active"' : '' ?>><a href="#result" class="result" data-toggle="pill"><i class="icon-trophy"></i>&nbsp; <?php echo $this->translate('Result') ?> &nbsp;<i class="icon-trophy"></i></a></li>
+                        <?php endif ?>
+                        <li<?php echo ($this->tab == 4) ? ' class="active"' : '' ?>><a href="#contact" data-toggle="tab"><?php echo $this->translate('Contact') ?></a></li>
+                    </ul>
+                    <span></span>
+                </div><!--  End of tile-header  -->
+
+                <div class="tile-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade<?php echo (empty($this->tab) || $this->tab == 1) ? ' in active' : '' ?>" id="rules">
+                            <div class="tile-container static-section col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <?php switch($this->contest) :
+                                    case \NBlog\Model\VoteConfig::BOOK_FAIR_2015:
+                                        echo $this->partial('blog/competitions/partials/creative-writing-rules-2015');
+                                        break;
+
+                                    case \NBlog\Model\VoteConfig::VoteForIndependent:
+                                        echo $this->partial('blog/competitions/partials/independence-day-writing-rules');
+                                        break;
+
+                                    case \NBlog\Model\VoteConfig::RAIN_COMPETITION:
+                                        echo $this->partial('blog/competitions/partials/rainy-literature-competition-rules-2014');
+                                        break;
+
+                                    case \NBlog\Model\VoteConfig::BOOK_FAIR_2014:
+                                    default:
+                                        echo $this->partial('blog/competitions/partials/creative-writing-rules') ?>
+                                <?php endswitch ?>
+                            </div>
+                        </div>
+
+                        <?php if (!(empty($this->blogPosts) && empty($this->isVotingEnabled))) : ?>
+                        <div class="tab-pane fade<?php echo ($this->tab == 2) ? ' in active' : '' ?>" id="voting-list">
+                            <?php echo $this->partial('blog/competitions/partials/post-list-for-contest', array(
+                                'episodeCount' => $this->episodeCount,
+                                'tab' => $this->tab,
+                                'voteCategories' => $this->voteCategories,
+                                'activeEpisode' => $this->activeEpisode,
+                                'blogPosts' => $this->blogPosts,
+                                'categories' => $this->categories,
+                                'professions' => $this->professions,
+                                'contest' => $this->contest
+                            )) ?>
+                        </div>
+                        <?php endif ?>
+
+                        <?php if (!empty($this->votingResult)) : ?>
+                        <div class="tab-pane fade<?php echo ($this->tab == 3) ? ' in active' : '' ?>" id="result">
+                            <?php echo $this->partial('blog/competitions/partials/competition-result', array(
+                                'episodeCount' => $this->episodeCount,
+                                'votingResult' => $this->votingResult,
+                                'voteCategories' => $this->voteCategories,
+                                'activeEpisode' => $this->activeEpisode,
+                                'categories' => $this->categories,
+                                'professions' => $this->professions,
+                                'topFiveTab' => $this->topFiveTab
+                            )) ?>
+                        </div>
+                        <?php endif ?>
+
+                        <div class="tab-pane fade<?php echo ($this->tab == 4) ? ' in active' : '' ?>" id="contact">
+                            <?php echo $this->partial('blog/partials/contact-form', array('contactForm' => $this->contactForm)) ?>
+                        </div>
+                    </div><!--  End of tab-content  -->
+                </div><!--  End of tile-body  -->
+            </div><!--    End of tile    -->
+        </div><!--  End of main-container  -->
+    </div>
+</div><!--  End Of content-wrap  -->

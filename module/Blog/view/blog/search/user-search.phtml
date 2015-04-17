@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="main-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+            <div class="mid-column user-search col-xs-12 col-sm-7 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
+                <div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <?php echo $this->partial('blog/search/user-list', array(
+                        'users' => $this->users,
+                        'criteria' => $this->criteria,
+                        'paginator' => $this->paginator,
+                        'paginatorOptions' => $this->paginatorOptions
+                    )) ?>
+                </div><!--    End of tile    -->
+            </div><!--  End of mid-column  -->
+        </div>
+    </div><!--  End of main-container  -->
+</div>

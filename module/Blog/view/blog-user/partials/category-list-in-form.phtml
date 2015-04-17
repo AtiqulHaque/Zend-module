@@ -1,0 +1,71 @@
+
+<?php if (!empty($this->categories)) : $element = $this->form->get('category_id') ?>
+<div id="<?php echo $this->domId = (!empty($this->domId))?$this->domId:'default'?>" class="control-group">
+    <label class="control-label"><?php echo $this->translate($element->getLabel()) ?></label>
+
+    <div class="controls accordion content-inner">
+        <div class="row-fluid">
+            <?php $count = 0; $categories = empty($_POST['category_id']) ? array() : $_POST['category_id'];
+            foreach ($this->categories AS $category) : ++$count ?>
+            <div class="accordion-group span4">
+                <?php if (empty($category['children'])) : ?>
+                <label class="checkbox">
+                    <input type="checkbox" name='category_id[]' value="<?php echo $category['category_id'] ?>" class="category"
+                        <?php echo (in_array($category['category_id'], $categories) ? 'checked="checked"' : '') ?> />
+                    <?php echo $category['name'] ?>
+                </label>
+                <?php else : ?>
+                <div class="accordion-heading">
+                    <input type="checkbox" name='category_id[]' value="<?php echo $category['category_id'] ?>"
+                        <?php echo (in_array($category['category_id'], $categories) ? 'checked="checked"' : '') ?> />
+                    <span class="accordion-toggle" data-toggle="collapse"
+                          data-parent="#property-update" data-target="#Category_<?php echo $category['category_id'] ?>">
+                        <?php echo $category['name'] ?>
+                    </span>
+                </div>
+                <div id="Category_<?php echo $category['category_id'] ?>" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <ul>
+                            <?php foreach ($category['children'] AS $subCategory) : ?>
+                                <li>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name='category_id[]' value="<?php echo $subCategory['category_id'] ?>"
+                                            <?php echo (in_array($subCategory['category_id'], $categories) ? 'checked="checked"' : '') ?> />
+                                        <?php echo $subCategory['name'] ?>
+                                    </label>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+            <?php if (!($count % 6)) : ?>
+        </div>
+        <div class="row-fluid">
+            <?php endif ?>
+            <?php endforeach ?>
+        </div>
+        <?php echo $this->formElementErrors($element) ?>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#<?php echo $this->domId  ?> input:checkbox[name='category_id[]']").on('click',function(){
+            var subMenu = $(this).closest('.accordion-heading').siblings('.accordion-body');
+            var totalCategory = $(this).parents('form').find("input:checkbox[name='category_id[]']:checked").length;
+            if($(this).is(':checked')) {
+                subMenu.addClass('in');
+                subMenu.css({height:'auto'});
+            }
+            if (totalCategory > 4) {
+                alert('<?php echo $this->translate('You cannot select more than four categories.') ?>');
+                return false;
+            } else {
+                return true;
+            }
+        });
+    });
+</script>
+<?php endif ?>

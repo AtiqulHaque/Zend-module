@@ -1,0 +1,10 @@
+<div class="row">
+    <div class="sub-navi bg1 type-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <ul>
+            <li><a href="<?php echo $this->url('public-profile', array('username' => $this->userDetail['username'])) ?>"><?php echo $this->translate('Profile') ?></a></li>
+            <li><a href="<?php echo $this->url('show-user-posts', array('username' => $this->userDetail['username'])) ?>"><?php echo $this->translate('All Posts') ?></a></li>
+            <li><a href="<?php echo $this->url('friends-subscribers-followers', array('username' => $this->userDetail['username'])) ?>"><?php echo $this->translate('Friends and Favorite Bloggers') ?></a></li>
+            <li><a href="<?php echo $this->url('show-user-pictures', array('username' => $this->userDetail['username'])) ?>"><?php echo $this->translate('Pictures') ?></a></li>
+        </ul>
+    </div>
+</div>

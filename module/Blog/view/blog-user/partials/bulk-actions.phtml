@@ -1,0 +1,26 @@
+
+<div class="form-inline pull-left">
+    <input type="checkbox" id='select-all' />
+    <select name='status' class="input-medium">
+        <option value="<?php echo \NBlog\Model\WritingStatus::DRAFT ?>">সংরক্ষন করুন</option>
+        <option value="<?php echo \NBlog\Model\WritingStatus::PENDING ?>">প্রকাশ করুন</option>
+        <option value="<?php echo \NBlog\Model\WritingStatus::TRASH ?>">মুছে ফেলুন</option>
+    </select>
+    <input type="submit" value="সাবমিট" class="btn btn-primary" />
+    <input type="hidden" name='urlFrom' value="<?php echo $_SERVER['REQUEST_URI'] ?>" />
+</div>
+
+<script type='text/javascript'>
+    (function($) {
+        $('#select-all').on('click', function() {
+            $(this).parent().parent().parent()
+                .find("input[type='checkbox']").attr('checked', $(this).is(':checked'));
+        });
+
+        $('.post_ids').click(function() {
+            $('#select-all').attr('checked', $(this).is(':checked') &&
+                    ! ($(this).parent().parent().siblings("tr").children("tr > td > input[type='checkbox']").not(':checked').length));
+        });
+    })(jQuery);
+
+</script>

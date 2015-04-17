@@ -1,0 +1,108 @@
+<div class="single-comment">
+    <a href="#"><img src="<?php echo $this->Profile()->getImage($this->comment) ?>"></a>
+
+    <div class="commenter-detail">
+        <a href="<?php echo $this->url('public-profile', array('username' => $this->comment['username'])) ?>">
+            <?php echo $this->Post()->getUserInfoLinkWithPopUpPost($this->comment, 'right', $this->professions) ?></a>
+        <?php echo $this->translate('Has been commented') ?>
+        <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($this->comment['comment_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($this->comment['comment_created']) ?></span>
+        <span class="pull-right">
+            <i class="icon-thumbs-up"></i>
+            <span class="likeCount"><?php echo $this->number()->convert($this->comment['total_comment_favorited']) ?></span>
+        </span>
+    </div>
+
+    <div class="comment-detail"><?php echo $this->NBEscapeHtml($this->comment['details'], true) ?></div>
+
+    <div class="comment-actions">
+        <div class="pull-right">
+
+            <?php if ($this->sessionContainer()->getData('username')) : ?>
+
+                <?php if (empty($this->isBlockedToComment)) : ?>
+                    <i class="icon icon-edit"></i><a href="#" class="do-reply-on-comment" rel='<?php echo $this->comment['comment_id'] ?>'><?php echo $this->translate('Reply') ?></a>
+                <?php endif;
+
+                $currentUser = $this->sessionContainer()->getData('user_id');
+                if ($currentUser != $this->comment['comment_created_by']) : ?>
+                <?php echo $this->BlogPost()->getLinkToDealWithFavorite(
+                    $this->comment['comment_id'], \BlogUser\Model\FavoriteType::COMMENT, isset($this->comment['isFavorite'])) ?>
+
+                <?php if (isset($this->comment['hasUserReported'])) { ?>
+                    <i class="icon icon-flag"></i><?php echo $this->translate('Already Reported') ?>
+                <?php } else { ?>
+                    <a href="" class='do-report-on-comment' rel='<?php echo $this->comment['comment_id'] ?>'>
+                        <i class="icon-warning-sign"></i><?php echo $this->translate('Make a complaint') ?>
+                    </a>
+                <?php } ?>
+
+                <?php if (isset($this->comment['isHidden'])) { ?>
+                    <a href='<?php echo $this->url('unhide-my-blog-content', array('content_type'=>\NBlog\Model\WritingType::COMMENT,'permalink' =>$this->comment['comment_id'])) ?>'>
+                        <i class="icon-off"></i><?php echo $this->translate('Display again') ?>
+                    </a>
+                <?php } else { ?>
+                    <a href='<?php echo $this->url('hide-my-blog-content', array('content_type'=>\NBlog\Model\WritingType::COMMENT,'permalink' =>$this->comment['comment_id'])) ?>'>
+                        <i class="icon-off"></i><?php echo $this->translate('Hide') ?>
+                    </a>
+                <?php } ?>
+
+            <?php else : ?>
+                <a id="comment_id_<?php echo $this->comment['comment_id'] ?>" class="edit-comment" rel="comment" href='javascript:void(0)'>
+                    <i class="icon-pencil"></i><?php echo $this->translate('Edit This') ?>
+                </a>
+            <?php endif ?>
+
+                <?php if (in_array($currentUser, array($this->creator, $this->comment['comment_created_by']))) : ?>
+                <a href="<?php echo $this->url('delete-comment', array('username'=>'me', 'id'=>$this->comment['comment_id'])) ?>"
+                   class="delete-comment" rel='<?php echo $this->comment['username'] ?>' data-askForBlock='<?php echo ($currentUser != $this->comment['comment_created_by']) ?>'
+                   data-permalink='<?php echo $this->writingPermalink ?>'>
+                    <i class="icon icon-trash"></i> <?php echo $this->translate('Delete This') ?>
+                </a>
+            <?php endif ?>
+
+            <?php else : ?>
+                <a href='' class='to-open-login-box'><i class="icon-comment"></i><?php echo $this->translate('Reply') ?></a>
+                <a href='' class='to-open-login-box'><i class="icon-thumbs-up"></i> <?php echo $this->translate('Make Favorite') ?></a>
+                <a href='' class='to-open-login-box'><i class="icon-warning-sign"></i><?php echo $this->translate('Make a complaint') ?></a>
+            <?php endif ?>
+        </div>
+    </div>
+
+    <?php if (empty($this->isBlockedToComment)) : ?>
+        <?php echo $this->partial('layout/partials/reply-form', array(
+            'writingPermalink' => $this->writingPermalink,
+            'commentForm' => $this->commentForm,
+            'commentId' => $this->comment['comment_id'],
+            'commentFor' => empty($this->commentFor) ? $this->comment['comment_for'] : $this->commentFor
+        )) ?>
+    <?php endif ?>
+
+    <?php if (!isset($this->comment['hasUserReported'])) : ?>
+        <?php echo $this->partial('layout/partials/report-form', array(
+            'reportForm' => $this->reportForm,
+            'formId' => $this->comment['comment_id'],
+            'reportedOn' => \NBlog\Model\WritingType::COMMENT,
+            'idOfReportedOn' => $this->comment['comment_id']
+        )) ?>
+    <?php endif ?>
+
+    <?php if (!empty($this->comment['replies'])) : ?>
+        <div class="replies row-fluid offset1 span23">
+        <?php foreach ($this->comment['replies'] AS $reply) : ?>
+            <?php if (!isset($reply['isHidden'])) : ?>
+                <?php echo $this->partial('layout/partials/single-reply-view', array(
+                    'writingPermalink' => $this->writingPermalink,
+                    'creator' => $this->creator,
+                    'comment' => $this->comment,
+                    'reply' => $reply,
+                    'professions' => $this->professions,
+                    'reportForm' => $this->reportForm
+                )) ?>
+            <?php else : ?>
+                <?php echo $this->Post()->getContentHideLink(\NBlog\Model\WritingType::COMMENT, $reply['comment_id']) ?>
+            <?php endif?>
+        <?php endforeach ?>
+        </div>
+
+    <?php endif ?>
+</div>

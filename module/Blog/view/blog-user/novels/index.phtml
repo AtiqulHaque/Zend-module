@@ -1,0 +1,68 @@
+<div class="row-fluid">
+    <div class="span8">
+        <?php echo $this->flashMessenger($this->errorMsg) ?>
+        <span class='h7'>
+            My Novels :
+            <?php if ($this->sessionContainer()->getData('user_id')) : ?>
+            <a class="btn btn-success" href="<?php echo $this->url('add-my-novel') ?>" style="float: right;margin-top: -5px">Write New Novel </a>
+            <?php endif ?>
+        </span>
+        <hr/>
+
+        <div class="tooltip-demo well1">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Serial</th>
+                    <th>Novel Name</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <?php if (empty($this->novels)) : ?>
+
+                <tr>
+                    <td class="report-no-data" colspan="5">No novel has been found.</td>
+                </tr>
+
+                <?php else : $count = 0; foreach ($this->novels AS $novel) : ?>
+
+                <tr>
+                    <td><?php echo ++$count ?></td>
+
+                    <td><a
+                        href="/<?php echo $novel['username'] ?>/my-novel/<?php echo $novel['novel_name_permalink'];?>"><?php echo $novel['novel_name'] ?></a>
+                    </td>
+
+                    <td>
+                    <?php if ($this->sessionContainer()->getData('user_id') == $novel['create_by']) : ?>
+                        <a href="<?php echo $this->url('edit-my-novel', array('permalink' => $novel['novel_name_permalink'])) ?>">Edit</a>
+                        &nbsp;&nbsp;
+                        <a href="<?php echo $this->url('delete-my-novel', array('permalink' => $novel['novel_name_permalink'])) ?>">Delete</a>
+                    <?php endif ?>
+                    </td>
+                </tr>
+
+                <?php endforeach; endif ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--/right contain -->
+    <div class="span4" id='sidebar'>
+        <?php echo $this->partial('blog-user/partials/my-favorite-novels.phtml', array('favoriteDiscussions' => $this->favoriteDiscussions)) ?>
+        <?php echo $this->partial('blog-user/partials/my-favorites.phtml', array('userDetail' => $this->userDetail)) ?>
+
+        <span class='h9'> উপন্যাস</span>
+        <img src="<?php echo $this->basePath("img/glyphicons_group.png") ?>" alt='' />
+        <hr/>
+
+        <?php if (!empty($this->favoriteNovels)) : foreach ($this->favoriteNovels AS $novel) : ?>
+        <a href="/<?php echo $novel['username'] ?>/my-novel/<?php echo $novel['novel_name_permalink'];?>"><?php echo $novel['novel_name'] ?>
+        <hr/>
+        <?php endforeach; endif ?>
+    </div>
+    <!--/end right contain -->
+</div>

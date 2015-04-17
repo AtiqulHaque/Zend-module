@@ -1,0 +1,83 @@
+
+<div class="new_message_button">
+    <a href="<?php echo $this->url('compose-email') ?>" class="btn btn-danger"><?php echo $this->translate('Write new Message') ?></a>
+</div>
+<ul>
+    <li>
+        <a href="<?php echo $this->url('specific-email', array('status' => \NBlog\Model\EmailStatus::INBOX_STRING))?>">
+            <?php echo $this->translate('Inbox') ?>
+            <span class="badge badge-success pull-right">
+                <?php echo $this->Number()->convert($this->inboxEmailCount).$this->translate('#') ?>
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url('specific-email', array('status' => \NBlog\Model\EmailStatus::DRAFT_STRING))?>">
+            <?php echo $this->translate('Drafted') ?>
+            <span class="pull-right">
+                <?php echo $this->Number()->convert($this->draftEmailCount).$this->translate('#') ?>
+            </span>
+        </a>
+    </li>
+    <li><a href="<?php echo $this->url('specific-email', array('status' => \NBlog\Model\EmailStatus::SEND_STRING))?>">
+            <?php echo $this->translate('Sent') ?>
+            <span class="pull-right">
+                <?php echo $this->Number()->convert($this->sentEmailCount).$this->translate('#') ?>
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url('specific-email', array('status' => \NBlog\Model\EmailStatus::SPAM_STRING))?>">
+            <?php echo $this->translate('Spam') ?>
+            <span class="pull-right">
+                <?php echo $this->Number()->convert($this->spamEmailCount).$this->translate('#') ?>
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url('specific-email', array('status' => \NBlog\Model\EmailStatus::DELETE_STRING))?>">
+            <?php echo $this->translate('Trashed') ?>
+            <span class="pull-right">
+                <?php echo $this->Number()->convert($this->trashEmailCount).$this->translate('#') ?>
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url('chat-history') ?>">
+            <?php echo $this->translate('Chat') ?>
+        </a>
+    </li>
+</ul>
+<div class="new_message_button">
+    <div class="filter">
+        <a href="#"><?php echo $this->translate('Filter') ?></a>
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="<?php echo $this->url('specific-email', array('status' => \NBlog\Model\EmailStatus::UNREAD_STRING))?>">
+            <?php echo $this->translate('Unread') ?>
+            <span class="badge badge-success pull-right">
+                <?php echo $this->Number()->convert($this->unreadEmailCount).$this->translate('#') ?>
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)">
+            <?php echo $this->translate('Friends') ?>
+            <span class="pull-right"><a href="#"> ৫ </a></span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)">
+            <?php echo $this->translate('Newsletter') ?>
+            <span class="pull-right"><a href="#"> ৫ </a></span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)">
+            <?php echo $this->translate('Notification') ?>
+            <span class="pull-right"><a href="#"> ৪ </a></span>
+        </a>
+    </li>
+</ul>

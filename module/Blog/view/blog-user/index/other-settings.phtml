@@ -1,0 +1,75 @@
+
+        <div id="accordion" class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading bg1">
+                    <h4 class="panel-title">
+                        <a href="#collapseOne" data-parent="#accordion" data-toggle="collapse">
+                            <span class="title"><?php echo $this->translate('Others Settings Changes.');?></span>
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse collapse in" id="collapseOne">
+                    <div class="panel-body">
+
+                           <?php
+                               $form = $this->form->setAttribute('action', $this->url('other-settings'))->prepare();
+                               echo $this->form()->openTag($form)
+                           ?>
+
+                            <div class="form-group">
+                                <?php $keyBoardElement = $form->get('keyboard');?>
+                                <label class="col-md-3 col-lg-3 control-label" for="keyboard_settings"><?php echo $this->translate($keyBoardElement->getLabel()); ?></label>
+                                <div class="col-md-9 col-lg-9">
+                                    <?php echo $this->formElement($keyBoardElement) ;?>
+                                </div>
+                                <label><?php echo $this->formElementErrors($keyBoardElement);?></label>
+                            </div>
+
+                            <div class="form-group">
+                                <?php $languagesElement = $form->get('language');?>
+                                <label class="col-md-3 col-lg-3 control-label" for="Language_settings"><?php echo $this->translate($languagesElement->getLabel()); ?></label>
+                                <div class="col-md-9 col-lg-9">
+                                    <?php echo $this->formElement($languagesElement) ;?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <?php $dateTimeElement = $form->get('date_time');?>
+                                <label class="col-md-3 col-lg-3 control-label" for="timeZone_settings"><?php echo $this->translate($dateTimeElement->getLabel()); ?> </label>
+                                <div class="col-md-9 col-lg-9">
+                                    <?php echo $this->formElement($dateTimeElement) ;?>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-lg-offset-2 col-md-10 col-lg-10">
+                                    <?php echo $this->formSubmit($form->get('submit')) ?>
+                                    <?php echo $this->formSubmit($form->get('cancel')); ?>
+                                </div>
+                            </div>
+
+                        <?php echo $this->form()->closeTag($form); ?>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+<script type="text/javascript">
+    $('#setting-tab-content').find("#other-settings").validate({
+
+        submitHandler: function (form) {
+            $.post($(form).attr('action'), $(form).serialize(), function(response) {
+                if(response.status == 'success')
+                {
+                    alertify.alert(response.data);
+                }else{
+                    alertify.alert(response.data);
+                }
+
+            }, 'json').error(function() {
+                    alert('Something went wrong. Please try again.');
+
+                });
+        }
+    });
+</script>

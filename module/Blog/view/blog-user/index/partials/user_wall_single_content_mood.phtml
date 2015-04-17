@@ -1,0 +1,102 @@
+<div class="tile-container bdt col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+    <div class="content-header pht col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div class="post-hit-count">
+            <div class="dropdown">
+                <a data-toggle="dropdown" id="dropdownMenu1" class="dropdown-toggle">
+                    <i class="icon-angle-down"></i>
+                </a>
+                <ul role="menu" class="dropdown-menu pull-right">
+                    <?php if($this->eachContent['created_by'] == $this->currentUser):?>
+                        <li>
+                            <a href="javascript:void(0)" class="delete-mood" id="delete_mood_id_<?php echo $this->eachContent['content_id']?>">
+                                <i class="icon-eraser"></i><span><?php echo $this->translate('Delete This') ?></span>
+                            </a>
+                        </li>
+                    <li>
+                        <a href="javascript:void(0)" rel="reply" class="edit-mood" id="mood_id_<?php echo $this->eachContent['content_id']?>">
+                            <i class="icon-pencil"></i><span><?php echo $this->translate('Edit This') ?></span>
+                            <input type="hidden" value="/me/edit-comment/<?php echo $this->eachContent['content_id']?>" id="edit-url-<?php echo $this->eachContent['content_id']?>" name="mood">
+                        </a>
+                    </li>
+                    <?php else : ?>
+                    <li>
+                        <a class='hide-it' rel="<?php echo $this->eachContent['content_id'] ?>" data-reported-on="<?php echo \NBlog\Model\WritingType::MOOD ?>">
+                            <i class='icon-eye-close'></i> <?php echo $this->translate('Hide') ?>
+                        </a>
+                    </li>
+                    <?php if (!isset($this->eachContent['hasUserReported'])) : ?>
+                        <li>
+                            <a class='complain-it' rel="<?php echo $this->eachContent['content_id'] ?>" data-reported-on="<?php echo \NBlog\Model\WritingType::MOOD ?>">
+                                <i class='icon-shield'></i> <?php echo $this->translate('Make a complaint') ?>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <?php endif;?>
+                </ul>
+            </div>
+
+        </div>
+        <?php echo $this->Profile()->getUserImageWithLink($this->eachContent) ?>
+        <?php echo  $this->Post()->getNewSummaryPostWithoutCategories($this->eachContent, $this->professions,$this->eachContent['wall_content_created'])?>
+        <div class="font-sizer">
+            <i class="icon-"></i>
+            <i class="icon-"></i>
+        </div>
+        <div class="complain-here"></div>
+    </div>
+    <div class="content-body col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <?php echo $this->eachContent['details']?>
+    </div>
+
+    <div class="content-footer col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div class="post-action-list">
+            <?php echo $this->BlogPost()->getLinkToDealWithFavorite(
+                $this->eachContent['permalink'], \BlogUser\Model\FavoriteType::MOOD, empty($this->eachContent['isFavorite'])) ?>
+        </div>
+
+        <div class="post-hit-count">
+            <a href="javascript: void(0)">
+                <i class="icon-comments-alt"></i>
+                <span class="commentCount"><?php echo $this->Number()->convert($this->eachContent['total_comments']) ?></span>
+            </a>
+            <a href="#" class="likeMeNow">
+                <i class="icon-thumbs-up-alt"></i>
+                <span class="likeCount"><?php echo $this->Number()->convert($this->eachContent['total_favorited']) ?></span>
+            </a>
+        </div>
+        <span class="separator"></span>
+
+        <div class="post-action-list">
+            <?php if(!empty($this->commentsData['comments']) && count($this->commentsData['comments']) > 1):?>
+                <a class="show-all-comments" href="#">
+                    <i class="icon-comments-alt"></i><span class="hidden-xs">সবগুলো  মন্তব্য দেখুন</span>
+                </a>
+            <?php endif;?>
+        </div>
+    </div>
+
+    <div class="comments-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <?php if (!empty($this->commentsData)) : foreach ($this->commentsData['comments'] AS $eachCommentsData) : ?>
+            <?php echo $this->partial('blog-user/index/partials/user_wall_single_comment', array(
+                'eachCommentsData'  => $eachCommentsData,
+                'commentForm'       => $this->commentForm,
+                'commentFor'        => \NBlog\Model\WritingType::MOOD,
+                'commentOn'         => $this->eachContent,
+                'categories'        => $this->categories,
+                'professions'       => $this->professions,
+                'formForReply'      => false
+            )) ?>
+        <?php endforeach; endif ?>
+
+        <?php echo $this->partial('blog-user/index/partials/user_wall_single_comment_form', array(
+            'commentOn'     => $this->eachContent,
+            'commentIn'     => $this->eachContent['content_id'],
+            'commentFor'    => \NBlog\Model\WritingType::MOOD,
+            'commentForm'   => $this->commentForm,
+            'formForReply'  => false
+        )) ?>
+    </div>
+</div>

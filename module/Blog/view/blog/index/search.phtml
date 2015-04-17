@@ -1,0 +1,35 @@
+<?php switch ($this->status) {
+
+    case 'post':
+        echo $this->partial('blog/search/post-search', array(
+            'posts' => $this->posts,
+            'categories' => $this->categories,
+            'criteria' => $this->criteria,
+            'paginator' => $this->paginator,
+            'paginatorOptions' => $this->paginatorOptions
+        ));
+        break;
+
+    case 'user':
+        echo $this->partial('blog/search/user-search', array(
+            'users' => $this->users,
+            'criteria' => $this->criteria,
+            'paginator' => $this->paginator,
+            'paginatorOptions' => $this->paginatorOptions
+        ));
+        break;
+
+    default:
+        echo $this->partial('blog/search/default-search', array(
+            'posts' => $this->posts,
+            'users' => $this->users,
+            'categories' => $this->categories,
+            'criteria' => $this->criteria,
+            'paginatorForUser' => $this->paginatorForUser,
+            'paginatorOptionsForUser' => $this->paginatorOptionsForUser,
+            'paginatorForPost' => $this->paginatorForPost,
+            'paginatorOptionsForPost' => $this->paginatorOptionsForPost
+        ));
+} ?>
+<input type="hidden" id="search-criteria" value="<?php echo $this->criteria ?>" />
+<input type="hidden" id="search-for" value="<?php echo $this->status ?>" />

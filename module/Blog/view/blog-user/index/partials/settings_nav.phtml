@@ -1,0 +1,9 @@
+<ul class="menu-for-settings">
+    <li><a href="<?php echo $this->url('change-profile');?>" class="<?php echo ($this->is_active == 'profile_setting') ? 'active' : ''?>">প্রোফাইল পরিবর্তন </a></li>
+    <li><a href="<?php echo $this->url('change-account');?> " class="<?php echo ($this->is_active == 'account_setting') ? 'active' : ''?>">একাউন্ট পরিবর্তন </a></li>
+    <li><a href="<?php echo $this->url('other-settings')?>" class="<?php echo ($this->is_active == 'other_setting') ? 'active' : ''?>">বিবিধ পরিবর্তন </a></li>
+    <li><a href="" class="under-development"><?php echo $this->translate('Privacy') ?></a></li>
+    <li><a href="" class="under-development"><?php echo $this->translate('Notification') ?></a></li>
+    <li><a href="" class="under-development"><?php echo $this->translate('Message') ?></a></li>
+    <li><a href="" class="under-development"><?php echo $this->translate('Blocking') ?></a></li>
+</ul>

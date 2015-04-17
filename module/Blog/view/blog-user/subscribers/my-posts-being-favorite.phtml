@@ -1,0 +1,93 @@
+<h3>
+    <?php echo $this->translate('Posts which has been favorited') ?>
+    (<?php echo $this->Number()->convert($this->countFavoritePosts) . $this->translate('#') ?>)
+</h3>
+
+<form action="<?php echo $this->url('do-bulk-action') ?>" method="POST">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th class="optional"></th>
+            <th><?php echo $this->translate('Post Title') ?></th>
+            <th class="optional"><?php echo $this->translate('Post Information') ?></th>
+            <th class="optional">&nbsp;</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <?php if (empty($this->favoritePosts)) : ?>
+
+        <tr>
+            <td colspan="4"><p class="no-record-found"><?php echo $this->translate('No post has been favorited.') ?></p></td>
+        </tr>
+
+        <?php else : foreach ($this->favoritePosts AS $post) : ?>
+
+        <tr>
+            <td class="optional"><input type="checkbox" name='postIds[]' value="<?php echo $post['post_id'] ?>" class="post_ids" /></td>
+            <td><a href="<?php echo $this->url('view-my-post', array('permalink' => $post['permalink'])) ?>"><?php echo $this->NBEscapeHtml($post['title']) ?></a></td>
+            <td>
+            <span class="postmeta">
+                <?php echo $this->translate('Writer') ?>: <?php echo $this->Profile()->getDisplayName($post) ?> <br />
+                <?php echo $this->translate('Published') ?>: <?php echo $this->DateTimeEnToBn()->ShowDateOnly($post['published']) ?><br />
+                <?php echo $this->translate('Total Comments') ?>: <?php echo $this->Number()->convert($post['total_comments']) . $this->translate('#') ?><br />
+                <?php echo $this->translate('Total Visited') ?>: <?php echo $this->Number()->convert($post['total_viewed']) . $this->translate('Times') ?><br />
+                <?php echo $this->translate('Total Favorite-doer') ?>: <?php echo $this->Number()->convert($post['total_favorited']) . $this->translate('Person') ?>
+            </span>
+            </td>
+            <td>
+                <small style="margin-left: 10px">
+                    <a href='<?php echo $this->url('edit-my-post', array('permalink' => $post['permalink'])) ?>'>
+                        <i class="icon icon-remove-sign"></i> <?php echo $this->translate('Edit This') ?></a><br />
+                    <?php if ($post['post_status'] != \NBlog\Model\WritingStatus::PUBLISHED) : ?>
+
+                    <?php switch ($post['post_status']) :
+                        case \NBlog\Model\WritingStatus::DRAFT: ?>
+                            <a href='<?php echo $this->url('trash-my-post', array('permalink' => $post['permalink'])) ?>' class="trash">
+                                <i class="icon icon-remove-sign"></i> <?php echo $this->translate('Make trash') ?></a><br />
+                            <?php break;
+
+                        case \NBlog\Model\WritingStatus::TRASH: ?>
+                            <a href='<?php echo $this->url('restore-my-post', array('permalink' => $post['permalink'])) ?>'>Restore Post</a><br />
+                            <a href='<?php echo $this->url('delete-my-post', array('permalink' => $post['permalink'])) ?>' class="delete">
+                                <i class="icon icon-remove-sign"></i>  <?php echo $this->translate('Delete Permanently') ?></a><br />
+                            <?php break;
+                    endswitch; endif ?>
+                </small>
+            </td>
+        </tr>
+
+        <?php endforeach; endif ?>
+        </tbody>
+    </table>
+
+    <?php if (!empty($this->favoritePosts)) : ?>
+
+    <div class="pagination pagination-centered">
+        <?php echo $this->partial('blog-user/partials/bulk-actions') ?>
+        <?php echo $this->paginator()->slide($this->paginator, array_merge($this->paginatorOptions, array('linksOnly' => true, 'class' => 'pull-right'))) ?>
+    </div>
+
+    <?php endif ?>
+
+</form>
+
+<script type='text/javascript'>
+    (function($) {
+        $('#select-all').on('click', function() {
+            $(this).parent().parent().parent()
+                    .find("input[type='checkbox']").attr('checked', $(this).is(':checked'));
+        });
+
+        $('.post_ids').click(function() {
+            $('#select-all').attr('checked', $(this).is(':checked') &&
+                    ! ($(this).parent().parent().siblings("tr").children("tr > td > input[type='checkbox']").not(':checked').length));
+        });
+
+        $('.do-only-one').click(function() {
+            $(this).parent().parent().find("td > input[type='checkbox']").attr('checked', true);
+            $(this).parents('form:first').submit();
+        });
+    })(jQuery);
+
+</script>

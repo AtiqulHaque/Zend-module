@@ -1,0 +1,6 @@
+<div class="tile notice col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="tile-body">
+        <?php echo $this->BlogPost()->getPartialDetailForNotice($this->notices) . $this->BlogPost()->getShowMoreLinkForNotice($this->notices); ?>
+        <a href="<?php echo $this->url('all-published-notices')?>" class="btn all-notice"><?php echo $this->translate("All Notices")?> </a>
+    </div>
+</div>

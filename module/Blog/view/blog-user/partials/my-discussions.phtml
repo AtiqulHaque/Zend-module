@@ -1,0 +1,11 @@
+
+<div id="my-discussions" class="content">
+    <span class='h9'>List for discussion</span>
+    <img src="<?php echo $this->basePath('img/glyphicons_group.png') ?>" alt='' />
+    <hr/>
+
+    <?php if (!empty($this->favoriteDiscussions)) : foreach ($this->favoriteDiscussions AS $discussion) : ?>
+        <a href="/blog/discussions/show/id/<?php echo $discussion['discussion_id'] ?>"><?php echo $discussion['title'] ?></a>
+        <hr/>
+    <?php endforeach; endif ?>
+</div>

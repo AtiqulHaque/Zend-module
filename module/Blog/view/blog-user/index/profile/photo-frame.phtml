@@ -1,0 +1,26 @@
+
+<div class='social-header'>
+    <span class='title'>
+        <a href="#" class='active'><?php echo $this->translate('Pictures'); ?></a>
+    </span>
+    <span class='title'>
+        <a class="count bg1"><?php echo $this->Number()->convert(count($this->allPicturesForProfile)) ?></a>
+    </span>
+</div>
+
+<div class="panel photo-frame">
+    <div class="panel-body">
+        <div class="tiar">
+            <?php $i = 0; foreach($this->allPicturesForProfile AS $eachImages) : ?>
+            <div class="cage imgJar">
+                <img  src="<?php echo $this->Profile()->getThumbImage($eachImages)?>" alt="">
+            </div>
+
+            <?php if (++$i % 4 == 0) : ?>
+        </div>
+        <div class="tiar">
+            <?php endif ?>
+            <?php endforeach ?>
+        </div>
+    </div>
+</div>

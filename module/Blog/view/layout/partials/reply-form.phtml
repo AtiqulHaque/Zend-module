@@ -1,0 +1,22 @@
+
+<?php $form = $this->commentForm->setAttributes(array(
+    'action' => $this->url('save-comment', array(
+        'permalink' => $this->writingPermalink,
+        'username' => $this->sessionContainer()->getData('username'))),
+    'id' => "comments-reply-{$this->commentId}"
+))->prepare() ?>
+    <div class="comments-area col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <?php  echo $this->form()->openTag($form) ?>
+        <?php $element = $form->get('comment')->setAttribute('id', 'reply-'.$this->commentId) ?>
+        <?php echo $this->formTextarea($element) ?>
+        <?php echo $this->formElementErrors($element) ?>
+        <div class="pull-right">
+            <?php $submit = $form->get('submit')->setValue('Write Comment');
+            echo $this->formSubmit($submit->setAttribute('class', $submit->getAttribute('class').($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))) ?>
+            <a href="javascript:void(0)" class="cancel-commenting btn btn-small"><?php echo $this->translate('Cancel') ?></a>
+            <?php echo $this->formHidden($form->get('comment_for')->setValue($this->commentFor)) ?>
+            <?php echo $this->formHidden($form->get('type')->setValue(\Blog\Model\Comment::TYPE_REPLY)) ?>
+            <?php echo $this->formHidden($form->get('parent_id')->setValue($this->commentId)) ?>
+        </div>
+    </div>
+<?php echo $this->form()->closeTag(); ?>

@@ -1,0 +1,40 @@
+<div id="banner-upload-holder" class="row-fluid">
+    <button id="add-new-album-pic"  class="btn"><i class="icon-plus"></i><?php echo $this->translate("Add new picture");?></button>
+    <div  id="banner-uploader-box" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel"><?php echo $this->translate("Album picture upload box.");?></h3>
+        </div>
+        <div class="modal-body">
+            <div class="row-fluid"">
+                <div id="album-uploader"></div>
+                <div class="row">
+                    <div style="display: none;color: #dc322f;font-weight: 600;"class="span5 message-upload-error">
+                    </div>
+                    <input type="hidden" id="permalink" value="<?php echo $this->permalink?>">
+                </div>
+            </div>
+        </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo $this->translate("Close");?></button>
+    </div>
+</div>
+
+<div id="album_holder" class="row-fluid">
+    <?php if(!empty($this->showAllPic)):?>
+    <ul class="thumbnails">
+        <?php foreach($this->showAllPic AS $eachPic):?>
+            <?php if ($this->objFileHandler->isFileExist("public" . $this->imagePath .$this->objFileHandler->renameFile($eachPic['name'],true,'thumb'))): ?>
+                <li class="span6">
+                    <a class="gallery each_album thumbnail" title="<?php echo $this->albumName?>" href="<?php echo $this->targetViewPath.$eachPic['name']; ?>">
+                        <img  class="lazy" src="<?php echo $this->basePath('img/grey.gif'); ?>" data-original="<?php echo $this->imagePath.$this->objFileHandler->renameFile($eachPic['name'],true,'thumb') ?>">
+                    </a>
+                </li>
+            <?php endif ?>
+        <?php endforeach;?>
+
+        <ul>
+    <?php endif;?>
+</div>
+
+

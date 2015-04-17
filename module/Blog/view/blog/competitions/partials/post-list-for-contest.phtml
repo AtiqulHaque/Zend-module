@@ -1,0 +1,65 @@
+<?php if ($this->episodeCount > 1) : ?>
+<ul class="nav nav-pills nav-justified subTab">
+    <?php for($episode = 1; $episode <= $this->episodeCount; ++$episode) : ?>
+        <li<?php echo $episode != $this->activeEpisode ? '' : ' class="active"' ?>>
+            <a href="#contest-part-<?php echo $episode ?>" data-toggle="tab">
+                প্রতিযোগিতা পর্ব <?php echo $this->Number()->convert($episode) ?>
+            </a>
+        </li>
+    <?php endfor ?>
+</ul>
+<div class="tab-content">
+    <?php for($episode = 1; $episode <= $this->episodeCount; ++$episode) : ?>
+        <div class="tab-pane fade<?php echo $episode != $this->activeEpisode ? '' : ' in active' ?>"
+             id="contest-part-<?php echo $episode ?>">
+            <?php echo $this->partial('blog/competitions/partials/episode-wise-posts-list', array(
+                'episode' => $episode,
+                'activeEpisode' => $this->activeEpisode,
+                'voteCategories' => $this->voteCategories,
+                'tab' => $this->tab,
+                'blogPosts' => $this->blogPosts,
+                'categories' => $this->categories,
+                'professions' => $this->professions,
+            )) ?>
+        </div>
+    <?php endfor ?>
+</div>
+<?php else : ?>
+    <?php echo $this->partial('blog/competitions/partials/episode-wise-posts-list', array(
+        'episode' => \NBlog\Model\VoteConfig::EPISODE_1,
+        'activeEpisode' => $this->activeEpisode,
+        'voteCategories' => $this->voteCategories,
+        'tab' => $this->tab,
+        'blogPosts' => $this->blogPosts,
+        'categories' => $this->categories,
+        'professions' => $this->professions,
+    )) ?>
+<?php endif ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+            var $this = $(this),
+                targetLink = $this.attr('data-href'),
+                $target = $($(e.target).attr('href'));
+
+            if (nbUtility.isUndefined(targetLink) || targetLink == '') {
+                var $targetSubTab = $target.find('ul.nav > li.active');
+                $targetSubTab.length ? $targetSubTab.find('a').tab('show').trigger('show.bs.tab') : null;
+                return;
+            } else if ($.trim($target.html()) != '') {
+                return;
+            }
+
+            mySiteAjax({
+                url: targetLink,
+                type: 'get',
+                data: { contest: '<?php echo $this->contest ?>'},
+                dataType: 'html',
+                success: function(response) {
+                    $target.html(response);
+                }
+            });
+        })
+    });
+</script>

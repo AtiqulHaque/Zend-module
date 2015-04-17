@@ -1,0 +1,46 @@
+<?php $form = $this->blogForm->setAttribute('action', $this->url('add-my-post'))->prepare();
+echo $this->form()->openTag($form); ?>
+<div class="post-title-here">
+    <?php echo $this->formInput($form->get('title')) ?>
+    <?php echo $this->formSelect($form->get('select-title')) ?>
+    <div id="title-wrap-error" class="post-field-error"></div>
+</div>
+
+<div class="sequential-box" id="scb_1">
+    <?php echo $this->formCheckBox($form->get('type')); ?>
+    <label for="seq-1" class="set-seq"><i class="icon-"></i></label>
+    <?php echo $this->formInput($form->get('episode_tag')); ?>
+</div>
+<label class="from-old-post">
+    <input class="continue-seq" type="checkbox" name="">
+    <i class="icon-"></i> <?php echo $this->translate('Next Episode') ?>
+</label>
+<div id="episode_tag-wrap-error" class="post-field-error"></div>
+<div class="tinyMce-wrap bd bds2">
+    <?php echo $this->formTextarea($form->get('details')) ?>
+</div>
+<div id="details-wrap-error" class="post-field-error"></div>
+
+<div id="categories_container" class="post-type col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="title col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <?php echo $this->translate('Blog Category') ?>
+    </div>
+    <?php echo $this->partial('blog-user/partials/category-list-in-form-new-ui', array(
+        'form' => $form,
+        'categories_for_form' => $this->categories_for_form,
+        'selectedCategories'=> array(),
+        'isEdit'=> false
+    )) ?>
+</div>
+<div id="category_id-wrap-error" class="post-field-error"></div>
+<?php echo $this->formElement($form->get('note')) ?>
+<div class="action-box">
+    <div class="pull-right">
+        <?php echo $this->formSelect($form->get('status')); ?>
+        <?php echo $this->formSubmit($form->get('submit')); ?>
+        <?php echo $this->formButton($form->get('cancel')); ?>
+        <?php echo $this->formHidden($form->get('episode_id')); ?>
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

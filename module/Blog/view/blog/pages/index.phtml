@@ -1,0 +1,22 @@
+<div class="content-wrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="row">
+        <div class="main-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="row">
+                <?php echo $this->partial('blog/pages/static_page_links', array('pageNav' => $this->pageNav)) ?>
+
+                <div class="mid-column col-xs-12 col-sm-5 col-md-9 col-lg-9">
+                    <div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="tile-header"><?php echo $this->pagesInfo['title'] ?></div>
+                        <div class="tile-body">
+                            <div class="row">
+                                <div class="tile-container static-section col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <?php echo $this->pagesInfo['description'] ?>
+                                </div>
+                            </div>
+                        </div><!--  End of tile-body  -->
+                    </div><!--    End of tile    -->
+                </div><!--  End of left-column  -->
+            </div>
+        </div><!--  End of main-container  -->
+    </div>
+</div>

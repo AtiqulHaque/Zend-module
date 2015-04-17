@@ -1,0 +1,86 @@
+    <div class="span24">
+        <div class="mail_compose">
+            <?php
+            $form = $this->form;
+            $form->setAttribute('action', $this->url('compose-email'))->prepare();
+            echo $this->form()->openTag($form);
+            ?>
+                <div class="control-group">
+                    <label for="inputEmail" class="control-label"> প্রাপক  : </label>
+                       <?php echo $this->NBFormRow($form->get('to'));?>
+                </div>
+
+                <div class="control-group">
+                    <label for="inputEmail" class="control-label">বিষয়  : </label>
+
+                    <?php  echo $this->NBFormRow($form->get('subject'));?>
+                </div>
+                <div class="more control-group">
+                    <div id="accordion2" class="accordion">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                               <!-- <a href="#collapseTwo" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle">
+                                    আরও  <i class="icon-plus"></i>
+                                </a>-->
+                            </div>
+                            <div class="accordion-body collapse" id="collapseTwo">
+                                <div class="accordion-inner">
+                                   <!-- <div class="control-group">
+                                        <label for="inputEmail" class="control-label">Cc : </label>
+                                        <?php /* echo $this->NBFormRow($form->get('cc'));*/?>
+                                    </div>-->
+
+                                   <!-- <div class="control-group">
+                                        <label for="inputEmail" class="control-label">Bcc : </label>
+                                        <?php /* echo $this->NBFormRow($form->get('bcc'));*/?>
+                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message_text_area control-group">
+                    <?php  echo $this->NBFormRow($form->get('message'));?>
+                </div>
+
+                <div class="message_area_footer">
+                    <div class="send_mail">
+                        <div class="send_mail_button">
+                            <?php  echo $this->formSubmit($form->get('draft'));?>
+                            <?php  echo $this->formSubmit($form->get('submit'));?>
+                            <?php  echo $this->formButton($form->get('cancel')); ?>
+
+                            <span class="footer_font"><a href="#"><i class="icon-font"></i></a></span>
+                            <span class="footer_file_upload"><i class="icon-file"></i></span>
+                            <span class="footer_plus_icon"><a href="#"><i class="icon-plus"></i></a></span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <?php echo $this->form()->closeTag($form);?>
+        </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(function() {
+            $( "#inputEmail" ).autocomplete({
+                source: function(request, response) {
+                    $.ajax({ url: "<?php echo $this->url('search-email')?>",
+                        data: { term: $("#inputEmail").val()},
+                        dataType: "json",
+                        type: "POST",
+                        success: function(data){
+                            response(data);
+                            console.log(data);
+                        }
+                    });
+                },
+                minLength: 1
+            });
+        });
+    });
+</script>

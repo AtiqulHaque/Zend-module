@@ -1,0 +1,60 @@
+<?php $currentUser = $this->sessionContainer()->getData('user_id');
+if (empty($this->isBlocked) && $currentUser) :
+    echo $this->partial('blog/partials/single-comment-form', array(
+        'commentForm' => $this->commentForm,
+        'commentOn' => $this->commentOn,
+        'userDetails' => $this->userDetails,
+        'commentFor'=>$this->commentFor
+    ));
+endif ?>
+
+<div class="row">
+    <div class="comments-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <?php if (!empty($this->comments)) : ?>
+            <?php foreach ($this->comments AS $comment) : ?>
+                <div class="comments-group">
+                    <?php if (empty($comment['isHidden'])): ?>
+                        <?php echo $this->partial('blog/partials/single-comment-view', array(
+                            'comment' => $comment,
+                            'categories' => $this->categories,
+                            'professions' => $this->professions,
+                            'currentUser'=> $currentUser
+                        )) ?>
+                        <?php if (!empty($comment['replies'])) : ?>
+                            <?php foreach ($comment['replies'] AS $reply) : ?>
+                                <?php if(empty($reply['isHidden'])): ?>
+                                    <?php echo $this->partial('blog/partials/single-comment-reply-view', array(
+                                        'reply' => $reply,
+                                        'categories' => $this->categories,
+                                        'professions' => $this->professions,
+                                        'currentUser'=> $currentUser
+                                    )) ?>
+                                <?php endif;?>
+                            <?php endforeach;?>
+                        <?php endif;?>
+                        <?php if (empty($this->isBlocked) && $currentUser) : ?>
+                            <div class="comments-here">
+                                <div class='comments-area col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+                                    <img class='commentator' src='<?php echo $this->Profile()->getImage($this->userDetails) ?>' alt=''>
+                                    <div class='comments-bubble'>
+                                        <?php echo $this->partial('blog/partials/single-comment-reply-form', array(
+                                            'commentForm' => $this->commentForm,
+                                            'commentOn' => $this->commentOn,
+                                            'userDetails' => $this->userDetails,
+                                            'commentFor'=>$this->commentFor,
+                                            'comment' => $comment,
+                                        )) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif;?>
+                    <?php endif;?>
+                </div>
+            <?php endforeach;?>
+        <?php endif;?>
+    </div>
+</div>
+
+<?php echo $this->partial('layout/partials/single-comment-complain-form', array(
+    'reportForm' => $this->reportForm
+)) ?>

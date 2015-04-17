@@ -1,0 +1,88 @@
+<div class="content-wrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="row">
+        <div class="main-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <?php if (!empty($this->notices)) : ?>
+                        <?php echo $this->partial('layout/partials/widget/notice',array('notices' => $this->notices)) ?>
+                    <?php endif ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="left-column col-xs-12 col-sm-7 col-md-7 col-lg-7">
+                    <?php if (!empty($this->superStickyPosts)) : ?>
+                        <div class="tile super-sticky col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="tile-body">
+                                <div class="row">
+                                    <?php echo $this->partial('layout/partials/widget/super_sticky_post', array(
+                                        'superStickyPosts' => $this->superStickyPosts,
+                                        'categories' => $this->categories,
+                                        'professions' => $this->professions,
+                                    )) ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif ?>
+
+                    <div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <?php echo $this->partial('layout/partials/widget/latest_anything_post', array(
+                            'recentPosts' => $this->recentBlogPosts
+                        )) ?>
+                    </div>
+                </div>
+                <div class="mid-column col-xs-12 col-sm-5 col-md-5 col-lg-5">
+
+                    <?php if (!empty($this->stickyPosts)) : ?>
+                    <div class="tile sticky col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="tile-header"> স্টিকি </div>
+                        <div class="tile-body">
+                            <div class="row">
+                                <?php echo $this->partial('blog/partials/posts-in-widget', array(
+                                    'posts' => $this->stickyPosts,
+                                    'categories' => $this->categories,
+                                    'professions' => $this->professions,
+                                )) ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif ?>
+                    <?php if(!empty($this->liveFeedEnable)): ?>
+                        <?php echo $this->partial('layout/partials/widget/livefeed') ?>
+                    <?php endif;?>
+
+                    <?php if (!empty($this->topBlogPosts)) : ?>
+                        <div class="tile hidden-xs col-sm-12 col-md-12 col-lg-12">
+                            <div class="tile-header"><?php echo $this->translate('Discussed Post') ?></div>
+                            <div class="tile-body">
+                                <div class="row tab-pane active" id="discussed-post">
+                                    <?php echo $this->partial('blog/partials/posts-in-widget', array(
+                                        'posts' => $this->topBlogPosts,
+                                        'categories' => $this->categories,
+                                        'professions' => $this->professions,
+                                    )) ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif ?>
+                    <?php if (!empty($this->oldPosts)) : ?>
+                    <div class="tile hidden-xs col-sm-12 col-md-12 col-lg-12">
+                        <div class="tile-header"><?php echo $this->translate('Old Posts') ?></div>
+                        <div class="tile-body">
+                            <div class="row" id="old-post">
+                                <?php echo $this->partial('blog/partials/posts-in-widget', array(
+                                    'posts' => $this->oldPosts,
+                                    'categories' => $this->categories,
+                                    'professions' => $this->professions,
+                                    'hideSummary' => true
+                                )) ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

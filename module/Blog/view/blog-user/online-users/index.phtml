@@ -1,0 +1,12 @@
+<div class="well display stats">
+    <h4>Chat Panel</h4>
+    <ul id='friend_select'>
+        <?php if (empty($this->friends)) : ?>
+        <li>None</li>
+        <?php else : foreach ($this->friends as $key => $friend) : ?>
+        <li><a class="online-chat" rel='<?php echo $friend['friend_user_id'] ?>'>
+                <?php echo $this->Profile()->getDisplayName($friend) ?>
+        </a></li>
+        <?php endforeach; endif ?>
+    </ul>
+</div>

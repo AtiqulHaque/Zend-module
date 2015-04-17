@@ -1,0 +1,69 @@
+
+<h3>
+    <?php echo $this->NBEscapeHtml($this->episode['title']) ?>
+    <span class="pull-right">
+        <a href="<?php echo $this->url('edit-my-episode', array('permalink' => $this->episode['permalink'])) ?>" class="btn btn-success"><?php echo $this->translate('Update Episode') ?></a>
+        <a href="<?php echo $this->url('add-my-episodic-post', array('episodePermalink' => $this->episode['permalink'])) ?>" class="btn btn-success"><?php echo $this->translate('New Episodic Post') ?></a>
+    </span>
+</h3>
+<span class="postmeta">
+    <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->episode['episode_modified']) ?> <?php echo $this->translate('At the date last updated') ?>&raquo;
+    <?php echo $this->translate('Division') ?> :: <?php echo $this->BlogPost()->getCategoryLink($this->episode, $this->categories, ' : ') ?>
+</span>
+
+<hr />
+
+<form action="<?php echo $this->url('do-bulk-action') ?>" method="POST">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th class="optional"></th>
+            <th><?php echo $this->translate('Post Title') ?></th>
+            <th class="optional"><?php echo $this->translate('Partial Description') ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if (empty($this->episodicPosts)) : ?>
+        <tr>
+            <td colspan="3"><p class="no-record-found"><?php echo $this->translate('No post has been found.') ?></p></td>
+        </tr>
+        <?php else: foreach ($this->episodicPosts AS $post) : ?>
+        <tr>
+            <td class="optional"><input type="checkbox" name='postIds[]' value="<?php echo $post['post_id'] ?>" /></td>
+            <td>
+                <a href="<?php echo $this->url('show-my-episodic-post', array('episodePermalink' => $this->episode['permalink'], 'permalink' => $post['permalink'])) ?>"><?php echo $post['episode_tag'] ?></a>
+                <span class="label label-inverse"><?php echo $this->statuses[$post['post_status']] ?></span></td>
+            <td>
+                <?php echo $this->BlogPost()->getPartialDetail($post) . $this->BlogPost()->getShowMoreLinkForLoggedInUser($post) ?>
+                <span class="label label-inverse">
+                    <small style="font-size: 12px;">
+                        <?php echo (($link = $this->BlogPost()->getCategoryLink($this->episode, $this->categories, ', ')) ? ($link.' '.$this->translate('Division')) : '') ?>
+                        <?php echo $this->DateTimeEnToBn()->timeSince($post['publicly_published_time']) ?> <?php echo $this->translate('Written') ?></small>
+                </span>
+                <small style="margin-left: 10px">
+                    <a href='<?php echo $this->url('edit-my-episodic-post', array(
+                        'episodePermalink' => $this->episode['permalink'], 'permalink' => $post['permalink'])) ?>'>
+                        <i class="icon icon-remove-sign"></i><?php echo $this->translate('Edit This') ?></a>
+                    <?php if ($post['post_status'] != \NBlog\Model\WritingStatus::PUBLISHED) : ?>
+
+                        <?php switch ($post['post_status']) :
+                            case \NBlog\Model\WritingStatus::DRAFT: ?>
+                                &raquo;
+                                <a href='<?php echo $this->url('trash-my-episodic-post', array('episodePermalink' => $this->episode['permalink'], 'permalink' => $post['permalink'])) ?>'>
+                                    <i class="icon icon-remove-sign"></i> <?php echo $this->translate('Trash This') ?></a>
+
+                                <?php break;
+
+                            case \NBlog\Model\WritingStatus::TRASH: ?>
+                                &raquo;<a href='<?php echo $this->url('restore-my-episodic-post', array('episodePermalink' => $this->episode['permalink'], 'permalink' => $post['permalink'])) ?>'><?php echo $this->translate('Restore This') ?></a>
+                                &raquo;<a href='<?php echo $this->url('delete-my-episodic-post', array('episodePermalink' => $this->episode['permalink'], 'permalink' => $post['permalink'])) ?>'>
+                                    <i class="icon icon-remove-sign"></i><?php echo $this->translate('Remove This') ?></a>
+                                <?php break;
+                        endswitch; endif ?>
+                </small>
+            </td>
+        </tr>
+        <?php endforeach; endif ?>
+        </tbody>
+    </table>
+</form>

@@ -1,0 +1,96 @@
+<?php echo $this->partial('blog-user/partials/email-top-menu');?>
+
+    <div class="span7">
+        <div class="mail_title">
+            <h2><?php echo $this->header;?></h2>
+        </div>
+        <div class="message_details_area">
+
+           <?php if(empty($this->summeryEmail)):?>
+               <?php echo "No ".$this->header." is There."?>
+            <?php else :?>
+
+            <?php foreach($this->summeryEmail AS $summery):?>
+
+            <div threadchildrenuids="false" class="mail_row read ui-draggable">
+               <span class="check checkBox">
+               <input type="checkbox" title="from dropbox@staff.atmail.com 3 hours ago - Welcome to your new email account.Press enter to open" name="checkboxMailId[]" value="<?php echo $summery['email_id']?>" class="EmailCheckbox">
+
+           </span>
+                <div class="<?php echo ($summery['is_read']==0) ? '' :'email_box_color' ?>">
+                <a href="#" class="email_show" rel="<?php echo $summery['email_id']?>" >
+
+                    <div id="load_basic" class="load_link">
+                        <span title="<?php echo $summery['created'] ?>" class="mailDate dateFormat1">
+                           <?php echo $this->DateTimeEnToBn()->timeSince($summery['created']) ?>
+                        </span>
+                        <div class="mailFrom">
+                            <h3 title="dropbox@staff.atmail.com"><?php echo $summery['email']?></h3>
+                        </div>
+                        <div class="mailSubject">
+                            <h4>
+                                <span><?php echo $summery['subject'];?></span>
+                            </h4>
+                        </div>
+                        <div class="mailPreview">
+                            <?php echo $this->Text()->word_limiter($summery['message'],7); ?>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
+
+           <?php endforeach ; endif; ?>
+        </div>
+    </div>
+
+
+<div class="span16">
+    <div class="message_body_area">
+        <div class="functions" id="email-result">
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $('#email_delete').click(function() {
+        var emailId = [];
+        $("input[name='checkboxMailId[]']:checked").each(function ()
+        {
+            emailId.push(parseInt($(this).val()));
+        });
+
+        $.post('<?php echo $this->url('delete-email')?>',{emailId: emailId}, function(response) {
+            if (response.success == 1) {
+                window.location = '';
+            } else {
+                $modalBox.html(response.html);
+            }
+        }, 'json');
+    });
+
+    $('#draft_email').click(function() {
+        var draftEmailId = [];
+        $("input[name='checkboxMailId[]']:checked").each(function ()
+        {
+            draftEmailId.push(parseInt($(this).val()));
+        });
+
+        $.post('<?php echo $this->url('draft-email')?>',{emailId: draftEmailId}, function(response) {
+            if (response.success == 1) {
+                window.location = '';
+            } else {
+                $modalBox.html(response.html);
+            }
+        }, 'json');
+    });
+</script>
+
+<style>
+    .email_box_color{
+        background: #E6E6E6;
+    }
+</style>

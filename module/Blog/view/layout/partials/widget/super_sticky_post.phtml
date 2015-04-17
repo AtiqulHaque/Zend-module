@@ -1,0 +1,25 @@
+<ul class="rslides" id="slider1">
+    <?php foreach($this->superStickyPosts AS $post) : ?>
+    <?php if (!empty($post['isHidden'])) continue; ?>
+        <li>
+            <div class="tile-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="author-unite">
+                    <a class="author-name text-center" href="<?php echo $this->url('public-profile',array('username'=>$post['username'])) ?>"><?php echo $this->Profile()->getDisplayName($post)?> এর লেখা</a>
+                </div>
+                <div class="content-body col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="author-unite">
+                        <a href="<?php echo $this->url('public-profile',array('username'=>$post['username'])) ?>" class="author-avatar">
+                            <img src="<?php echo $this->Profile()->getImage($post,'image_source','profile') ?>">
+                        </a>
+                    </div>
+                    <div class="title">
+                        <?php echo $this->BlogPost()->getPostTitle($post, true, 1) ?>
+                    </div>
+                    <?php echo $this->BlogPost()->getPartialDetail($post) . $this->BlogPost()->getShowMoreLinkForPost($post); ?>
+                </div>
+            </div>
+        </li>
+    <?php endforeach ?>
+</ul>
+
+<div class="common-pagi text-center super-pagi"></div>

@@ -1,0 +1,66 @@
+<?php $privacyFieldset = $this->form->get('privacy') ?>
+<div id="personal_info_privacy_table">
+    <div class="form-group error-occurred">
+        <label class="col-md-3 col-lg-3 control-label"><?php echo $this->translate('Name') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <label class="control-label"><?php echo implode(' ', array($this->userDetail['first_name'], $this->userDetail['middle_name'], $this->userDetail['last_name'])) ?></label>
+        </div>
+    </div>
+
+    <div class="form-group error-occurred">
+        <label class="col-md-3 col-lg-3 control-label" for="nick_name"><?php echo $this->translate('Nickname') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <label class="control-label"><?php echo $this->userDetail['nickname'] ?></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="gender"><?php echo $this->translate('Gender') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->profileInfoFieldset->get('gender'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->genders[$this->userDetail['gender']] ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::GENDER_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+
+            <label class="error" generated="true" for="gender"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <?php $dateOfBirth = $this->profileInfoFieldset->get('day_of_birth');?>
+        <label class="col-md-3 col-lg-3 control-label" for="birth-date"><?php echo $this->translate($dateOfBirth->getLabel()) ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php
+            $monthOfBirth = $this->profileInfoFieldset->get('month_of_birth');
+            $yearOfBirth = $this->profileInfoFieldset->get('year_of_birth'); ?>
+
+            <?php echo $this->formElement($dateOfBirth);
+            echo $this->formElement($monthOfBirth);
+            echo $this->formElement($yearOfBirth); ?>
+
+
+            <label class="control-label for-display display-show"><?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->userDetail['date_of_birth']) ?>
+                (<?php echo $this->Profile()->getPresentAge($this->userDetail['date_of_birth']) ?>)</label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::DOB_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+
+            <label class="error" generated="true" for="gender"><?php
+                echo $this->formElementErrors($dateOfBirth);
+                echo $this->formElementErrors($monthOfBirth);
+                echo $this->formElementErrors($yearOfBirth) ?></label>
+        </div>
+    </div>
+
+    <div id="go-to-action" class="form-group display-hide">
+        <div class="col-md-offset-2 col-lg-offset-2 col-md-10 col-lg-10">
+            <?php echo $this->formSubmit($this->form->get('submit')->setAttributes(array(
+                'name' => $this->profileInfoFieldset->getName().'_submit', 'onclick' => 'cancelDisabledField();'))) ?>
+            <?php echo $this->formElement($this->form->get('cancel')); ?>
+        </div>
+    </div>
+</div>

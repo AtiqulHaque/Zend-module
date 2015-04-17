@@ -1,0 +1,27 @@
+<div class="tile-header tab-holder">
+    <span></span>
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a href="#sequential" data-toggle="tab"><?php echo $this->translate('Serialized') ?></a></li>
+        <li><a href="#selected-post" data-toggle="tab"><?php echo $this->translate('Selected') ?></a></li>
+        <li><a href="#most-wanted" data-toggle="tab"><?php echo $this->translate('Maximum') ?></a></li>
+    </ul>
+    <span></span>
+
+</div><!--  End of tile-header  -->
+
+<div class="tile-body">
+    <div class="tab-content">
+        <div class="row tab-pane active" id="sequential">
+            <?php echo $this->recentPosts ?>
+        </div>
+
+        <div class="row tab-pane" id="selected-post"></div>
+
+        <div class="row tab-pane" id="most-wanted"></div>
+
+    </div><!--  End of tab-content  -->
+</div><!--  End of tile-body  -->
+
+<div id="check-non-queued-post" style="display: none;">
+    <?php echo $this->url('check-non-queued-post') ?>
+</div>

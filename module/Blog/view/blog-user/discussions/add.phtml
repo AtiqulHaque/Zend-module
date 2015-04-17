@@ -1,0 +1,94 @@
+<?php if (empty($this->isAjax)) : ?>
+<?php echo $this->partial('blog-user/partials/writing-links', array('nav'=>'discussion')) ?>
+<h1><?php echo $this->translate('New Discussion') ?></h1>
+<?php endif ?>
+<?php if ($this->errorMsg) : ?>
+<div class="alert-message alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong><?php echo $this->errorMsg ?></strong>
+</div>
+<?php endif ?>
+
+<?php $form = $this->form->setAttribute('action', $this->url('add-my-discussion'))->prepare();
+echo $this->form()->openTag($form);
+echo $this->NBFormRow($form->get('title'));
+echo $this->NBFormRow($form->get('details')) ?>
+
+<div class="controls-row">
+    <div id="discussion-error-details" class="span24"></div>
+</div>
+<?php echo $this->partial('blog-user/partials/category-list-in-form', array('form' => $form, 'categories' => $this->categories,'domId'=>'discussion-category'));
+echo $this->NBFormRow($form->get('agree'), 'append', true); ?>
+
+<div class="form-actions">
+    <?php echo $this->formSelect($form->get('status')); ?>
+    <?php echo $this->formSubmit($form->get('submit')); ?>
+    <?php echo $this->formButton($form->get('cancel')->setAttribute('onClick', "window.location='{$this->url('my-discussions')}'; return false;")); ?>
+</div>
+<?php echo $this->form()->closeTag(); ?>
+
+<?php if (empty($this->isAjax)) :
+    echo $this->partial('blog-user/partials/select-box-modifier');
+else : ?>
+<script type="text/javascript">
+    setDiscussionEditor();
+</script>
+<?php endif ?>
+
+<script type="text/javascript">
+    $(function() {
+        setDiscussionFormRule();
+
+        $("#discussion-form").find('input[type="submit"]').on('click',function(){
+            var content = tinyMCE.activeEditor.getContent();
+            $("#discussion-form").find('#details').html(content);
+        });
+    });
+    function setDiscussionFormRule() {
+        $("#discussion-form").submit(function() {
+            tinyMCE.triggerSave();
+        }).validate({
+            ignore: '',
+            rules: {
+                'title': { required: true },
+                'details': { required: true },
+                'category_id[]': { required: true },
+                'status': { required: true },
+                'agree': { required: true }
+            },
+            messages: {
+                'title': {required: '<?php echo $this->translate('Please enter discussion title.') ?>'},
+                'details': {required: '<?php echo $this->translate('Please enter discussion details.') ?>'},
+                'category_id[]': {required: '<?php echo $this->translate('Please select a category of the discussion.') ?>'},
+                'status': {required: '<?php echo $this->translate('Please enter discussion status.') ?>'},
+                'agree': {required: '<?php echo $this->translate('You must agree to the terms of use.') ?>'}
+            },
+            errorPlacement: function ($error, $element) {
+                if ($element.attr('type') == 'checkbox') {
+                    $element.parents('.controls').append($error);
+                } else if ($element.is('textarea')) {
+                    $('#discussion-error-details').append($error);
+                } else {
+                    $error.insertAfter($element);
+                }
+            },
+            focusInvalid : function() {
+                var toFocus = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
+                if (toFocus.is('textarea')) {
+                    tinyMCE.get(toFocus.attr('id')).focus();
+                } else {
+                    toFocus.filter(":visible").focus();
+                }
+            },
+            submitHandler: function(form) {
+                if ($(form).find('[name="status"]').val() == '<?php echo \NBlog\Model\WritingStatus::DRAFT ?>') {
+                    form.submit();
+                } else if (typeof checkUserSMSVerified == 'function' && !checkUserSMSVerified()) {
+                    (typeof registerSmsVerification == 'function') && registerSmsVerification($(form).find('input[type="submit"]'));
+                } else {
+                    form.submit();
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,9 @@
+<ul class="nav nav-pills">
+    <li<?php echo $this->nav == 'post' ? ' class="active"' : '' ?>>
+        <a href="<?php echo $this->nav != 'post' ? $this->url('add-my-post') : '' ?>"><?php echo $this->translate('New Post') ?></a>
+    </li>
+
+    <li<?php echo $this->nav == 'discussion' ? ' class="active"' : '' ?>>
+        <a href="<?php echo $this->nav != 'discussion' ? $this->url('add-my-discussion') : '' ?>"><?php echo $this->translate('New Discussion') ?></a>
+    </li>
+</ul>

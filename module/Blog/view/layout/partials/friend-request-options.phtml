@@ -1,0 +1,104 @@
+
+<div id="friend-request-options">
+    <?php switch($this->status) :
+
+        case 'same_user':
+            break;
+
+        case 'request_not_accept': ?>
+            <div class="after-friends-req">
+                <?php echo $this->translate('Friend Request Sent') ?>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                        <i class="icon-chevron-sign-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation"><a href="#" class="friend-request-cancel" rel="<?php echo $this->userId ?>"><?php echo $this->translate('Cancel Friend Request') ?></a></li>
+                    </ul>
+                </div>
+            </div>
+            <?php break;
+
+        case 'following': ?>
+            <div class="friends-req">
+                <button class="btn xxz bg1 dropdown-toggle bg1 un_subscriber" type="button" data-toggle="dropdown"
+                        id="un_subscriber_<?php echo $this->userId ?>"><?php echo $this->translate('Unsubscribe')?>
+                </button>
+            </div>
+            <?php break;
+
+        case 'follower': ?>
+            <div class="after-friends-req">
+                <?php echo $this->translate('Subscriber') ?>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                        <i class="icon-chevron-sign-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#" class="cancel_subscription" id="cancel_subscription_<?php echo $this->userId ?>">
+                                <?php echo $this->translate('Cancel Subscription') ?>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <?php break;
+
+        case 'show_accept_deny_link': ?>
+            <div class="after-friends-req">
+                <?php echo $this->translate('Friend Request Received') ?>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                        <i class="icon-chevron-sign-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#" class="friend-request-accept" id="request-for-friend_accept_<?php echo $this->userId ?>">
+                                <?php echo $this->translate('Accept') ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#" class="friend-request-deny" id="request-for-friend_cancel_<?php echo $this->userId ?>">
+                                <?php echo $this->translate('Deny') ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#" class="make_subscriber" id="make_subscriber_<?php echo $this->userId ?>">
+                                <?php echo $this->translate('Make Subscriber') ?>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <?php break;
+
+        case 'request_accept': ?>
+            <div class="after-friends-req">
+                <?php echo $this->translate('Friend') ?>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                        <i class="icon-chevron-sign-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#" class="friend-cancel" id="friend_cancel_<?php echo $this->userId ?>">
+                                <?php echo $this->translate('Cancel Friendship') ?>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <?php break;
+
+        case 'user_not_logged_in':
+        case 'request_not_send':
+        default: ?>
+            <div class="friends-req">
+                <button class="btn xxz bg1 friend-request" type="button" data-logged-in="<?php echo ($this->sessionContainer()->getData('username')) ?>"
+                        id="request-for-friend_<?php echo $this->userId ?>"><?php echo $this->translate('Send Friend Request')?>
+                </button>
+            </div>
+            <?php break;
+    endswitch ?>
+</div>

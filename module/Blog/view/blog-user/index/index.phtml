@@ -1,0 +1,14 @@
+<div class="row">
+    <div id="idOfMeWallAjaxLoding" class="left-column col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <?php echo $this->partial('blog-user/index/partials/user_wall_left', array(
+            'latestAnything'    =>  $this->latestAnything,
+            'moodView'          =>  $this->moodView,
+            'blogView'          =>  $this->blogView,
+            'reportForm'        =>  $this->reportForm,
+        )); ?>
+    </div>
+
+    <div class="right-column col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div id="friend-suggestions" data-username="<?php echo $this->username ?>"></div>
+    </div>
+</div>

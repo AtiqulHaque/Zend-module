@@ -1,0 +1,65 @@
+<h3>
+    <?php echo $this->translate('My Episodes') ?>
+    <a href="<?php echo $this->url('add-my-episode') ?>" class="pull-right btn btn-success"><?php echo $this->translate('New Episode') ?></a>
+</h3>
+
+<form action="<?php echo $this->url('do-bulk-action') ?>" method="POST">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th class="optional"></th>
+            <th><?php echo $this->translate('Title of Episode') ?></th>
+            <th class="optional"><?php echo $this->translate('Created') ?></th>
+            <th class="optional"><?php echo $this->translate('Last Modified') ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if (empty($this->episodes)) : ?>
+        <tr>
+            <td colspan="4"><p class="no-record-found"><?php echo $this->translate('No episode has been found.') ?></p></td>
+        </tr>
+        <?php else: foreach ($this->episodes AS $episode) : ?>
+        <tr>
+            <td class="optional"><input type="checkbox" name='episodeIds[]' value="<?php echo $episode['episode_id'] ?>" /></td>
+            <td>
+                <a href='<?php echo $this->url('show-my-episode', array('permalink' => $episode['permalink'])) ?>'>
+                    <?php echo $episode['title'] ?></a></td>
+            <td>
+                <a href='<?php echo $this->url('show-my-episode', array('permalink' => $episode['permalink'])) ?>'>
+                    <?php echo $this->translate('See Detail') ?></a><br />
+
+            <span class="label label-inverse">
+                <small style="font-size: 12px;">
+                    <?php echo (($link = $this->BlogPost()->getCategoryLink($episode, $this->categories, ', ')) ? ($link.' '.$this->translate('Division')) : '') ?>
+
+                    <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($episode['episode_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($episode['episode_created']) ?></span>
+                    লেখা</small>
+            </span>
+                <small style="margin-left: 10px">
+                    <a href='<?php echo $this->url('edit-my-episode', array('permalink' => $episode['permalink'])) ?>'>
+                        <i class="icon icon-remove-sign"></i> সংশোধন করুন</a>
+                </small>
+            </td>
+            <td>
+                <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($episode['episode_modified']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($episode['episode_modified']) ?></span>
+                </td>
+        </tr>
+        <?php endforeach; endif ?>
+        </tbody>
+    </table>
+
+    <?php if (!empty($this->episodes)) : ?>
+        <div class="pagination pagination-centered">
+            <?php echo $this->partial('blog-user/partials/bulk-actions') ?>
+            <?php echo $this->paginator()->slide($this->paginator, array_merge($this->paginatorOptions, array('linksOnly' => true, 'class' => 'pull-right'))) ?>
+        </div>
+    <?php endif ?>
+</form>
+<div>
+    <h3>কি-নোট: </h3>
+    <ul class="nav-list unstyled">
+        <li><span class="label label-info">অপ্রকাশিত:</span> যে উপাখ্যানগুলি আপনি নিজে এখনো প্রকাশ করেননি।</li>
+        <li><span class="label label-warning">ব্যানড্‌:</span> ব্লগ কর্তৃপক্ষ কোন না কোন কারণে উপাখ্যানটি বাতিল করেছেন।</li>
+        <li><span class="label label-inverse">রিপোর্টেড:</span> জনসাধারণ কর্তৃক উপাখ্যানটি একাধিকবার রিপোর্ট করা হয়েছে।</li>
+    </ul>
+</div>

@@ -1,0 +1,102 @@
+<?php $isUserCurrentUser = (isset($this->userDetail['user_id']) && $this->sessionContainer()->getData('user_id') == $this->userDetail['user_id']);
+if (!$isUserCurrentUser) :
+    echo $this->partial('blog-user/index/partials/anonymous-user-navbar', array('userDetail' => $this->userDetail));
+endif ?>
+<div class="row">
+    <div class="sub-navi bg1 col-xs-12 col-sm-12 col-md-12 col-lg-12 albums">
+        <ul>
+            <li><a href="<?php echo $this->url('show-pic-album', array('username' => $this->userDetail['username'])) ?>" class="active"
+                   rel="<?php echo \NBlog\Model\ImageUsagesType::ALBUM ?>"><?php echo $this->translate('Album') ?></a>
+            </li>
+            <li><a href="<?php echo $this->url('show-pic-album', array('username' => $this->userDetail['username'])) ?>"
+                   rel="<?php echo \NBlog\Model\ImageUsagesType::PROFILE ?>"><?php echo $this->translate('Profile') ?></a>
+            </li>
+            <li><a href="<?php echo $this->url('show-pic-album', array('username' => $this->userDetail['username'])) ?>"
+                   rel="<?php echo \NBlog\Model\ImageUsagesType::BANNER ?>"><?php echo $this->translate('Banner') ?></a>
+            </li>
+            <li><a href="<?php echo $this->url('show-pic-album', array('username' => $this->userDetail['username'])) ?>"
+                   rel="<?php echo \NBlog\Model\ImageUsagesType::BLOG ?>"><?php echo $this->translate('Blog') ?></a>
+            </li>
+            <li><a href="<?php echo $this->url('show-pic-album', array('username' => $this->userDetail['username'])) ?>"
+                   rel="<?php echo \NBlog\Model\ImageUsagesType::COMMENT ?>"><?php echo $this->translate('Comment') ?></a>
+            </li>
+            <li><a href="<?php echo $this->url('show-pic-album', array('username' => $this->userDetail['username'])) ?>"
+                   rel="<?php echo \NBlog\Model\ImageUsagesType::MOOD ?>"><?php echo $this->translate('Mood') ?></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row loading-parent">
+    <div class="myPic col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <?php if ($isUserCurrentUser) : ?>
+        <div class="pic-action">
+            <button class="btn btn-default create-album bg1" type="button">
+                <i class="icon-folder-open-alt"></i><?php echo $this->translate('Album creation') ?>
+            </button>
+            <button class="btn btn-default margR10 bg1 add-album" type="button">
+                <i class="icon-plus"></i> <?php echo $this->translate('Picture upload') ?>
+            </button>
+
+            <div id="action-settings" class="action-subset">
+                <button id="select-pic" class="btn btn-default pic-set bg1" type="button">
+                    <i class="icon-"></i>
+                </button>
+                <div class="action-toDo" style="display: none;">
+                    <button class="btn btn-default selectAll bg1" type="button">
+                        <i class="icon-"></i> <?php echo $this->translate('All') ?>
+                    </button>
+                    <button class="btn btn-default ifChecked bg1 forRename" type="button" disabled="disabled">
+                        <i class="icon-edit"></i><?php echo $this->translate('Name change') ?>
+                    </button>
+                    <button class="btn btn-default ifChecked bg1 forDelete" type="button" disabled="disabled">
+                        <i class="icon-trash"></i><?php echo $this->translate('Delete This') ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="album-writing-area bg1" style="display: none;">
+            <?php $form = $this->albumForm->setAttribute('action', $this->url('add-album'))->prepare();?>
+            <?php echo $this->form()->openTag($form) ?>
+            <label for=""><?php echo $this->translate('Album name') ?> :</label>
+            <?php $element = $form->get('album_name') ?>
+            <?php echo $this->formInput($element) ?>
+            <?php echo $this->formElementErrors($element) ?>
+            <div class="btn-group">
+                <button id="add-album" class="btn btn-default" type="submit"><i class="icon-ok"></i></button>
+                <button class="btn btn-default remove-writing-area" type="button"><i class="icon-remove"></i></button>
+            </div>
+            <?php echo $this->form()->closeTag(); ?>
+        </div>
+
+        <div class="modal fade" id="add-album-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel"><?php echo $this->translate('Upload picture') ?></h4>
+                    </div>
+                    <div class="modal-body pad-1">
+                        <div id="upload-container">
+                            <div class="upload_title"></div>
+                            <div id="album-file-uploader"></div>
+                            <div class="message-upload-error"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer marg-0">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->translate('Cancel') ?></button>
+                        <button type="button" class="btn btn-primary"><?php echo $this->translate('Upload') ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php endif ?>
+
+        <ul class="album" id="album-container" data-username="<?php echo $this->userDetail['username'] ?>" style="overflow: hidden"></ul>
+    </div>
+    <div style="display: none;" class="loading-back">
+        <i class="icon-spinner icon-spin icon-large"></i>
+    </div>
+    <!-- End of right-column -->
+</div>

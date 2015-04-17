@@ -1,0 +1,132 @@
+<div class="row-fluid">
+    <div class="row-fluid">
+        <div class="box span24 noticebox">
+            <div class="box-header bg-sky-blue no-pad">
+                <div class="sticky_bg">
+                    <div class="select_text">
+                        <h2> <?php echo $this->translate('Featured Discussion') ?> </h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-content">
+                <?php if (empty($this->latestDiscussion)) : ?>
+                    <p class="no-record-found"><?php echo $this->translate('No recent discussion has been found.') ?></p>
+                <?php else : foreach ($this->latestDiscussion AS $discussion) :?>
+                    <?php if (empty($discussion['isHidden'])) : ?>
+                        <div class="single-post">
+                            <div class="post-header">
+                                <a href="<?php echo $this->url('specific-discussion', array('permalink' => $discussion['permalink'])) ?>" class="post-title">
+                                    <?php echo $this->Text()->word_limiter($discussion['title'],5) ?>
+                                </a>
+
+                                <div class="post-details">
+                                    <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($discussion['discussion_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($discussion['discussion_created']) ?></span>
+                                    <?php echo $this->translate('Has written') ?>
+                                    <a href="<?php echo $this->url('public-profile', array('username' => $discussion['username'])) ?>">
+                                        <?php echo $this->Post()->getUserInfoLinkWithPopUpPost($discussion, 'right', $this->professions) ?></a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php else : ?>
+                        <?php echo $this->Post()->getContentHideLink(\NBlog\Model\WritingType::DISCUSSION, $discussion['permalink']) ?>
+                    <?php endif ?>
+                <?php endforeach; endif ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="span12">
+        <div class="row-fluid">
+            <div class="box span24">
+                <div class="box-header red">
+                    <h2><?php echo $this->translate('Discussion') . ' - ' . $this->translate('Nokkhotro Blog') ?></h2>
+                    <?php if ($this->sessionContainer()->getData('user_id')) : ?>
+                        <div class="box-icon">
+                            <ul class="nav nav-pills">
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="#"><?php echo $this->translate('Hide') ?></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    <?php endif ?>
+                </div>
+                <div class="box-content">
+
+                    <?php if (empty($this->discussion)) : ?>
+                        <p class="no-record-found"><?php echo $this->translate('No discussion has been found.') ?></p>
+                    <?php else : foreach ($this->discussion AS $singleDiscussion) :?>
+                        <?php if (empty($singleDiscussion['isHidden'])) : ?>
+                        <div class="single-post">
+                            <div class="post-header">
+                                <a href="#"><img src="<?php echo $this->Profile()->getImage($singleDiscussion) ?>" /></a>
+                                <h4 class="post-title">
+                                    <a href="<?php echo $this->url('specific-discussion', array('permalink' => $singleDiscussion['permalink'])) ?>">
+                                        <?php echo $singleDiscussion['title']?>
+                                    </a>
+                                </h4>
+
+                                <div class="post-details">
+                                    <?php echo $this->Post()->getSummaryPost($singleDiscussion, $this->categories , $this->professions, $singleDiscussion['discussion_created']) ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php else : ?>
+                        <?php echo $this->Post()->getContentHideLink(\NBlog\Model\WritingType::DISCUSSION, $singleDiscussion['permalink']) ?>
+                        <?php endif?>
+
+                    <?php endforeach; endif ?>
+                </div>
+              <!--  --><?php /*echo $this->paginator()->slide($this->paginator, $this->paginatorOptions) */?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="box span24 noticebox">
+
+            <div class="box-header bg-sky-blue no-pad">
+                <div class="sticky_bg">
+                    <div class="select_text">
+                        <h2> <?php echo $this->translate('Old Discussions') ?> </h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-content">
+                <?php if (empty($this->oldDiscussion)) : ?>
+                    <p class="no-record-found"><?php echo $this->translate('No recent post has been found.') ?></p>
+                <?php else : foreach ($this->oldDiscussion AS $discussion) : ?>
+                    <?php if (empty($discussion['isHidden'])) : ?>
+                        <div class="single-post">
+                            <div class="post-header">
+                                <a href="<?php echo $this->url('specific-discussion', array('permalink' => $discussion['permalink'])) ?>" class="post-title">
+                                    <?php echo $this->Text()->word_limiter($discussion['title'], 5) ?>
+                                </a>
+                                <div class="post-details">
+
+                                    <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($discussion['discussion_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($discussion['discussion_created']) ?></span>
+                                    <?php echo $this->translate('Has written') ?>
+                                    <a href="<?php echo $this->url('public-profile', array('username' => $discussion['username'])) ?>">
+                                        <?php echo $this->Post()->getUserInfoLinkWithPopUpPost($discussion, 'right', $this->professions) ?></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php else : ?>
+                        <?php echo $this->Post()->getContentHideLink(\NBlog\Model\WritingType::DISCUSSION, $discussion['permalink']) ?>
+                    <?php endif ?>
+
+                <?php endforeach; endif ?>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="row-fluid">
+    <div class="box span24">
+        <div class="box-header">
+            <h2><i class="icon-bookmark icon-white"></i><?php echo $this->translate('Top Selected Posts') ?></h2>
+
+
+        </div>
+        <div class="box-content">
+            <?php foreach ($this->topBlogPosts AS $post) : ?>
+                <div class="single-post">
+                    <div class="post-header">
+                        <a href="#"><img src="<?php echo $this->Profile()->getImage($post) ?>" /></a>
+                        <h4 class="post-title">
+                            <a href="<?php echo $this->url('specific-post', array('permalink' => $post['permalink'])) ?>">
+                                <?php echo $post['title']?>
+                            </a>
+                        </h4>
+
+                        <div class="post-details">
+                            <?php echo $this->Post()->getSummaryPost($post, $this->categories, $this->professions, $post['publicly_published_time']) ?>
+                        </div>
+                    </div>
+
+                    <div class="post-body">
+                        <?php echo $this->BlogPost()->getPartialDetail($post) . $this->BlogPost()->getShowMoreLinkForPost($post); ?>
+                    </div>
+
+                    <div class="post-summary">
+                        <i class="icon icon-comment"></i><?php echo $this->number()->convert($post['total_comments']) ?>
+                        <i class="icon-thumbs-up"></i><?php echo $this->Number()->convert($post['total_favorited']) ?>
+                        <i class="icon-share"></i><?php echo $this->Number()->convert($post['total_share']) ?>
+
+                    </div>
+                </div>
+            <?php endforeach ?>
+            <span><a href="<?php echo $this->url('view-all-selected-posts') ?>">» <?php echo $this->translate('All Selected Posts') ?></a></span>
+        </div>
+    </div>
+</div>

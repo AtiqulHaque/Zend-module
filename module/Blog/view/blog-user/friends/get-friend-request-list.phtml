@@ -1,0 +1,28 @@
+
+<?php if ($this->friendRequests) : foreach((array)$this->friendRequests AS $request) : ?>
+<div class="full" id="friend_id_<?php echo $request['user_id']?>">
+    <div class="lft">
+        <div class="imgJar">
+            <img src="<?php echo $this->Profile()->getImage($request) ?>"
+                 alt="<?php echo $this->Profile()->getDisplayName($request) ?>">
+        </div>
+        <div>
+            <span class="name"><?php echo $this->Profile()->getNameWithPublicProfileLink($request, true) ?></span>
+            <span class="mutual">
+                <?php echo $this->translate('Mutual Friend') ?>
+                <?php echo $this->Number()->convert(0);//$request['mutual_friends'] ?>
+                <?php echo $this->translate('# of Persons') ?>
+            </span>
+<!--            <span class="suggested">-->
+<!--                --><?php //echo $this->translate('Friendship by whom') ?><!--: <a href="">আতিকুল হক</a>-->
+<!--            </span>-->
+        </div>
+    </div>
+    <div class="rgt">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary btn-sm btn-ok accept-request" title="<?php echo $this->translate('Accept') ?>"><i class="icon-ok"></i></button>
+            <button type="button" class="btn btn-default btn-sm cancel-request" title="<?php echo $this->translate('Cancel') ?>"><i class="icon-remove"></i></button>
+        </div>
+    </div>
+</div>
+<?php endforeach; endif ?>

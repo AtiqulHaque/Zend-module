@@ -1,0 +1,54 @@
+<?php $privacyFieldset = $this->form->get('privacy') ?>
+<div id="profile_info_privacy_table">
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="hobby"><?php echo $this->translate('Hobby') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->moreProfileInfoFieldset->get('hobby'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->NBEscapeHtml($this->userDetail['hobby'])) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::HOBBY_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="hobby"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <!-- <div class="form-group error-occurred"> -->
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="biography"><?php echo $this->translate('Biography') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->moreProfileInfoFieldset->get('biography'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"> <?php echo $this->Text()->getNotNullText($this->NBEscapeHtml($this->userDetail['biography'])) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::BIOGRAPHY_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="biography"> <?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <!-- <div class="form-group error-occurred"> -->
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="profile_tagline"><?php echo $this->translate('Profile Tagline') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->moreProfileInfoFieldset->get('profile_tagline'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->NBEscapeHtml($this->userDetail['profile_tagline'])) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::PROFILE_TAGLINE_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="profile_tagline"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <div id="go-to-action" class="form-group display-hide">
+        <div class="col-md-offset-2 col-lg-offset-2 col-md-10 col-lg-10">
+            <?php echo $this->formSubmit($this->form->get('submit')->setAttributes(array(
+                'name' => $this->moreProfileInfoFieldset->getName().'_submit', 'onclick' => 'cancelDisabledField();'))) ?>
+            <?php echo $this->formElement($this->form->get('cancel')); ?>
+        </div>
+    </div>
+</div>

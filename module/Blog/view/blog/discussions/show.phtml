@@ -1,0 +1,177 @@
+
+<div class="row-fluid">
+
+<div class="sidebar span6">
+    <?php echo $this->partial('blog/partials/user-summary-widget', array(
+        'writing' => $this->discussion,
+        'userId' => $this->discussion['discussion_created_by'],
+        'friendInfo' => $this->friendInfo
+    )) ?>
+
+    <div class="box span24 noticebox">
+
+        <div class="box-header bg-sky-blue no-pad">
+            <div class="sticky_bg">
+                <div class="select_text">
+                    <h2><?php echo $this->translate('Other discussions of the blogger') ?></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-content">
+            <?php if (empty($this->otherDiscussions)) : ?>
+                <p class="no-record-found"><?php echo $this->translate('No other discussion has been found.') ?></p>
+            <?php else : foreach ($this->otherDiscussions AS $discussion) : ?>
+                <?php if (empty($discussion['isHidden'])) : ?>
+                    <div class="single-post">
+                        <div class="post-header">
+                            <a href="<?php echo $this->url('specific-discussion',array('permalink'=>$discussion['permalink']))?>" class="post-title">
+                                <?php echo $this->Text()->word_limiter($discussion['title'], 5); ?>
+                            </a>
+
+                            <div class="post-details">
+                                <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($discussion['discussion_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($discussion['discussion_created']) ?></span>
+                                <?php echo $this->translate('Has written') ?>
+                                <a href="<?php echo $this->url('public-profile', array('username' => $discussion['username'])) ?>">
+                                    <?php echo $this->Post()->getUserInfoLinkWithPopUpPost($discussion, 'right', $this->professions) ?></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php else : ?>
+                    <?php echo $this->Post()->getContentHideLink(\NBlog\Model\WritingType::DISCUSSION, $discussion['permalink']) ?>
+                <?php endif ?>
+            <?php endforeach; endif ?>
+        </div>
+    </div>
+</div>
+
+<div class="span12 posts-box">
+    <div class="box-header bg-sky-blue no-pad">
+        <div class="sticky_bg">
+            <div class="select_text">
+                <h2><?php echo $this->translate('Discussion Description') ?></h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-content">
+        <div class="single-post">
+            <div class="post-header">
+                <a href="#"><img src="<?php echo $this->Profile()->getImage($this->discussion) ?>" /></a>
+                <h4 class="post-title"><a href="#"> <?php echo $this->NBEscapeHtml($this->discussion['title']) ?> </a></h4>
+
+                <div class="post-details">
+                    <?php echo $this->Post()->getSummaryPost($this->discussion, $this->categories, $this->professions, $this->discussion['discussion_created']) ?>
+                    <?php echo ($this->discussion['discussion_created'] == $this->discussion['discussion_updated']) ? '' : 'Modified: <i>'.$this->DateTimeEnToBn()->ShowDate($this->discussion['discussion_updated']).'</i>'?>
+                </div>
+            </div>
+
+            <div class="post-body">
+                <?php echo $this->NBEscapeHtml($this->discussion['details'], true) ?>
+            </div>
+
+            <div class="post-footer">
+                <div class="post-actions">
+
+                    <?php if ($this->sessionContainer()->getData('username')) : ?>
+
+                        <?php $currentUser = $this->sessionContainer()->getData('user_id') ?>
+                        <?php if (empty($this->discussion['isBlocked'])) : ?>
+                            <a href='#' class='do-comment-for-writing'><?php echo $this->translate('Write Comment') ?></a>
+                        <?php endif ?>
+
+                        <?php if ($currentUser == $this->discussion['discussion_created_by']) : ?>
+                            <a href='<?php echo $this->url('edit-my-post', array('permalink' => $this->discussion['permalink'])) ?>'>
+                                <?php echo $this->translate('Edit This') ?>
+                            </a>
+                            <a href='<?php echo $this->url('trash-my-blog-post', array('permalink' => $this->discussion['permalink'])) ?>'>
+                                <?php echo $this->translate('Delete This') ?>
+                            </a>
+                        <?php else : ?>
+                            <?php echo $this->BlogPost()->getLinkToDealWithFavorite(
+                                $this->discussion['permalink'], \BlogUser\Model\FavoriteType::POST, isset($this->discussion['isFavorite']), false) ?>
+
+
+                            <?php if (isset($this->discussion['hasUserReported'])) : ?>
+                                <i class="icon icon-flag"></i><?php echo $this->translate('Already Reported') ?>
+                            <?php else : ?>
+                                <a href="" class='do-report-on-writing' rel='<?php echo $this->discussion['discussion_id'] ?>'><?php echo $this->translate('Make a complaint') ?></a>
+                            <?php endif ?>
+
+                            <?php if (isset($this->discussion['isHidden'])) : ?>
+                                <a href='<?php echo $this->url('unhide-my-blog-content', array('content_type'=>\NBlog\Model\WritingType::DISCUSSION, 'permalink' => $this->discussion['permalink'])) ?>'><?php echo $this->translate('Display again') ?></a>
+                            <?php else : ?>
+                                <a href='<?php echo $this->url('hide-my-blog-content', array('content_type'=>\NBlog\Model\WritingType::DISCUSSION, 'permalink' => $this->discussion['permalink'])) ?>'><?php echo $this->translate('Hide') ?></a>
+                            <?php endif ?>
+                        <?php endif ?>
+                    <?php else : ?>
+                        <a href='' class='to-open-login-box'><?php echo $this->translate('Write Comment') ?></a>
+                        <a href='' class='to-open-login-box'><?php echo $this->translate('Make Favorite') ?></a>
+                        <a href='' class='to-open-login-box'><?php echo $this->translate('Make a complaint') ?></a>
+                    <?php endif ?>
+                    <a onClick="window.open('<?php echo $this->BlogPost()->discussionShareToFacebook($this->discussion) ?>', 'feedDialog','toolbar=0,status=0,width=626,height=436')" href="javascript: void(0)">FB Share</a>
+                </div>
+
+                <div class="post-summary">
+                    <i class="icon icon-comment"></i><span class="commentCount"><?php echo $this->number()->convert($this->discussion['total_comments']) ?></span>
+                    <i class="icon-thumbs-up"></i><span class="likeCount"><?php echo $this->Number()->convert($this->discussion['total_favorited']) ?></span>
+                    <i class="icon-eye-open"></i> <?php echo $this->number()->convert($this->discussion['total_viewed']) ?>
+                </div>
+            </div>
+
+            <?php echo $this->partial('blog/partials/all-comments-view', array(
+                'commentOn' => $this->discussion,
+                'comments' => $this->comments,
+                'creator' => $this->discussion['discussion_created_by'],
+                'userDetails' => $this->userDetails,
+                'commentFor' => \NBlog\Model\WritingType::DISCUSSION,
+                'blockedBloggers' => $this->blockedBloggers,
+                'isBlocked' => isset($this->discussion['isBlocked']),
+                'isWritingReported' => isset($this->discussion['hasUserReported']),
+                'commentForm' => $this->commentForm,
+                'reportForm' => $this->reportForm
+            )) ?>
+        </div>
+    </div>
+</div>
+
+<div class="sidebar span6">
+    <div class="box span24 noticebox">
+        <div class="box-header bg-sky-blue no-pad">
+            <div class="sticky_bg">
+                <div class="select_text">
+                    <h2> <?php echo $this->translate('Related Discussion') ?></h2>
+                </div>
+            </div>
+        </div>
+        <div class="box-content">
+            <?php if (empty($this->relatedPosts)) : ?>
+                <p class="no-record-found"><?php echo $this->translate('No recent discussion has been found.') ?></p>
+            <?php else : foreach ($this->relatedPosts AS $discussion) : ?>
+
+                <?php if (empty($discussion['isHidden'])) : ?>
+
+                <div class="single-post">
+                    <div class="post-header">
+                        <a href="<?php echo $this->url('specific-discussion', array('permalink'=>$discussion['permalink']))?>" class="post-title">
+                            <?php echo $this->Text()->word_limiter($discussion['title'],5); ?>
+                        </a>
+
+                        <div class="post-details">
+                            <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($discussion['discussion_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($discussion['discussion_created']) ?></span>
+                             <?php echo $this->translate('Has written') ?>
+
+                            <a href="<?php echo $this->url('public-profile', array('username' => $discussion['username'])) ?>">
+                                <?php echo $this->Post()->getUserInfoLinkWithPopUpPost($discussion,'left', $this->professions) ?></a>
+                        </div>
+                    </div>
+                </div>
+
+                <?php else : ?>
+                    <?php echo $this->Post()->getContentHideLink(\NBlog\Model\WritingType::DISCUSSION, $discussion['permalink']) ?>
+                <?php endif ?>
+            <?php endforeach; endif ?>
+        </div>
+    </div>
+</div>
+</div>

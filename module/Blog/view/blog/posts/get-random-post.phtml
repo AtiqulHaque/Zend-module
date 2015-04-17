@@ -1,0 +1,52 @@
+
+<?php if (empty($this->randomPosts)) : ?>
+<p class='no-record-found'><?php echo $this->translate('No post has been found.') ?></p>
+<?php else : ?>
+<div class="row-fluid">
+    <div class="box span24">
+        <div class="box-header">
+            <h2><i class="icon-bullhorn icon-white"></i><?php echo $this->translate('Old Posts') ?></h2>
+
+        </div>
+
+        <div class="box-content">
+            <?php foreach ($this->randomPosts AS $post) : ?>
+
+                <div class="single-post">
+                    <div class="post-header">
+                        <a href="#"><img src="<?php echo $this->Profile()->getImage($post) ?>"/></a>
+                        <h4 class="post-title">
+                            <a href="<?php echo $this->url('view-my-post', array('permalink' => $post['permalink'])) ?>">
+                                <?php echo $post['title'] ?></a>
+                        </h4>
+
+                        <div class="post-details">
+                            <?php echo $this->Post()->getSummaryPost($post, $this->categories, $this->professions) ?>
+                        </div>
+                    </div>
+
+                    <div class="post-body">
+                        <?php echo $this->Text()->word_limiter($this->Image()->removeImageTag($post['details'])) .
+                            $this->BlogPost()->getShowMoreLinkForLoggedInUser($post) ?>
+                    </div>
+
+                    <div class="post-summary">
+                        <i class="icon icon-comment"></i><?php echo $this->number()->convert($post['total_comments']) ?>
+                        <i class="icon-thumbs-up"></i><?php echo $this->Number()->convert($post['total_favorited']) ?>
+                        <i class="icon-share"></i><?php echo $this->Number()->convert($post['total_share']) ?>
+
+                    </div>
+                </div>
+
+            <?php endforeach ?>
+            <div class="row-fluid">
+                <div class="span24">
+                    <span class="pull-right">
+                        <a href="<?php echo $this->url('view-all-selected-posts') ?>">» <?php echo $this->translate('See All Posts') ?></a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif ?>

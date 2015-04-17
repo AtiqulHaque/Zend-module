@@ -1,0 +1,25 @@
+<?php $form = $this->commentForm->setAttributes(array(
+    'action' => $this->url('edit-comment', array('id' => $this->commentId)),
+    'id'  => 'comment-update-form',
+    'class' => 'comment-update-form'
+))->prepare();
+echo $this->form()->openTag($form); ?>
+
+<div class="control-group">
+    <div class="controls">
+        <?php echo $this->formElement($form->get('comment')->setAttribute('id', 'comment_no_'.$this->commentId)); ?>
+        <span class="field-error"><?php echo $this->formElementErrors($form->get('comment')) ?></span>
+    </div>
+</div>
+
+<div class="row-fluid actions">
+    <div class="span24">
+        <?php echo $this->formSubmit($form->get('submit')->setAttribute('id', 'update-comment')->setValue('Update comment')) ?>
+        <?php echo $this->formButton($form->get('cancel')->setAttributes(array('id'=>'cancel-edit'))) ?>
+        <?php echo $this->formElement($form->get('comment_id')); ?>
+        <?php echo $this->formElement($form->get('type')); ?>
+        <?php echo $this->formElement($form->get('comment_for')); ?>
+        <?php echo $this->formElement($form->get('parent_id')); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

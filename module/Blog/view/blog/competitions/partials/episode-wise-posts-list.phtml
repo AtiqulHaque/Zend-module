@@ -1,0 +1,25 @@
+<ul class="nav nav-pills nav-justified subChildTab">
+    <?php $count = 0; foreach($this->voteCategories AS $key => $categories) : ?>
+        <li<?php echo ($count++) ? '' : ' class="active"' ?>>
+            <a href="#contest-part-<?php echo $this->episode ?>-<?php echo $key ?>" data-toggle="tab"
+               data-href='<?php echo $this->url('blog-competition/get-posts', array('episode' => $this->episode, 'category' => $key)) ?>'
+               title="<?php echo $this->voteCategories[$key]['items'] ?>">
+                <?php echo $categories['title'] ?>
+            </a>
+        </li>
+    <?php endforeach ?>
+</ul>
+<div class="tab-content">
+    <?php $count = 0; foreach($this->voteCategories AS $key => $categories) : ?>
+        <div class="tab-pane fade<?php echo ($count++) ? '' : ' in active' ?>"
+             id="contest-part-<?php echo $this->episode ?>-<?php echo $key ?>">
+            <?php if ($this->episode == $this->activeEpisode && $count == 1) {
+                echo $this->partial('blog/competitions/partials/post-list', array(
+                    'blogPosts' => $this->blogPosts,
+                    'categories' => $this->categories,
+                    'professions' => $this->professions,
+                ));
+            } ?>
+        </div>
+    <?php endforeach ?>
+</div>

@@ -1,0 +1,110 @@
+<div class="banner col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div id="banner-holder">
+        <img id="pictureId" src="<?php echo $this->Profile()->getBannerImage($this->userDetail)?>"
+             alt="<?php echo $this->Profile()->getDisplayName($this->userDetail) ?>">
+        <input type="hidden" id="left-value" value="0"/>
+        <input type="hidden" id="top-value" value="0"/>
+    </div>
+
+    <?php $isUserCurrentUser = $this->sessionContainer()->getData('username') === $this->userDetail['username'];
+    if ($isUserCurrentUser) : ?>
+    <div class="action action-banner dropdown">
+        <button class="btn dropdown-toggle " type="button" id="dropdownMenu1" data-toggle="dropdown">
+            <?php echo $this->translate('Cover Change') ?>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation">
+                <a class="change-banner-pic" data-title="2" role="menuitem" tabindex="-1" href="#" data-section="from_album" data-toggle="modal" data-target="#modal_for_image_upload">
+                    <?php echo $this->translate('From Album') ?>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="change-banner-pic" data-title="2" role="menuitem" tabindex="-1" href="#" data-section="from_computer" data-toggle="modal" data-target="#modal_for_image_upload">
+                    <?php echo $this->translate('From Computer') ?>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="after-banner-select">
+        <div class="drag-notice"><?php echo $this->translate('Determine the exact location of the image by dragging') ?></div>
+        <div style="display: none;" class="banner-action">
+            <a id="cancel-banner-set" class="cancle"><?php echo $this->translate('Cancellation') ?></a>
+            <a id="save-banner-set" class="save"><?php echo $this->translate('Save') ?></a>
+        </div>
+    </div>
+    <?php endif ?>
+
+    <div class="user-intro">
+        <img class="profile-pic" src="<?php echo $this->Profile()->getImage($this->userDetail,'image_source','profile') ?>" alt="">
+        <?php if ($isUserCurrentUser) : ?>
+        <div class="action  dropdown">
+            <button  class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                <?php echo $this->translate('Image Change') ?>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation">
+                    <a data-title="1" class="change-profile-pic" role="menuitem" tabindex="-1" href="#" data-section="from_album" data-toggle="modal" data-target="#modal_for_image_upload">
+                        <?php echo $this->translate('From Album') ?>
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a class="change-profile-pic" data-title="1" role="menuitem" tabindex="-1" href="#" data-section="from_computer" data-toggle="modal" data-target="#modal_for_image_upload">
+                        <?php echo $this->translate('From Computer') ?>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <?php endif ?>
+        <a class="title bg1">
+            <?php echo $this->Profile()->getDisplayName($this->userDetail) ?>
+        </a>
+    </div>
+
+    <?php if ($isUserCurrentUser) : ?>
+
+    <div class="modal fade" id="modal_for_image_upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true" data-width="760">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button style="display: none" type="button"  class="btn back"><?php echo $this->translate('Home') ?></button>
+                    <button type="button" data-section="from_album" class="btn active"><?php echo $this->translate('From Album') ?></button>
+                    <button type="button" data-section="from_computer" class="btn"><?php echo $this->translate('From Computer') ?></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div id="content-container" class="modal-body loading-parent pad-0">
+                    <div class="tab-element">
+                        <div class="from_album">
+                            <ul id="albums-container" class="album"></ul>
+                        </div>
+                        <div class="from_computer">
+                            <div class="image_process_area">
+                                <div class="img_view_area">
+                                    <div class="upload-area">
+                                        <i class="icon-picture"></i>
+                                        <div id="profile-image-upload"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: block;" class="loading-back">
+                        <i class="icon-spinner icon-spin icon-large"></i>
+                    </div>
+                </div>
+                <div class="modal-footer marg-0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->translate('Cancellation') ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php else : ?>
+        <?php echo $this->partial('layout/partials/friend-request-options', array(
+            'status' => $this->friendInfo['stRequestStatus'],
+            'userId' => $this->userDetail['user_id']
+        )) ?>
+    <?php endif ?>
+</div>

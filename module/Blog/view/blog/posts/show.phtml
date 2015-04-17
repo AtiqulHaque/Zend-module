@@ -1,0 +1,72 @@
+<div class="content-wrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<div class="row">
+    <div class="main-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+            <div class="left-column hidden-xs col-sm-5 col-md-5 col-lg-5">
+                <?php echo $this->partial('blog/partials/user-summary-widget', array(
+                    'writing' => $this->post,
+                    'userId' => $this->post['post_created_by'],
+                    'friendInfo' => $this->friendInfo,
+                    'otherPostInfoByUser'=> $this->otherPostInfoByUser
+                )) ?>
+
+<!--                <div class="tile ads-zone col-xs-12 col-sm-12 col-md-12 col-lg-12" data-item="2" data-dimension="vertical"></div>-->
+
+                <div class="tile usp-post-list hidden-xs col-sm-12 col-md-12 col-lg-12">
+                    <div class="tile-header"><?php echo $this->translate('Other writings of the blogger') ?></div>
+                    <div class="tile-body">
+                        <div class="tab-content">
+                            <div class="row tab-pane active" id="discussed-post">
+                                <?php if (empty($this->blogPost)) : ?>
+                                    <p class="no-record-found"><?php echo $this->translate('No recent post has been found.') ?></p>
+                                <?php else : echo $this->partial('blog/partials/posts-in-widget', array(
+                                    'posts' => $this->blogPost,
+                                    'categories' => $this->categories,
+                                    'hideUserInfo' => true,
+                                    'hideSummary' => true,
+                                    'hideUserActivity' => true
+                                ));
+                                endif ?>
+                            </div>
+                        </div>
+                    </div><!--  End of tile-body  -->
+                </div><!--    End of tile    -->
+            </div>
+
+            <div class="mid-column col-xs-12 col-sm-7 col-md-7 col-lg-7">
+                <div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="tile-body">
+                        <div class="row" >
+                            <div class="tile-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <?php echo $this->partial('blog/partials/post-details-middle-widget', array(
+                                    'post' => $this->post,
+                                    'episode'=>$this->episode,
+                                    'isSelectedForVote' => $this->isSelectedForVote,
+                                    'isVotingEnabled' => $this->isVotingEnabled,
+                                    'isCheckVoteForUser' => $this->isCheckVoteForUser,
+                                    'voteCount' => $this->voteCount,
+                                    'categories' => $this->categories,
+                                    'professions' => $this->professions
+                                )) ?>
+
+                                <?php echo $this->partial('blog/partials/all-comments-view', array(
+                                    'commentOn' => $this->post,
+                                    'comments' => $this->comments,
+                                    'creator' => $this->post['post_created_by'],
+                                    'userDetails' => $this->userDetails,
+                                    'commentFor' => \NBlog\Model\WritingType::POST,
+                                    'blockedBloggers' => $this->blockedBloggers,
+                                    'isBlocked' => isset($this->post['isBlocked']),
+                                    'isWritingReported' => isset($this->post['hasUserReported']),
+                                    'commentForm' => $this->commentForm,
+                                    'reportForm' => $this->reportForm
+                                )) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

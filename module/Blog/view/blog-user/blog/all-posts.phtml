@@ -1,0 +1,60 @@
+<div class="row-fluid">
+    <div class="box span24">
+        <div class="box-header">
+            <h2>
+                <i class="icon-bookmark icon-white"></i>
+                <?php echo empty($this->summaryHeader) ? '' : $this->summaryHeader ?>
+            </h2>
+        </div>
+
+        <div class="box-content">
+            <?php if (empty($this->blogPosts)) : ?>
+
+            <div class="post_block">
+                <p class="no-record-found"><?php echo $this->translate('No post has been found.') ?></p>
+            </div>
+
+            <?php else: foreach ($this->blogPosts AS $post) : ?>
+
+            <div class="single-post">
+                <div class="post-header">
+                    <a href="#"><img src="<?php echo $this->Profile()->getImage($post) ?>"/></a>
+                    <h4 class="post-title">
+                        <a href="<?php echo $this->url('view-my-post', array('permalink' => $post['permalink'])) ?>">
+                            <?php echo $post['title'] ?></a>
+                    </h4>
+
+                    <div class="post-details">
+                        <?php echo $this->Post()->getSummaryPost($post, $this->categories, $this->professions,$post['publicly_published_time']) ?>
+                    </div>
+                </div>
+
+                <div class="post-body">
+                    <?php echo $this->Text()->word_limiter($this->Image()->removeImageTag($post['details'])) .
+                        $this->BlogPost()->getShowMoreLinkForLoggedInUser($post) ?>
+                </div>
+
+                <div class="post-footer">
+                    <div class="post-actions">
+                        <a href="<?php echo $this->url('trash-my-post', array('permalink' => $post['permalink']))?>" class="trash"><?php echo $this->translate('Make trash') ?></a>
+                        <a href="<?php echo $this->url('edit-my-post', array('permalink' => $post['permalink']))?>"><?php echo $this->translate('Edit') ?></a>
+                    </div>
+
+                    <div class="post-summary">
+                        <i class="icon icon-comment"></i>
+                        <span class="commentCount"><?php echo $this->Number()->convert($post['total_comments']) ?></span><?php echo $this->translate('Comment') ?>
+                        <i class="icon-thumbs-up"></i>
+                        <span class="likeCount"><?php echo $this->Number()->convert($post['total_favorited']) ?></span> <?php echo $this->translate('Favorites') ?>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+
+            <div class="pagination pagination-centered">
+                <?php echo $this->paginator()->slide($this->paginator, array_merge($this->paginatorOptions, array('linksOnly' => true, 'class' => 'pull-right'))) ?>
+            </div>
+
+            <?php endif ?>
+        </div>
+    </div>
+</div>

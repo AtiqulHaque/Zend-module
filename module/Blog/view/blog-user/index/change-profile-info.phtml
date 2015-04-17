@@ -1,0 +1,358 @@
+<?php if (empty($this->isAjax)) : ?>
+<div class="row mySettings">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <?php echo $this->partial('blog-user/index/partials/settings_nav', array('is_active'=> 'profile_setting')) ?>
+    </div><!-- End of right-column -->
+
+    <div class="cut-padding-left col-xs-12 col-sm-12 col-md-8 col-lg-8" id="setting-tab-content">
+<?php endif ?>
+
+<?php $form = $this->profileForm->setAttribute('action', $this->url('change-profile'))->prepare();
+$formLabel = $this->plugin('formLabel');
+$sectionPrivacyFieldset = $form->get('section_privacy');
+echo $this->form()->openTag($form) ?>
+
+<div id="accordion" class="panel-group">
+
+<div class="panel panel-default">
+    <?php $profileInfoFieldset = $form->get('profile_info') ?>
+    <div class="panel-heading bg1">
+        <h4 class="panel-title">
+            <a href="#collapseOne" data-parent="#accordion" data-toggle="collapse">
+                <span class="title"><?php echo $this->translate($profileInfoFieldset->getLabel()) ?> </span>
+            </a>
+            <a data-selected="personal_info_privacy" data-zone="writeAble" class="changeThis"><i class="icon-edit"></i></a>
+        </h4>
+    </div>
+    <div class="panel-collapse collapse" id="collapseOne">
+        <div class="panel-body">
+            <div class="section_privacy display-hide" id="personal_info_privacy_global">
+                <?php echo $this->translate($sectionPrivacyFieldset->getLabel()) ?>
+                <?php echo $this->formRadio($sectionPrivacyFieldset->get(\NBlog\Model\Setting::SECTION_PERSONAL_INFO_PRIVACY)) ?>
+            </div>
+
+            <?php echo $this->partial('blog-user/index/partials/profile_info_fieldset', array(
+                'form' => $form,
+                'profileInfoFieldset' => $profileInfoFieldset,
+                'privacyOptions' => $this->privacyOptions,
+                'userDetail' => $this->userDetail,
+                'genders' => $this->genders
+            )) ?>
+        </div>
+    </div>
+
+</div>
+
+<div class="panel panel-default">
+    <?php $educationalInfoFieldset = $form->get('educational_info') ?>
+    <div class="panel-heading bg1">
+        <h4 class="panel-title">
+            <a href="#collapseTwo" data-parent="#accordion" data-toggle="collapse">
+                <span class="title"><?php echo $this->translate($educationalInfoFieldset->getLabel()) ?> </span>
+            </a>
+            <a data-selected="educational_info_privacy" data-zone="writeAble" class="changeThis"><i class="icon-edit"></i></a>
+        </h4>
+    </div>
+    <div class="panel-collapse collapse" id="collapseTwo">
+        <div class="panel-body">
+
+            <div id="educational_info_privacy_global" class="section_privacy display-hide">
+                <?php echo $this->translate($sectionPrivacyFieldset->getLabel()) ?>
+                <?php echo $this->formRadio($sectionPrivacyFieldset->get(\NBlog\Model\Setting::SECTION_EDUCATION_INFO_PRIVACY)) ?>
+            </div>
+
+            <?php echo $this->partial('blog-user/index/partials/educational_info_fieldset', array(
+                'form' => $form,
+                'educationalInfoFieldset' => $educationalInfoFieldset,
+                'privacyOptions' => $this->privacyOptions,
+                'userDetail' => $this->userDetail,
+                'degrees' => $this->degrees
+            )) ?>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <?php $professionalInfoFieldset = $form->get('professional_info') ?>
+    <div class="panel-heading bg1">
+        <h4 class="panel-title">
+            <a href="#collapseThree" data-parent="#accordion" data-toggle="collapse">
+                <span class="title"><?php echo $this->translate($professionalInfoFieldset->getLabel()) ?></span>
+            </a>
+            <a data-selected="professional_info_privacy" data-zone="writeAble" class="changeThis"><i class="icon-edit"></i></a>
+        </h4>
+    </div>
+    <div class="panel-collapse collapse" id="collapseThree">
+        <div class="panel-body">
+            <div id="professional_info_privacy_global" class="section_privacy display-hide">
+                <?php echo $this->translate($sectionPrivacyFieldset->getLabel()) ?>
+                <?php echo $this->formRadio($sectionPrivacyFieldset->get(\NBlog\Model\Setting::SECTION_PROFESSIONAL_INFO_PRIVACY)) ?>
+            </div>
+
+            <!-- <div class="form-group error-occurred"> -->
+            <?php echo $this->partial('blog-user/index/partials/professional_info_fieldset', array(
+                'form'=> $form,
+                'professionalInfoFieldset' => $professionalInfoFieldset,
+                'privacyOptions' => $this->privacyOptions,
+                'userDetail' => $this->userDetail,
+                'professions' => $this->professions
+            )) ?>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <?php $moreProfileInfoFieldset = $form->get('more_profile_info') ?>
+    <div class="panel-heading bg1">
+        <h4 class="panel-title">
+            <a href="#collapseFour" data-parent="#accordion" data-toggle="collapse">
+                <span class="title"><?php echo $this->translate($moreProfileInfoFieldset->getLabel()) ?></span>
+            </a>
+            <a data-selected="profile_info_privacy" data-zone="writeAble" class="changeThis"><i class="icon-edit"></i></a>
+        </h4>
+    </div>
+    <div class="panel-collapse collapse" id="collapseFour">
+        <div class="panel-body">
+            <div id="profile_info_privacy_global" class="section_privacy display-hide">
+                <?php echo $this->translate($sectionPrivacyFieldset->getLabel()) ?>
+                <?php echo $this->formRadio($sectionPrivacyFieldset->get(\NBlog\Model\Setting::SECTION_PROFILE_INFO_PRIVACY)) ?>
+            </div>
+
+            <?php echo $this->partial('blog-user/index/partials/more_profile_info_fieldset', array(
+                'form' => $form,
+                'moreProfileInfoFieldset' => $moreProfileInfoFieldset,
+                'privacyOptions' => $this->privacyOptions,
+                'userDetail' => $this->userDetail
+            )) ?>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <?php $contactInfoFieldset = $form->get('contact_info') ?>
+    <div class="panel-heading bg1">
+        <h4 class="panel-title">
+            <a href="#collapseFive" data-parent="#accordion" data-toggle="collapse">
+                <span class="title"><?php echo $this->translate($contactInfoFieldset->getLabel()) ?></span>
+            </a>
+            <a data-selected="contact_info_privacy"  data-zone="writeAble" class="changeThis"><i class="icon-edit"></i></a>
+        </h4>
+    </div>
+    <div class="panel-collapse collapse" id="collapseFive">
+        <div class="panel-body">
+            <div id="contact_info_privacy_global" class="section_privacy display-hide">
+                <?php echo $this->translate($sectionPrivacyFieldset->getLabel()) ?>
+                <?php echo $this->formRadio($sectionPrivacyFieldset->get(\NBlog\Model\Setting::SECTION_CONTACT_INFO_PRIVACY)) ?>
+            </div>
+            <?php echo $this->partial('blog-user/index/partials/contact_info_fieldset', array(
+                'form' => $form,
+                'contactInfoFieldset' => $contactInfoFieldset,
+                'privacyOptions' => $this->privacyOptions,
+                'userDetail' => $this->userDetail,
+                'socialMedias' => $this->socialMedias,
+                'socialMediasBits' => $this->socialMediasBits
+            )) ?>
+        </div>
+    </div>
+</div>
+
+</div>
+<?php echo $this->formHidden($form->get('form_submitted')) ?>
+<?php echo $this->form()->closeTag($form); ?>
+<?php if (empty($this->isAjax)) : ?>
+</div>
+</div>
+<?php endif ?>
+
+<script type="text/javascript">
+    $(function() {
+
+        $(":submit").on('click', function () {
+            $('#form_to_be_submitted').val(this.name);
+        });
+
+        disableNonCustomPrivacyField('personal_info_privacy', '<?php echo \NBlog\Model\Setting::SECTION_PERSONAL_INFO_PRIVACY ?>');
+        disableNonCustomPrivacyField('profile_info_privacy', '<?php echo \NBlog\Model\Setting::SECTION_PROFILE_INFO_PRIVACY ?>');
+        disableNonCustomPrivacyField('contact_info_privacy', '<?php echo \NBlog\Model\Setting::SECTION_CONTACT_INFO_PRIVACY ?>');
+        disableNonCustomPrivacyField('educational_info_privacy', '<?php echo \NBlog\Model\Setting::SECTION_EDUCATION_INFO_PRIVACY ?>');
+        disableNonCustomPrivacyField('professional_info_privacy', '<?php echo \NBlog\Model\Setting::SECTION_PROFESSIONAL_INFO_PRIVACY?>');
+
+        $('body').on('change', '#personal_info_privacy_global input:radio[name="section_privacy[<?php echo \NBlog\Model\Setting::SECTION_PERSONAL_INFO_PRIVACY ?>]"]', function(){
+            dealWithTableOnPrivacy(this, '#personal_info_privacy_table');
+        }).on('change', '#educational_info_privacy_global input:radio[name="section_privacy[<?php echo \NBlog\Model\Setting::SECTION_EDUCATION_INFO_PRIVACY ?>]"]', function(){
+            dealWithTableOnPrivacy(this, '#educational_info_privacy_table');
+        }).on('change', '#professional_info_privacy_global input:radio[name="section_privacy[<?php echo \NBlog\Model\Setting::SECTION_PROFESSIONAL_INFO_PRIVACY ?>]"]', function(){
+            dealWithTableOnPrivacy(this, '#professional_info_privacy_table');
+        }).on('change', '#profile_info_privacy_global input:radio[name="section_privacy[<?php echo \NBlog\Model\Setting::SECTION_PROFILE_INFO_PRIVACY ?>]"]', function(){
+            dealWithTableOnPrivacy(this, '#profile_info_privacy_table');
+        }).on('change', '#contact_info_privacy_global input:radio[name="section_privacy[<?php echo \NBlog\Model\Setting::SECTION_CONTACT_INFO_PRIVACY ?>]"]', function(){
+            dealWithTableOnPrivacy(this, '#contact_info_privacy_table');
+        });
+    });
+
+    function dealWithTableOnPrivacy(privacyField, table) {
+        var value = $(privacyField).val();
+        $(table+' .privacy .dropdown-toggle').removeAttr('disabled');
+        if (value != 4) {
+            var icons = { 1: 'globe', 2: 'group', 3: 'lock' };
+            $(table+' .privacy .dropdown-toggle').attr("disabled", "disabled")
+                .siblings('input[type="hidden"]').val(value);
+            $(table+' .privacy .dropdown-toggle').val(value).find('i').attr('class', 'icon-'+icons[value]);
+        }
+    }
+
+    function cancelDisabledField(){
+        $('.privacy').attr('readOnly', 'readOnly').removeAttr('disabled');
+        return true;
+    }
+
+    function disableNonCustomPrivacyField(id, section){
+        var value = $('#' + id + '_global input:radio[name="section_privacy[' + section + ']"]:checked').val(),
+            $privacyDropdown = $('#' + id + '_table .privacy .dropdown-toggle'),
+            icons = { 1: 'globe', 2: 'group', 3: 'lock' };
+
+        if (value == 4) {
+            $privacyDropdown.removeAttr('disabled');
+        } else {
+            $privacyDropdown.find('i').attr('class', 'icon-'+icons[value]);
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        var countrySelector = '#country', divisionSelector = '#division', districtSelector = '#district', stationSelector = '#police-station';
+        $(countrySelector).on('change', function () {
+            $.post('<?php echo $this->url('get-divisions') ?>', { countryId: $(this).val()}, function (response) {
+                processResponseForSelectElement(response, divisionSelector)
+            }, 'json');
+        });
+
+        $(divisionSelector).on('change', function () {
+            $.post('<?php echo $this->url('get-districts') ?>', { divisionId: $(this).val()}, function (response) {
+                processResponseForSelectElement(response, '#district')
+            }, 'json');
+        });
+        $(districtSelector).on('change', function () {
+            $.post('<?php echo $this->url('ajax-station') ?>', { districtId: $(this).val()}, function (response) {
+                processResponseForStationSelectElement(response, response['stationList'] ,'#police-station')
+            }, 'json');
+        });
+        $(stationSelector).on('change', function () {
+            $.post('<?php echo $this->url('ajax-offices') ?>', { stationId: $(this).val()}, function (response) {
+                processResponseForStationSelectElement(response, response['officeList'],'#zip_code')
+            }, 'json');
+        });
+        ($(countrySelector).val() == '') || ($(countrySelector).trigger('change'));
+        ($(divisionSelector).val() == '') || ($(divisionSelector).trigger('change'));
+        ($(districtSelector).val() == '') || ($(districtSelector).trigger('change'));
+        ($(stationSelector).val() == '') || ($(stationSelector).trigger('change'));
+
+        function processResponseForStationSelectElement(response, data ,element) {
+            if (response.status == 'success') {
+                $(element).html(makeSelectOptions(data, $(element).val()));
+            } else {
+                if (confirm('Something went wrong! Do you want to reload?')) {
+                    window.location = '';
+                }
+            }
+        }
+
+        function processResponseForSelectElement(response, element) {
+            if (response.status == 'success') {
+                $(element).html(makeSelectOptions(response.data, $(element).val()));
+            } else {
+                if (confirm('Something went wrong! Do you want to reload?')) {
+                    window.location = '';
+                }
+            }
+        }
+
+        function makeSelectOptions(options, selectedValue) {
+            var selectOptions = '<option value=""><?php echo $this->translate('Select') ?></option>';
+            $.each(options, function (key, value) {
+                selectOptions += '<option value="' + value + '"';
+                selectOptions += (value != selectedValue) ? '' : ' selected="selected"';
+                selectOptions += '>' + key + '</option>';
+            });
+
+            return selectOptions;
+        }
+
+        $('.privacy').find('ul.dropdown-menu li').on('click', function() {
+            $(this).closest('ul.dropdown-menu').siblings('input[type="hidden"]').val($(this).attr('data-rel'));
+        });
+    });
+</script>
+
+<script type="text/javascript">
+
+    $(function() {
+        $('.panel').find('.edit-this-field').removeAttr("disabled");
+        $('.changeThis').on('click',function(event){
+            event.preventDefault();
+            var dataSelected = $(this).attr('data-selected'),
+                parent = $(this).closest('.panel'),
+                dataZone = $(this).attr('data-zone'),
+                goToAction = parent.find('#go-to-action');
+
+            if(dataZone == 'writeAble'){
+                parent.find('.for-display').removeClass('display-show').addClass('display-hide');
+                parent.find('.for-edit').removeClass('display-hide').addClass('display-show');
+                parent.find('#'+dataSelected+'_global').removeClass('display-hide');
+                parent.find('.edit-this-field').attr("disabled", "disabled");
+                goToAction.removeClass('display-hide');
+                $(this).attr("data-zone", "readOnly");
+            }else{
+                parent.find('.for-display').removeClass('display-hide').addClass('display-show');
+                parent.find('.for-edit').removeClass('display-show').addClass('display-hide');
+                parent.find('#'+dataSelected+'_global').addClass('display-hide');
+                parent.find('.edit-this-field').removeAttr("disabled");
+                goToAction.addClass('display-hide');
+                $(this).attr("data-zone", "writeAble");
+            }
+        });
+
+        $('.edit-this-field').on('click', function(event) {
+            event.preventDefault();
+
+            var dataZone	= $(this).attr("data-zone"),
+                parent 		= $(this).closest('.privacy'),
+                topParent 	= $(this).closest('.panel-body'),
+                privacyBtn = parent.find('.dropdown-toggle'),
+                goToAction = topParent.find('#go-to-action');
+
+
+            if (dataZone == 'writeAble') {
+                parent.siblings('.for-display').removeClass('display-show').addClass('display-hide');
+                parent.siblings('.for-edit').removeClass('display-hide').addClass('display-show');
+                privacyBtn.removeAttr("disabled");
+                goToAction.removeClass('display-hide');
+                $(this).attr("data-zone", "readOnly");
+            } else {
+                parent.siblings('.for-display').removeClass('display-hide').addClass('display-show');
+                parent.siblings('.for-edit').removeClass('display-show').addClass('display-hide');
+                privacyBtn.attr("disabled", "disabled");
+                goToAction.addClass('display-hide');
+                $(this).attr("data-zone", "writeAble");
+            }
+        });
+
+        $('#setting-tab-content').find('#user-profile').validate({
+            submitHandler : function(form) {
+                mySiteAjax({
+                    url: $(form).attr('action'),
+                    data: $(form).serialize(),
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            alertify.success(response.data);
+                            $('#setting-tab-content').html(response.html);
+                        } else {
+                            alertify.alert(response.data);
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>

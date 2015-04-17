@@ -1,0 +1,27 @@
+
+<?php echo $this->partial('blog-user/partials/writing-links', array('nav'=>'episode')) ?>
+<h3><?php echo $this->translate('Update Episodic Post') ?></h3>
+
+<?php $form = $this->form;
+$form->setAttribute('action', $this->url('edit-my-episodic-post', array(
+    'episodePermalink' => $this->episodePermalink,
+    'permalink' => $this->postPermalink
+)));
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->NBFormRow($form->get('episode_tag'));
+echo $this->partial('blog-user/partials/category-list-in-form', array('form' => $form, 'categories' => $this->categories));
+echo $this->NBFormRow($form->get('details'));
+echo $this->NBFormRow($form->get('note')); ?>
+
+<div class="form-actions">
+    <?php echo $this->formSelect($form->get('status')); ?>
+    <?php $submit = $form->get('submit');
+    echo $this->formSubmit($submit->setAttribute('class', $submit->getAttribute('class').($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))); ?>
+    <?php echo $this->formButton($form->get('cancel')->setAttribute('onClick', "window.location='{$this->url('show-my-episode', array('permalink' => $this->episodePermalink))}'; return false;")); ?>
+    <?php echo $this->formHidden($form->get('episode_id')); ?>
+    <?php echo $this->formHidden($form->get('post_id')); ?>
+</div>
+<?php echo $this->form()->closeTag();
+
+echo $this->partial('blog-user/partials/select-box-modifier');

@@ -1,0 +1,28 @@
+
+<div class='social-header'>
+    <span class='title'>
+        <a href="#" class='active'><?php echo $this->translate('Friends and Favorite Bloggers');?></a>
+    </span>
+    <span class='title'>
+        <a class="count bg1"><?php echo $this->Number()->convert($this->countAllFriends) ?></a>
+    </span>
+</div>
+
+<div class="panel friends-album">
+    <div class="panel-body">
+        <div class="tiar">
+            <?php $count = 0; foreach($this->allFriendsForProfile AS $friend) : ?>
+            <div class="cage imgJar">
+                <img src="<?php echo $this->Profile()->getImage($friend, 'image_source', 'profile') ?>" alt="" />
+                <a href="<?php echo $this->url('public-profile', array('username' => $friend['username'])) ?>"
+                   target="_blank">
+                    <span><?php echo $this->profile()->getDisplayName($friend) ?></span>
+                </a>
+            </div>
+            <?php if (++$count % 4 == 0) : ?>
+        </div>
+        <div class="tiar">
+            <?php endif; endforeach ?>
+        </div>
+    </div>
+</div>

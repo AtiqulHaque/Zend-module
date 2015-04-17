@@ -1,0 +1,26 @@
+<?php if (empty($this->isAjax)) : ?>
+    <?php echo $this->partial('blog-user/partials/writing-links', array('nav'=>'episode')) ?>
+    <h1><?php echo $this->translate('New Episode') ?></h1>
+<?php endif ?>
+<?php if ($this->errorMsg) : ?>
+<div class="alert-message alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong><?php echo $this->errorMsg ?></strong>
+</div>
+<?php endif ?>
+
+<?php $form = $this->form;
+$form->setAttribute('action', $this->url('add-my-episode'));
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->NBFormRow($form->get('title'));
+echo $this->NBFormRow($form->get('episodic_style_id'));
+echo $this->partial('blog-user/partials/category-list-in-form', array('form' => $form, 'categories' => $this->categories,'domId'=>'post-category'));
+echo $this->NBFormRow($form->get('agree'), 'append', true); ?>
+
+<div class="form-actions">
+    <?php $submit = $form->get('submit');
+    echo $this->formSubmit($submit->setAttribute('class', $submit->getAttribute('class').($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))); ?>
+    <?php echo $this->formSubmit($form->get('cancel')); ?>
+</div>
+<?php echo $this->form()->closeTag() ?>

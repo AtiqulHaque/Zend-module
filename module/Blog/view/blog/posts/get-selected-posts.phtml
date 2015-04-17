@@ -1,0 +1,57 @@
+<?php if (empty($this->isAjax)) : ?>
+<div class="content-wrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="row">
+        <div class="main-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="row">
+                <div class="left-column hidden-xs col-sm-5 col-md-5 col-lg-5">
+                    <div class="tile sticky usp-post-list hidden-xs col-sm-12 col-md-12 col-lg-12">
+                        <div class="tile-header">
+                            <?php echo $this->translate('Selected Posts') ?> (<?php echo $this->translate('30 days') ?>)
+                        </div>
+                        <div class="tile-body">
+                            <div class="tab-content">
+                                <div class="row tab-pane active" id="discussed-post">
+                                    <?php if (empty($this->oldSelectedPosts)) : ?>
+                                        <p class="no-record-found"><?php echo $this->translate('No selected post has been found.') ?></p>
+                                    <?php else : echo $this->partial('blog/partials/posts-in-widget', array(
+                                        'posts' => $this->oldSelectedPosts,
+                                        'categories' => $this->categories,
+                                        'professions' => $this->professions,
+                                        'hideSummary' => true,
+                                        'hideUserActivity' => true
+                                    ));
+                                    endif ?>
+                                </div>
+                            </div>
+                        </div><!--  End of tile-body  -->
+                    </div><!--    End of tile    -->
+
+                </div><!--  End of left-column  -->
+
+                <div class="mid-column col-xs-12 col-sm-7 col-md-7 col-lg-7">
+                    <div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="tile-header">
+                            <?php echo $this->translate('Selected Posts') . ' - ' . $this->translate('Nokkhotro Blog') ?>
+                        </div>
+                        <div class="tile-body">
+                            <div class="row">
+<?php endif ?>
+                                <?php if (empty($this->selectedBlogPosts)) : ?>
+                                    <p class="no-record-found"><?php echo $this->translate('No post has been selected.') ?></p>
+                                <?php else : echo $this->partial('blog/partials/posts-in-widget', array(
+                                    'posts' => $this->selectedBlogPosts,
+                                    'categories' => $this->categories,
+                                    'professions' => $this->professions,
+                                ));
+                                echo $this->paginator()->slide($this->paginator, $this->paginatorOptions);
+                                endif ?>
+<?php if (empty($this->isAjax)) : ?>
+                            </div>
+                        </div><!--  End of tile-body  -->
+                    </div><!--    End of tile    -->
+                </div><!--  End of mid-column  -->
+            </div>
+        </div><!--  End of main-container  -->
+    </div>
+</div>
+<?php endif ?>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Image Manager</title>
+    <link type="text/css" rel="stylesheet"
+          href="<?php echo $this->basePath('vendors/tinymce/plugins/nblog_image_manager/css/image-manager.css') ?>">
+    <link type="text/css" rel="stylesheet"
+          href="<?php echo $this->basePath('vendors/tinymce/plugins/nblog_image_manager/css/font-awesome.min.css') ?>">
+</head>
+<body>
+
+<div id="container" class="im-fancy">
+    <div class="fancy-nav">
+        <div id="breadcrum" class="fancy-breadcrumb">
+            <a id="home" title="We ask for your age only for statistical purposes." href="javascript:void(0);">Home</a>
+            /
+        </div>
+        <div id="command-bar" class="fancy-btn">
+            <a id="upload-image" href="javascript:void(0);"><i
+                    class="icon-upload-alt widget btn primary first abs-layout-item"> </i>Upload</a>
+            <a id="insert-image" href="javascript:void(0);"><i class="icon-upload-alt"> </i>Insert</a>
+        </div>
+    </div>
+
+
+    <div class="fancy-container">
+        <div id="deselectImage-container" class="fancy-store">
+            <p>Please Double click to select this image.</p>
+            <div id="image-container"></div>
+        </div>
+
+        <div id="selected-container"  class="fancy-selected">
+            <p id="instructions">You can drag  images to change their positions.</p>
+            <div id='sortable'></div>
+        </div>
+
+    </div>
+
+    <div id="loader" class="fancy-loader">
+        <i class="icon-spinner icon-spin"></i>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="<?php echo $this->basePath('js/jquery.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->basePath('js/handlebars.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->basePath('js/blog/jquery-ui.js') ?>"></script>
+
+<script id="show-selected-images" type="text/x-handlebars-template">
+    <div class="img-box image_deselected ui-state-default">
+        <img src="{{image_url}}" title="Please Single click to deselect this image;You can also change image position by " alt="">
+
+        <div class="onHover"><i class="icon-remove"></i></div>
+    </div>
+</script>
+
+<script id="show-all-images_view" type="text/x-handlebars-template">
+    {{#eachImages Images}}
+    <div class="img-box">
+        <img src="/asset/upload/1/original/{{image_url}}" alt="">
+
+        <div class="onHover"><i class="icon-ok"></i></div>
+    </div>
+    {{/eachImages}}
+</script>
+
+<script id="album-detail_view" type="text/x-handlebars-template">
+    {{#each Folder}}
+    <div id="{{album_id}}" class="img-box album_details" title="{{album_name}}">
+        <div class="folder-icon"></div>
+        <span class="folder-name">{{album_name}}</span>
+    </div>
+    {{/each}}
+</script>
+
+<script id="folder_view" type="text/x-handlebars-template">
+    {{#allFolder Folder}}{{/allFolder}}
+</script>
+
+<script type="text/javascript">
+
+Handlebars.registerHelper('allFolder', function (context, options) {
+    var html = "";
+    $.each(context, function (key, value) {
+        html += '<div class="img-box"><div rel="' + key + '" id="' + value[0].usages_type + '" class="folder-icon each_folder"></div><span class="folder-name">' + key + '</span></div>';
+    });
+    return html;
+});
+Handlebars.registerHelper('eachImages', function (context) {
+    var html = "";
+    $.each(context, function (key, value) {
+        var url = value.image_url.split('.');
+        var image_src = url[0] + "_thumb" + '.' + url[1];
+        html += '<div class="img-box each_image"><img title="Please Double click to select this image" src="/asset/upload/' + value.user_id + '/thumb/' + image_src + '" alt=""><div class="onHover"><i class="icon-ok"></i></div> </div>';
+    });
+    return html;
+});
+
+(function($,window){
+    "use strict";
+    var imageManager = {
+        environment             : null,
+        parentWin               : null,
+        parentEditor            : null,
+        allData                 : null,
+        folderTemplate          : $("#folder_view").html(),
+        albumDetailsTemplate    : $("#album-detail_view").html(),
+        imageDetailsTemplate    : $("#show-all-images_view").html(),
+        imageContainer          : $("#image-container"),
+        selectedImageContainer  : $("#sortable"),
+        container               : $("#container"),
+        selectedImageTemplate   : $("#show-selected-images").html(),
+        breadCum                : [],
+        loader                  :  $("#loader"),
+        config: {
+            tempPattern     : '^/asset/upload/[0-9]+/temp/thumb/[0-9]+_[0-9]+_[0-9]+_thumb.jpg$',
+            thumbPattern    : '^/asset/upload/[0-9]+/thumb/[0-9]+_[0-9]+_[0-9]+_thumb.jpg$'
+        },
+        init: function (params) {
+            this.config                 = $.extend(this.config, params);
+            this.parentWin              = (!window.frameElement && window.dialogArguments) || opener || parent || top;
+            this.parentEditor           = this.parentWin.nblog_activeEditor;
+            this.initializeBox();
+            this.addEventListener();
+            this.selectedImageContainer.sortable().disableSelection();
+            $('#deselectImage-container').find('p').slideDown(300);
+            this.environment = this.parentEditor.getParam('tinymce_for');
+        },
+
+
+        addEventListener: function () {
+            $("#upload-image").on('click', this.uploadImage);
+            $("#home").on('click', this.initializeBox);
+            $("#insert-image").on('click', this.insertImage);
+            this.container.on('click', '.each_folder', this.getAllAlbum);
+            this.imageContainer
+                .on('click', '.album_details', this.getEachAlbumDetails)
+                .on('dblclick','.each_image', this.setImageSelected);
+            this.selectedImageContainer.on('dblclick', '.image_deselected', this.setImageDeselected)
+        },
+
+
+        uploadImage: function () {
+            imageManager.blockContainer();
+            var uploadWindow = imageManager.parentEditor.windowManager.open(
+                {
+                    title: "Upload Image",
+                    height: 200,
+                    width: 700,
+                    url: "/me/get-upload-box",
+                    buttons: [
+                        {text: "Close", onclick: "close"}
+                    ]
+                }, {
+                    win: window,
+                    image_for :  imageManager.environment
+
+                });
+            uploadWindow.on('close', function () {
+                imageManager.unBlockContainer();
+                if (window.nblog_upload_image !== '') {
+                    var template = Handlebars.compile(imageManager.selectedImageTemplate);
+                    imageManager.selectedImageContainer.append(template({image_url: window.nblog_upload_image}));
+                }
+            });
+            window.nblog_upload_image = "";
+        },
+
+
+        insertImage: function () {
+            var selectedImages = imageManager.selectedImageContainer.find('img');
+            var images = '';
+            $.each(selectedImages, function (key, value) {
+                var src = $(value).attr('src');
+                if (imageManager.testRegExp(imageManager.config.thumbPattern, src)) {
+                    src = imageManager.replaceAll('_thumb', '', imageManager.replaceAll('/thumb/', '/original/', src));
+                    images += '<img alt ="reuse" src="' + src + '">';
+                } else if (imageManager.testRegExp(imageManager.config.tempPattern, src)) {
+                    src = imageManager.replaceAll('_thumb', '', imageManager.replaceAll('/thumb/', '/original/', src));
+                    images += '<img alt ="unique" src="' + src + '">';
+                } else {
+                    images += '';
+                }
+            });
+            imageManager.setImageInToEditor(images);
+        },
+
+
+        setImageInToEditor: function (htmlImages) {
+
+            if(imageManager.testRegExp('^comment$', imageManager.environment)){
+                imageManager.parentEditor.execCommand('mceInsertRawHTML', false, "<br>"+htmlImages+"<br>");
+            }else{
+                imageManager.parentEditor.execCommand('mceInsertRawHTML', false, htmlImages);
+            }
+            imageManager.parentEditor.execCommand('mceAutoResize',false);
+            imageManager.parentEditor.focus();
+            imageManager.parentEditor.windowManager.close();
+        },
+
+
+        blockContainer: function () {
+            imageManager.loader.fadeIn(500);
+        },
+
+        unBlockContainer: function () {
+            imageManager.loader.fadeOut(500);
+        },
+        initializeBox: function () {
+            var object = {
+                url: "/me/get-all-images",
+                requestType: "POST",
+                params: { type: "post"},
+                dataType: "json",
+                callback: imageManager.processAllAlbumView
+            };
+            imageManager.myAjax(object);
+            imageManager.breadCum = [];
+            $("#breadcrum").find("a.each_folder").remove();
+        },
+
+        processAllAlbumView: function (data) {
+            imageManager.allData = data;
+            var template = Handlebars.compile(imageManager.folderTemplate);
+            var html = template({Folder: imageManager.allData});
+            imageManager.imageContainer.html(html);
+        },
+
+        getAllAlbum: function () {
+            var object = {};
+            var $self = $(this);
+            if ($self.attr('id') == 1) {
+                object = {
+                    url: "/me/get-all-album",
+                    requestType: "POST",
+                    params: { album_id: $self.attr('id')},
+                    dataType: "json",
+                    callback:  imageManager.processAlbumView
+                };
+                 imageManager.myAjax(object);
+            } else {
+                var objects = {
+                    url: "/me/get-each-album",
+                    requestType: "POST",
+                    params: { usages_type: $self.attr('id')},
+                    dataType: "json",
+                    callback:  imageManager.processEachImage
+                };
+                 imageManager.myAjax(objects);
+
+            }
+            if (!$self.hasClass('bread_link')) {
+                 imageManager.breadCum.push({
+                    name: $self.attr('rel'),
+                    id: $self.attr('id')
+                });
+                 imageManager.createBreadCum();
+            }
+        },
+
+        processAlbumView: function (data) {
+            var template = Handlebars.compile(imageManager.albumDetailsTemplate);
+            var html = template({Folder: data});
+            imageManager.imageContainer.html(html);
+
+        },
+
+        getEachAlbumDetails: function () {
+            var $self = $(this);
+            var object = {
+                url: '/me/get-album-details',
+                requestType: "POST",
+                params: { album_id: $self.attr('id')},
+                dataType: "json",
+                callback: imageManager.processEachImage
+            };
+            imageManager.myAjax(object);
+            imageManager.breadCum.push({
+                name: $self.attr('title'),
+                id: $self.attr('id')
+            });
+            imageManager.createBreadCum();
+        },
+
+        alertBox: function ($text) {
+            imageManager.parentEditor.windowManager.alert($text);
+        },
+
+        myAjax: function (object) {
+            var api = $.ajax({
+                url: object.url,
+                type: object.requestType,
+                data: object.params,
+                dataType: object.dataType,
+                beforeSend: function () {
+                    imageManager.blockContainer();
+                },
+                complete: function () {
+                    imageManager.unBlockContainer();
+                },
+                error: function () {
+                    imageManager.alertBox("error found");
+                }
+            });
+            api.done(object.callback);
+            return api;
+        },
+
+        processEachImage: function (data) {
+            var template = Handlebars.compile(imageManager.imageDetailsTemplate);
+            var html = template({Images: data});
+            imageManager.imageContainer.html(html);
+        },
+
+        setImageSelected: function () {
+            if(imageManager.testRegExp('^comment$', imageManager.environment)){
+                if(imageManager.selectedImageContainer.find('img').length > 0){
+                    $("#instructions").text('You can not select more than one image').css({backgroundColor:'#FF7575'}).slideDown(200);
+                    return false;
+                }
+            }
+            var $self = $(this);
+            var src = $self.find('img').attr('src');
+            var template = Handlebars.compile(imageManager.selectedImageTemplate);
+            var html = template({image_url: src});
+            imageManager.selectedImageContainer.append(html);
+            $self.children('div.onHover').addClass('active').find('i').show();
+            if(imageManager.selectedImageContainer.find('img').length > 1){
+                $("#instructions").slideDown(200);
+            }
+
+        },
+        setImageDeselected: function () {
+            var $self = $(this);
+            imageManager.imageContainer.find("img[src=" + "'" + $self.find('img').attr('src') + "'" + "]").siblings('div.onHover').find('i').hide();
+            $self.remove();
+            if(imageManager.selectedImageContainer.find('img').length <= 1){
+                $("#instructions").slideUp(200);
+            }
+
+        },
+        replaceAll: function (find, replace, str) {
+            return str.replace(new RegExp(find, 'g'), replace);
+        },
+        testRegExp: function (pattrn, str) {
+            var pattern = new RegExp(pattrn);
+            return pattern.test(str);
+        },
+        back: function () {
+
+        },
+        createBreadCum: function () {
+            var params = imageManager.breadCum.pop();
+            var link = $('<a>', {
+                href: "javascript:void(0);",
+                text: params.name + " / ",
+                rel: params.name + " / ",
+                id: params.id,
+                class: 'each_folder bread_link'
+            });
+            $("#breadcrum").append(link);
+            imageManager.breadCum = [];
+        }
+    };
+    imageManager.init({
+        tempPattern: '^/asset/upload/[0-9]+/temp/thumb/[0-9]+_[0-9]+_[0-9]+_thumb.jpg$',
+        thumbPattern: '^/asset/upload/[0-9]+/thumb/[0-9]+_[0-9]+_[0-9]+_thumb.jpg$',
+        alertCallBack: 'myalertBox'
+    });
+})(jQuery,window);
+
+
+</script>
+</body>
+</html>
+

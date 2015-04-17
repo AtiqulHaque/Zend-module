@@ -1,0 +1,41 @@
+<?php if (!empty($this->friendSuggestions)) : ?>
+<div class="panel panel-default fRequest">
+    <div class="panel-heading social-header">
+        <span class='title'><a href="#" class='active'><?php echo $this->translate('Friend Suggestion') ?></a></span>
+<!--        <span class='title'><a class="count bg1">--><?php //echo $this->translate('See All') ?><!--</a></span>-->
+    </div>
+    <div class="panel-body">
+        <?php foreach((array)$this->friendSuggestions AS $suggestion) : ?>
+            <div class="individual">
+                <div class="fpic">
+                    <img src="<?php echo $this->Profile()->getImage($suggestion) ?>"
+                         alt="<?php echo $this->profile()->getDisplayName($suggestion) ?>" />
+                </div>
+                <div class="fInfo">
+                    <a href="#" class="newFriend"><?php echo $this->profile()->getDisplayName($suggestion) ?></a>
+                    <span class="Education">
+                        <?php echo $this->translate('Education') ?>
+                        <a href="#"><?php echo (empty($suggestion['educational_institute']))? $this->translate('Undefined') : $suggestion['educational_institute'] ?></a>
+                    </span>
+
+                    <?php if (!empty($suggestion['commonFriendsList'])) : ?>
+                    <div class="request-by">
+                        <?php foreach($suggestion['commonFriendsList'] AS $friend) : ?>
+                            <img src="<?php echo $this->Profile()->getImage($friend) ?>"
+                                 alt="<?php echo $this->profile()->getDisplayName($friend) ?>" />
+                        <?php endforeach ?>
+                        <?php echo $this->translate('Common Friend') ?>
+                    </div>
+                    <?php endif ?>
+                </div>
+                <div class="fAcceptance">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default bg1 delete" id="<?php echo $suggestion['friend_user_id'] ?>"><i class="icon-remove"></i></button>
+                        <button type="button" class="btn btn-default send-request" data-name="<?php echo $this->Profile()->getDisplayName($suggestion);?>" data-rel="<?php echo $suggestion['friend_user_id'] ?>"><i class="icon-ok"></i></button>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </div>
+</div>
+<?php endif ?>

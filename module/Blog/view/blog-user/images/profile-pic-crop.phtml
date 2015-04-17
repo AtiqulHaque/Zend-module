@@ -1,0 +1,30 @@
+<div class="row-fluid">
+            <?php if ($this->isFoundImage) : ?>
+                <div class="row-fluid">
+                    <div class="span5">
+                        <div id="crop-holder">
+                            <img id="image-id" src="<?php echo $this->imagePath; ?><?php echo $this->imageInfo['name']; ?>">
+                        </div>
+                        <input type="hidden" name="left" value="" id="left-value"/>
+                        <input type="hidden" name="top" value="" id="top-value"/>
+                        <input type="hidden" name="newWidth" value="" id="newWidth"/>
+                        <input type="hidden" name="newHeight" value="" id="newHeight"/>
+                    </div>
+                </div>
+                <div class="row-fluid" style="margin-top: 10px;">
+                    <div id="responsive" style="display: none;">
+                        <div class="row">
+                            <div style="float:left;line-height: 32px;" class="span1"> <img style="width: 20px;height: 20px;" src="<?php echo $this->basePath('img/pre-loader.gif') ?>"></div>
+                            <div style="float:left; line-height: 32px;" class="span7"><div id="serverMessage">Loading</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid" style="margin-top: 10px;">
+                    <div> <button id="crop-it" class="btn btn-info">Crop</button></div>
+                </div>
+            <?php else : ?>
+                <p>
+                    No data Found
+                </p>
+            <?php endif ?>
+</div>

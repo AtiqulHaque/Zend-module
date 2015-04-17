@@ -1,0 +1,20 @@
+<div class="row-fluid">
+    <div class="box span24">
+        <div class="box-header bg-sky-blue no-pad">
+            <div class="sticky_bg">
+                <div class="select_text">
+                    <h2><?php echo $this->translate('Top Commenter') ?> ( <?php echo $this->number()->convert(7)?> দিন )</h2>
+                </div>
+            </div>
+        </div>
+        <div class="box-content new-blogger-box-padding">
+            <ul class="nav nav-list">
+                <?php if (empty($this->TopCommentPosters)) : ?>
+                    <p class="no-record-found"><?php echo $this->translate('No new blogger has been found') ?></p>
+                <?php else : foreach($this->TopCommentPosters AS $user) : ?>
+                    <li><?php echo $this->Post()->getUserInfoLinkWithPopUp($user, 'left', $this->professions) ?></li>
+                <?php endforeach; endif?>
+            </ul>
+        </div>
+    </div>
+</div>

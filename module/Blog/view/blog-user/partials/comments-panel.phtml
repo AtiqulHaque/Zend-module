@@ -1,0 +1,338 @@
+<table class="table">
+<tbody>
+<tr id="comment-box" class="comment-box" style="display: none">
+    <td class="well">
+        <?php $form = $this->commentForm->setAttributes(array(
+            'action' => $this->url('save-comment', array('permalink' => $this->writingPermalink)),
+            'class' => 'comment-form-user'
+        ))->prepare();
+        echo $this->form()->openTag($form) ?>
+        <div class="control-group">
+            <div class="controls">
+                <?php $element = $form->get('comment') ?>
+                <?php echo $this->formTextarea($element) ?>
+                <?php echo $this->formElementErrors($element) ?>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <span class="pull-right">
+                <?php $submit = $form->get('submit')->setValue('Write Comment');
+                echo $this->formSubmit($submit->setAttribute('class', $submit->getAttribute('class').' btn-small'.($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))); ?>
+                <?php echo $this->formButton($form->get('cancel')->setAttributes(array(
+                    'class' => $submit->getAttribute('class').' btn-small',
+                    'id' => 'cancel-button'
+                ))) ?>
+                <?php echo $this->formHidden($form->get('comment_for')->setValue($this->commentFor)) ?>
+            </span>
+        </div>
+        <?php echo $this->form()->closeTag(); ?>
+    </td>
+</tr>
+</tbody>
+</table>
+
+<div class="comments">
+    <?php if (!empty($this->comments)) : ?>
+    <?php echo $this->partial('blog-user/partials/comment-edit'); ?>
+    <?php $currentUser = $this->sessionContainer()->getData('user_id') ?>
+    <?php foreach ($this->comments AS $comment) : ?>
+    <div class="single-comment">
+        <a href="#"><img src="<?php echo $this->Profile()->getImage($comment) ?>"></a>
+
+        <div class="commenter-detail">
+            <?php echo $this->Post()->getUserInfoLinkWithPopUpPost($comment, 'right', $this->professions) ?>
+            <?php echo $this->translate('Has commented for post') ?>
+            <?php echo $this->DateTimeEnToBn()->ShowDate($comment['comment_created']) ?>
+        </div>
+        <div class="comment-detail">
+            <?php echo $this->NBEscapeHtml($comment['details'], true) ?>
+        </div>
+
+        <div class="comment-actions">
+            <a href="#" class="commentReplyLink" rel='<?php echo $comment['comment_id'] ?>'>
+            <i class="icon-comment"></i><?php echo $this->translate('Reply') ?></a>
+
+            <?php if ($currentUser != $comment['comment_created_by']) : ?>
+                <?php if (empty($this->reportStatuses[$comment['comment_id']])) : ?>
+                    <i class="icon-warning-sign"></i>
+                    <a href="javascript:void(0)" class='report' rel='<?php echo $comment['comment_id'] ?>'><?php echo $this->translate('Report About This') ?></a>
+                <?php else : ?>
+                    <i class="icon icon-flag"></i> <?php echo $this->translate('Already Reported') ?>
+                <?php endif ?>
+            <?php endif ?>
+
+
+            <?php if ($currentUser == $comment['comment_created_by'] || $currentUser == $this->creator) : ?>
+                <i class="icon icon-trash"></i>
+                <a href="<?php echo $this->url('delete-comment', array('username' => 'me', 'id'=>$comment['comment_id'])) ?>"
+                   class="delete-comment" rel='<?php echo $comment['username'] ?>'
+                   askForBlock = '<?php echo ($currentUser != $comment['comment_created_by']) ?>'
+                   permalink='<?php echo $this->writingPermalink ?>'><?php echo $this->translate('Delete This') ?></a>
+                <a id="comment_id_<?php echo $comment['comment_id'] ?>" class="edit-comment" rel="comment" href='javascript:void(0);'>
+                    <i class="icon-pencil"></i><?php echo $this->translate('Edit This') ?>
+                </a>
+            <?php endif ?>
+        </div>
+
+        <table id="comments-reply-<?php echo $comment['comment_id'] ?>" class="table comment-box" style="display: none;">
+            <tr>
+                <td class="well">
+                    <?php $form = $this->commentForm->setAttributes(array(
+                        'action' => $this->url('save-comment', array('permalink' => $this->writingPermalink)),
+                        'class' => 'comment-form-user'
+                    ))->prepare();
+                    echo $this->form()->openTag($form) ?>
+                    <div class="control-group">
+                        <div class="controls">
+                            <?php $element = $form->get('comment') ?>
+                            <?php echo $this->formTextarea($element) ?>
+                            <?php echo $this->formElementErrors($element) ?>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <span class="pull-right">
+                            <?php $submit = $form->get('submit')->setValue('Write Comment');
+                            echo $this->formSubmit($submit->setAttribute('class', $submit->getAttribute('class').' btn-small'.($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))); ?>
+                            <a href="javascript:void(0)" class="cancel-commenting btn btn-small" rel='<?php echo $comment['comment_id'] ?>'><?php echo $this->translate('Cancel') ?></a>
+                            <?php echo $this->formHidden($form->get('comment_for')->setValue($this->commentFor)) ?>
+                            <?php echo $this->formHidden($form->get('type')->setValue(\Blog\Model\Comment::TYPE_REPLY)) ?>
+                            <?php echo $this->formHidden($form->get('parent_id')->setValue($comment['comment_id'])) ?>
+                        </span>
+                    </div>
+                    <?php echo $this->form()->closeTag(); ?>
+                </td>
+            </tr>
+        </table>
+
+        <?php if ($currentUser != $comment['comment_created_by'] && empty($this->reportStatuses[$comment['comment_id']])) : ?>
+            <table id="report-box-<?php echo $comment['comment_id'] ?>" class="table report-box" style="display: none;">
+                <tr>
+                    <td class="well">
+                        <?php $form = $this->reportForm->setAttributes(array(
+                            'action' => $this->url('report'),
+                            'class' => 'report-form-user'
+                        ))->prepare();
+                        echo $this->form()->openTag($form) ?>
+                        <div class="control-group">
+                            <label><?php echo $this->translate('Please inform us about your report: ') ?></label>
+                            <div class="controls">
+                                <div class="row-fluid">
+                                    <?php $reportMessages = $form->get('message_id')->getValueOptions() ?>
+                                    <?php $count = 0; foreach ((array)$reportMessages AS $key => $message) : ++$count ?>
+                                    <label class="radio inline">
+                                        <input type="radio" name="message_id" value="<?php echo $key ?>">
+                                        <?php echo $message ?>
+                                    </label>
+                                    <?php if (!($count % 5)) : ?>
+                                </div>
+                                <div class="row-fluid">
+                                    <?php endif ?>
+                                    <?php endforeach ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <span class="pull-right">
+                                <?php $submit = $form->get('submit')->setValue('Write Comment');
+                                echo $this->formSubmit($submit->setAttribute('class', $submit->getAttribute('class').' btn-small'.($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))); ?>
+                                <a class="cancel-report btn btn-small" rel='<?php echo $comment['comment_id'] ?>'><?php echo $this->translate('Cancel') ?></a>
+                                <?php echo $this->formHidden($form->get('id_of_reported_on')->setValue($comment['comment_id'])) ?>
+                                <?php echo $this->formHidden($form->get('reported_on')->setValue(\NBlog\Model\WritingType::COMMENT)) ?>
+                            </span>
+                        </div>
+                        <?php echo $this->form()->closeTag(); ?>
+                    </td>
+                </tr>
+            </table>
+        <?php endif ?>
+
+        <?php if (!empty($comment['replies'])) : ?>
+
+        <div class="replies row-fluid offset1 span23">
+
+            <?php foreach ($comment['replies'] AS $reply) : ?>
+
+            <div class="single-reply span24">
+
+                <a href="#"><img src="<?php echo $this->Profile()->getImage($reply) ?>"></a>
+
+                <div class="commenter-detail">
+                    <?php echo $this->Post()->getUserInfoLinkWithPopUpPost($reply, 'right', $this->professions) ?>
+                    <?php echo $this->translate('Has commented for post') ?>
+                    <?php echo $this->DateTimeEnToBn()->ShowDate($comment['comment_created']) ?>
+                </div>
+                <div class="reply-detail">
+                    <?php echo $this->NBEscapeHtml($reply['details'], true) ?>
+                </div>
+
+                <div class="reply-actions">
+                    <?php if ($currentUser == $reply['comment_created_by']) : ?>
+                        <a id="comment_id_<?php echo $reply['comment_id'] ?>" class="edit-comment" rel="reply" href='javascript:void(0);'>
+                            <i class="icon-pencil"></i><?php echo $this->translate('Edit This') ?>
+                        </a>
+                    <?php else : ?>
+
+                    <?php if (empty($this->reportStatuses[$reply['comment_id']])) : ?>
+                        <i class="icon-warning-sign"></i>
+                        <a href="" class='report' rel='<?php echo $reply['comment_id'] ?>'><?php echo $this->translate('Report About This') ?></a>
+                    <?php else : ?>
+                        <i class="icon icon-flag"></i> <?php echo $this->translate('Already Reported') ?>
+                    <?php endif ?>
+                    <?php endif ?>
+
+                    <?php if ($currentUser == $reply['comment_created_by'] || $currentUser == $this->creator) : ?>
+                        <i class="icon icon-trash"></i>
+                        <a href="<?php echo $this->url('delete-comment', array('username' => 'me', 'id'=>$reply['comment_id'])) ?>"
+                           class="delete-comment" rel='<?php echo $reply['username'] ?>'
+                           askForBlock = '<?php echo ($currentUser != $reply['comment_created_by']) ?>'
+                           permalink='<?php echo $this->writingPermalink ?>'><?php echo $this->translate('Delete This') ?></a>
+                    <?php endif ?>
+                </div>
+
+                <?php if ($currentUser != $reply['comment_created_by'] && empty($this->reportStatuses[$reply['comment_id']])) : ?>
+
+                <table id="report-box-<?php echo $reply['comment_id'] ?>" class="table report-box" style="display: none;">
+                    <tr>
+                        <td class="well">
+                            <?php $form = $this->reportForm->setAttributes(array(
+                                'action' => $this->url('report'),
+                                'class' => 'report-form-user'
+                            ))->prepare();
+                            echo $this->form()->openTag($form) ?>
+                            <div class="control-group">
+                                <label><?php echo $this->translate('Please inform us about your report: ') ?></label>
+                                <div class="controls">
+                                    <div class="row-fluid">
+                                        <?php $reportMessages = $form->get('message_id')->getValueOptions() ?>
+                                        <?php $count = 0; foreach ((array)$reportMessages AS $key => $message) : ++$count ?>
+                                        <label class="radio inline">
+                                            <input type="radio" name="message_id" value="<?php echo $key ?>">
+                                            <?php echo $message ?>
+                                        </label>
+                                        <?php if (!($count % 5)) : ?>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <?php endif ?>
+                                        <?php endforeach ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <span class="pull-right">
+                                    <?php $submit = $form->get('submit')->setValue('Write Comment');
+                                    echo $this->formSubmit($submit->setAttribute('class', $submit->getAttribute('class').' btn-small'.($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))); ?>
+                                    <a class="cancel-report btn btn-small" rel='<?php echo $reply['comment_id'] ?>'><?php echo $this->translate('Cancel') ?></a>
+                                    <?php echo $this->formHidden($form->get('id_of_reported_on')->setValue($reply['comment_id'])) ?>
+                                    <?php echo $this->formHidden($form->get('reported_on')->setValue(\NBlog\Model\WritingType::COMMENT)) ?>
+                                </span>
+                            </div>
+                            <?php echo $this->form()->closeTag(); ?>
+                        </td>
+                    </tr>
+                </table>
+
+                <?php endif ?>
+
+
+            </div>
+            <?php endforeach;?>
+        </div>
+        <?php endif ?>
+    </div>
+    <?php endforeach; endif ?>
+</div>
+
+
+<script type="text/javascript">
+    (function($) {
+        $('#show-comment-box').on('click', function() {
+            $('.comment-box, .report-box').hide();
+            $('#comment-box').slideToggle();
+            return false;
+        });
+
+        $('#cancel-button').on('click', function() {
+            $('#comment-box').slideUp();
+            return false;
+        });
+
+        $('.box-content').on('submit', '.comment-form-user', function() {
+            $.post($(this).attr('action'), $(this).serialize(), function(response) {
+                if (response.status == 'success') {
+                    window.location = '';
+                } else {
+                    alertify.alert('<?php echo $this->translate('Something went wrong. Please try again.') ?>');
+                }
+            }, 'json');
+            return false;
+        }).on('submit', '.report-form-user', function() {
+            if ($(this).find('[name="message_id"]:checked').length > 0) {
+                $.post($(this).attr('action'), $(this).serialize(), function(response) {
+                    if (response.status == 'success') {
+                        window.location = '';
+                    } else {
+                        alertify.alert('<?php echo $this->translate('Something went wrong. Please try again.') ?>');
+                    }
+                }, 'json');
+            } else {
+                alertify.alert('<?php echo $this->translate('Please select your report message.') ?>');
+            }
+            return false;
+        });
+
+        $('.commentReplyLink').on('click', function() {
+            $('.comment-box, .report-box').hide();
+            $('#comments-reply-'+$(this).attr('rel')).toggle();
+            return false;
+        });
+
+        $('.cancel-commenting').on('click', function() {
+            $('#comments-reply-'+$(this).attr('rel')).slideUp();
+            return false;
+        });
+
+        $('a.report').on('click', function() {
+            $('.comment-box, .report-box').hide();
+            $('#report-box-'+$(this).attr('rel')).slideDown();
+            return false;
+        });
+
+        $('.cancel-report').on('click', function() {
+            $('#report-box-'+$(this).attr('rel')).slideUp();
+            return false;
+        });
+
+        $(".report-form").on('submit', function() {
+            $.post($(this).attr('action'), $(this).serialize(), function(response) {
+                if (response.status == 'success') {
+                    window.location = '';
+                } else {
+                    alertify.alert('<?php echo $this->translate('Something went wrong. Please try again.') ?>');
+                }
+            }, 'json');
+            return false;
+        });
+
+        $('.unblock-commenter').on('click', function() {
+            if (confirm('<?php echo $this->translate('Do you want to unblock this blogger for this') ?> <?php echo $this->commentFor ?>?')) {
+                $.post($(this).attr('href'), function(response) {
+                    if (response.status == 'success') {
+                        window.location = '';
+                    } else if (response.status == 'error') {
+                        if (response.data == 'unknown') {
+                            if (confirm('<?php echo $this->translate('Something went wrong! Do you want to reload?') ?>')) {
+                                window.location = '';
+                            }
+                        } else if (response.data == 'unauthenticated') {
+                            alertify.alert('<?php echo $this->translate('You are not permitted to do this.') ?>');
+                        }
+                    }
+                }, 'json');
+            }
+            return false;
+        });
+    })(jQuery);
+</script>

@@ -1,0 +1,31 @@
+
+<div class="complain-wrap">
+    <div class="complain-for bg1">
+        <?php $form = $this->reportForm->setAttribute('action', $this->url('report'))->prepare();
+        echo $this->form()->openTag($form) ?>
+        <fieldset>
+            <legend>
+                <?php echo $this->translate('Please tell us about your report') ?>
+                <a class="leave-it"><i class='icon-remove'></i></a>
+            </legend>
+            <div class="radioBox">
+                <?php $reportMessages = $form->get('message_id')->getValueOptions() ?>
+                <?php $count = 0; foreach ((array)$reportMessages AS $key => $message) : ++$count ?>
+                <div class="radio-inline">
+                    <label>
+                        <input type="radio" name="message_id" value="<?php echo $key ?>" />
+                        <i class="icon-"></i> <?php echo $message ?>
+                    </label>
+                </div>
+                <?php endforeach ?>
+            </div>
+        </fieldset>
+        <div class="action-box">
+            <?php echo $this->formButton($form->get('submit')) ?>
+            <?php echo $this->formButton($form->get('cancel')) ?>
+            <?php echo $this->formHidden($form->get('reported_on')) ?>
+            <?php echo $this->formHidden($form->get('id_of_reported_on')->setValue($this->idOfReportedOn)) ?>
+        </div>
+        <?php echo $this->form()->closeTag(); ?>
+    </div><!--  End of complain-for  -->
+</div>

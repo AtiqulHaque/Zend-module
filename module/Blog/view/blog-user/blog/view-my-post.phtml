@@ -1,0 +1,97 @@
+<div class="box span24">
+    <div class="box-header">
+        <h2>
+            <i class="icon-bookmark icon-white"></i><?php echo $this->translate('Post Details') ?>
+        </h2>
+    </div>
+
+    <div class="box-content">
+        <div class="single-post">
+            <div class="post-header">
+                <a href="#"><img src="<?php echo $this->Profile()->getImage($this->blog) ?>"/></a>
+                <h4 class="post-title">
+                    <?php echo $this->BlogPost()->getPostTitle($this->blog,false,2);?>
+                </h4>
+                <div class="post-details">
+                    <?php echo $this->Post()->getSummaryPost($this->blog, $this->categories, $this->professions, $this->blog['publicly_published_time']) ?>
+                </div>
+            </div>
+
+            <div class="post-body">
+                <?php echo $this->NBEscapeHtml($this->blog['details'], true) ?>
+            </div>
+
+            <?php if (!empty($this->episode)) : ?>
+                <div class="post-footer">
+                    <div class="post-actions">
+                        <?php foreach($this->episode AS $episodicPost) : ?>
+                            <?php echo $this->BlogPost()->getEpisodeTitle($episodicPost, 2) ?>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+            <?php endif ?>
+
+            <div class="post-footer">
+                <div class="post-actions">
+                    <?php $currentUser = $this->sessionContainer()->getData('user_id') ?>
+                    <?php if (!isset($this->blog['isBlocked']) && $this->blog['post_status'] == \NBlog\Model\WritingStatus::PUBLISHED) : ?>
+                    <a href='javascript: void(0)' class='do-comment-for-writing'><?php echo $this->translate('Write Comment') ?></a>
+                    <?php endif ?>
+
+                    <?php if ($currentUser == $this->blog['post_created_by']) : ?>
+                        <a href='<?php echo $this->url('edit-my-post', array('permalink' => $this->blog['permalink'])) ?>'>
+                            <?php echo $this->translate('Edit This') ?>
+                        </a>
+                        <a href='<?php echo $this->url('trash-my-post', array('permalink' => $this->blog['permalink'])) ?>' class="trash">
+                            <?php echo $this->translate('Make trash') ?>
+                        </a>
+                        <?php if ($this->blog['type'] == \NBlog\Model\PostType::EPISODE) : ?>
+                            <?php echo empty($post['episode_tag']) ? '' : " ({$post['episode_tag']})" ?>
+                            <a href="<?php echo $this->url('add-my-post', array('episodeId' => $this->blog['episode_id'])) ?>">
+                                <?php echo $this->translate('Write next episode') ?>
+                            </a>
+                        <?php endif ?>
+
+                    <?php else : ?>
+                        <?php echo $this->BlogPost()->getLinkToDealWithFavorite(
+                            $this->blog['permalink'], \BlogUser\Model\FavoriteType::POST, isset($this->blog['isFavorite']), false) ?>
+
+                        <?php if (isset($this->blog['hasUserReported'])) : ?>
+                            <i class="icon icon-flag"></i> <?php echo $this->translate('Already Reported') ?>
+                        <?php else : ?>
+                            <a href="" class='do-report-on-writing' rel='<?php echo $this->blog['post_id'] ?>'><?php echo $this->translate('Make a complaint') ?></a>
+                        <?php endif ?>
+
+                        <?php if (isset($this->blog['isHidden'])) : ?>
+                            <a href='<?php echo $this->url('unhide-my-blog-content', array('content_type'=>\NBlog\Model\WritingType::POST,'permalink' => $this->blog['permalink'])) ?>'><?php echo $this->translate('Display again') ?></a>
+                        <?php else : ?>
+                            <a href='<?php echo $this->url('hide-my-blog-content', array('content_type'=>\NBlog\Model\WritingType::POST,'permalink' => $this->blog['permalink'])) ?>'><?php echo $this->translate('Hide') ?></a>
+                        <?php endif ?>
+                    <?php endif?>
+
+                    <a onClick="window.open('<?php echo $this->BlogPost()->facebookShare($this->blog) ?>', 'feedDialog','toolbar=0,status=0,width=626,height=436')" href="javascript: void(0)">FB Share</a>
+                </div>
+
+                <div class="post-summary">
+                    <span><i class="icon icon-comment"></i><a href="#"><span class="commentCount"><?php echo $this->number()->convert($this->blog['total_comments']) ?></span></a></span>
+                    <span><i class="icon-thumbs-up"></i><a href="#"><span class="likeCount"><?php echo $this->number()->convert($this->blog['total_favorited']) ?></span></a></span>
+                    <span><i class="icon-eye-open"></i><?php echo $this->number()->convert($this->blog['total_viewed']) ?></span>
+                </div>
+            </div>
+
+            <?php echo $this->partial('blog/partials/all-comments-view', array(
+                'commentOn' => $this->blog,
+                'comments' => $this->comments,
+                'creator' => $this->blog['post_created_by'],
+                'userDetails' => $this->userDetails,
+                'commentFor' => \NBlog\Model\WritingType::POST,
+                'blockedBloggers' => $this->blockedBloggers,
+                'isBlocked' => isset($this->blog['isBlocked']),
+                'isWritingReported' => isset($this->blog['hasUserReported']),
+                'commentForm' => $this->commentForm,
+                'reportForm' => $this->reportForm
+            )) ?>
+        </div>
+    </div>
+</div>
+

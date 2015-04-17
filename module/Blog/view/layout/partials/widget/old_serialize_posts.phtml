@@ -1,0 +1,51 @@
+<div class="row-fluid">
+    <div class="box span24">
+        <div class="box-header">
+
+            <h2><i class="icon-bullhorn icon-white"></i><?php echo $this->translate('Serialized Posts') ?></h2>
+
+
+        </div>
+
+        <div class="box-content">
+            <?php foreach($this->RecentPosts AS $post) : ?>
+            <a href="#"> <img src="<?php echo $this->Profile()->getImage($post) ?>"  style="height: 45px; width: 45px;float: left; margin-top: 4px;
+                           padding: 0 5px 0 0 ; vertical-align: text-top;"></a>
+            <h4>
+                <a href="<?php echo $this->url('specific-post', array('permalink' => $post['permalink'])) ?>">
+                    <span style="float:left; margin-top: -2px;" class="blog-post-heading"><?php echo $post['title']?></span></a><br>
+            </h4>
+
+            <?php echo $this->Post()->getSummaryPost($post, $this->categories,$this->professions,$post['publicly_published_time']) ?> <br />
+
+            <hr style="margin-top: -13px; margin-bottom: 4px;">
+                <?php echo $this->BlogPost()->getPartialDetail($post) . $this->BlogPost()->getShowMoreLinkForPost($post); ?>
+                <hr style="margin-top: 5px; margin-bottom: 4px;">
+            <div class="post-summary">
+                <i class="icon icon-comment"></i><?php echo $this->number()->convert($post['total_comments']) ?>
+                <i class="icon-thumbs-up"></i><?php echo $this->Number()->convert($post['total_favorited']) ?>
+                <i class="icon-share"></i><?php echo $this->Number()->convert($post['total_share']) ?>
+
+            </div>
+
+            <hr style="margin-top: 10px; margin-bottom: 4px;">
+
+            <?php endforeach;?>
+            <div class="row-fluid">
+                <div class="span24">
+                    <span class="pull-right">
+                        <a href="<?php echo $this->url('view-all-selected-posts') ?>">» <?php echo $this->translate('Show all serialized posts') ?></a>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .post-summary {
+        font-size: 12px;
+        color: #005580;
+    }
+</style>

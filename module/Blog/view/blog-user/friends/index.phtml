@@ -1,0 +1,18 @@
+<?php $isUserCurrentUser = (isset($this->userDetail['user_id']) && $this->sessionContainer()->getData('user_id') == $this->userDetail['user_id']);
+if (!$isUserCurrentUser) :
+    echo $this->partial('blog-user/index/partials/anonymous-user-navbar', array('userDetail' => $this->userDetail));
+endif ?>
+<div class="row">
+    <div id="usersMyFriends" class="myFriends col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <?php echo $this->partial('blog-user/friends/partials/friends_nav_menu', array(
+            'totalFriends' => $this->totalFriends,
+            'totalFollowing' => $this->totalFollowing,
+            'totalFollower' => $this->totalFollower,
+            'totalRequests' => $this->totalRequests,
+            'userDetail' => $this->userDetail
+        )) ?>
+
+        <ul class="friends-list" id="friends-list"></ul>
+    </div>
+    <!-- End of right-column -->
+</div>

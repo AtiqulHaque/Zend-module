@@ -1,0 +1,34 @@
+<ul class="nav nav-pills nav-justified">
+    <li class="active"><a href="#most-commented" data-toggle="pill"><?php echo $this->translate('Comment') ?></a></li>
+    <li><a href="#most-like" data-toggle="pill"><?php echo $this->translate('Been Favorited') ?></a></li>
+    <li><a href="#most-read" data-toggle="pill"><?php echo $this->translate('Read') ?></a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="most-commented">
+        <?php echo $this->partial('blog/partials/posts-in-widget', array(
+            'posts' => $this->mostCommentedPosts,
+            'categories' => $this->categories,
+            'professions' => $this->professions,
+            'hideSummary' => true,
+        )); ?>
+    </div>
+
+    <div class="tab-pane" id="most-like">
+        <?php echo $this->partial('blog/partials/posts-in-widget', array(
+            'posts' => $this->mostFavoritedPosts,
+            'categories' => $this->categories,
+            'professions' => $this->professions,
+            'hideSummary' => true,
+        )); ?>
+    </div>
+
+    <div class="tab-pane" id="most-read">
+        <?php echo $this->partial('blog/partials/posts-in-widget', array(
+            'posts' => $this->mostViewedPosts,
+            'categories' => $this->categories,
+            'professions' => $this->professions,
+            'hideSummary' => true,
+        )); ?>
+    </div>
+</div><!--  End of tab-content ( child) -->

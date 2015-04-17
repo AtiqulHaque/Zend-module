@@ -1,0 +1,7 @@
+<?php
+
+echo $this->partial('blog-user/partials/my-links');
+
+echo $this->partial('blog-user/partials/my-favorite-writers', array('favoriteWriters' => $this->favoriteWriters));
+
+echo $this->partial('blog-user/partials/my-favorite-posts', array('favoritePosts' => $this->favoritePosts));

@@ -1,0 +1,32 @@
+<div class="row-fluid">
+    <div class="box span24 noticebox">
+        <div class="box-header bg-sky-blue no-pad">
+            <div class="sticky_bg">
+                <div class="select_text">
+                    <h2><?php echo $this->translate('Latest Posts') ?></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-content">
+            <?php if (empty($this->latestBlogPosts)) : ?>
+            <p class="no-record-found"><?php echo $this->translate('No recent post has been found.') ?></p>
+            <?php else : foreach ($this->latestBlogPosts AS $blogPost) : ?>
+
+            <div class="single-post">
+                <div class="post-header">
+                    <?php echo $this->BlogPost()->getPostTitle($blogPost,true,1);?>
+
+                    <div class="post-details">
+                        <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($blogPost['publicly_published_time']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($blogPost['publicly_published_time']) ?></span>
+                        <?php echo $this->translate('Has written') ?>
+                        <a href="<?php echo $this->url('public-profile', array('username' => $blogPost['username'])) ?>">
+                            <?php echo $this->Post()->getUserInfoLinkWithPopUpPost($blogPost, 'left', $this->professions) ?></a>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; endif ?>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="row-fluid">
+    <div class="box span24">
+        <div class="box-header">
+            <h2><i class="icon-th icon-white"></i><?php echo $this->translate('Latest Anything') ?> </h2>
+
+
+        </div>
+        <div class="box-content">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#home" data-toggle="tab"><?php echo $this->translate('Maximum Comments') ?></a></li>
+                <li><a href="#profile" data-toggle="tab"><?php echo $this->translate('Maximum Read') ?></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <table class="table">
+                        <tbody>
+                        <?php if (empty($this->TopCommentedPosts)) : ?>
+                        <tr>
+                            <td colspan="2" class="no-record-found">
+                                <p class="no-record-found"><?php echo $this->translate('No Comments') ?></p>
+                            </td>
+                        </tr>
+                        <?php else : foreach ($this->TopCommentedPosts AS $post) : ?>
+                        <tr>
+                            <td style="padding: 8px 0;">
+                                <a href="#"> <img src="<?php echo $this->basePath($this->Profile()->getImage($post)) ?>" style="width:45px; height:45px; float: left; margin-top: 4px; vertical-align: text-top;"></a>
+                            </td>
+                            <td >
+                                <a href="<?php echo $this->url('specific-post', array('permalink' => $post['permalink'])) ?>"><span class='blog-post-heading'><?php echo $post['title']?></span></a><br />
+                                <?php echo $this->Post()->getSummaryPost($post, $this->categories,$this->professions,$this->createdDate) ?>
+                            </td>
+                            <td class="postlist" vertical-align="middle" width="15%">
+                                <?php echo $this->BlogPost()->getTotalComments($post) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; endif ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane" id="profile">
+                    <table class="table">
+                        <tbody>
+                        <?php if (empty($this->MostViewedPosts)) : ?>
+                        <tr>
+                            <td colspan="2" class="no-record-found">
+                                <p class="no-record-found"><?php echo $this->translate('No Posts') ?></p>
+                            </td>
+                        </tr>
+                        <?php else : foreach ($this->MostViewedPosts AS $post) : ?>
+                        <tr>
+                            <td style="padding: 8px 0;">
+                                <a href="#"> <img src="<?php echo $this->basePath($this->Profile()->getImage($post)) ?>"
+                                style="height:45px; width:45px; float: left; margin-top: 4px; vertical-align: text-top;"></a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url('specific-post', array('permalink' => $post['permalink'])) ?>"><span class='blog-post-heading'><?php echo $post['title']?></span></a><br />
+                                <?php echo $this->Post()->getSummaryPost($post, $this->categories , $this->professions) ?>
+                            </td>
+                            <td class="postlist" vertical-align="middle" width="15%">
+                                <?php echo $this->BlogPost()->getTotalViews($post) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; endif ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

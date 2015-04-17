@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link type="text/css" rel="stylesheet" href="<?php echo $this->basePath('vendors/fine-upload/fineuploader-3.5.0.css') ?>">
+    <style type="text/css">
+        div#tinymce-file-uploader .qq-upload-button {
+            margin: 20px 0;
+            width: 105px;
+        }
+        #upload-container{
+            padding: 20px 10px 30px 30px;
+        }
+        div.message-upload-error { color: #dc322f; display: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div id="upload-container">
+    <div id="tinymce-file-uploader"></div>
+    <div class="message-upload-error"></div>
+</div>
+
+</body>
+<script type="text/javascript" src="<?php echo $this->basePath('js/jquery.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->basePath('vendors/fine-upload/jquery.fineuploader-3.5.0.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->basePath('js/user/nb-uploader.js') ?>"></script>
+</html>
+

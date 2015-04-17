@@ -1,0 +1,55 @@
+
+<div class="row-fluid">
+
+    <?php echo $this->partial('blog/partials/left-sidebar-of-widgets', array(
+        'recentBlogPosts' => $this->recentBlogPosts, 'recentComments' => $this->recentComments)) ?>
+
+    <div class="span14 posts-box">
+        <div class="box-header">
+            <h2>
+                <i class="icon-bookmark icon-white"></i>
+                <?php echo $this->translate('All') ?> <span class="badge badge-important"><?php echo $this->blogStatus ?></span> <?php echo $this->translate('Posts') ?>
+            </h2>
+        </div>
+        <div class="box-content">
+
+            <?php if (empty($this->blogPosts)) : ?>
+            <p class="no-record-found"><?php echo $this->translate('No post has been found.') ?></p>
+            <?php else : foreach ($this->blogPosts AS $post) : ?>
+
+            <div class="single-post">
+                <div class="post-header">
+                    <a href="#"><img src="<?php echo $this->Profile()->getImage($post) ?>" /></a>
+                    <h4 class="post-title">
+                        <a href="<?php echo $this->url('specific-post', array('permalink' => $post['permalink'])) ?>">
+                            <?php echo $post['title'] ?>
+                        </a>
+                    </h4>
+
+                    <div class="post-details">
+                        <?php echo $this->Post()->getSummaryPost($post, $this->categories, $this->professions) ?>
+                    </div>
+                </div>
+
+                <div class="post-body">
+                    <?php echo $this->BlogPost()->getPartialDetail($post) . $this->BlogPost()->getShowMoreLinkForPost($post); ?>
+                </div>
+
+                <div class="post-summary">
+                    <i class="icon icon-comment"></i><?php echo $this->number()->convert($post['total_comments']) ?>
+                    <i class="icon-thumbs-up"></i><?php echo $this->Number()->convert($post['total_favorited']) ?>
+                    <i class="icon-share"></i><?php echo $this->Number()->convert($post['total_share']) ?>
+
+                </div>
+            </div>
+            <?php endforeach; endif ?>
+        </div>
+        <?php echo $this->paginator()->slide($this->paginator, $this->paginatorOptions) ?>
+    </div>
+
+    <?php echo $this->partial('blog/partials/right-sidebar-of-widgets', array(
+        'categoryLists' => $this->categoryLists, 'topBloggers' => $this->topBloggers,
+        'topCommentPosters' => $this->topCommentPosters, 'newBloggers' => $this->newBloggers,
+        'blogTrends' => $this->blogTrends, 'professions'=> $this->professions
+    )) ?>
+</div>

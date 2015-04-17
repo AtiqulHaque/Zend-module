@@ -1,0 +1,19 @@
+<?php if (empty($this->blogPosts)) : ?>
+    <p class="text-center"><?php echo $this->translate('No post has been found for vote.') ?></p>
+<?php else : foreach ($this->blogPosts AS $post) :?>
+    <div class="tile-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="content-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <?php echo $this->Profile()->getUserImageWithLink($post) ?>
+            <div class="title">
+                <?php echo $this->BlogPost()->getPostTitle($post, true, 1) ?>
+            </div>
+            <?php echo $this->Post()->getNewSummaryPost($post, $this->categories, $this->professions, $post['publicly_published_time']) ?>
+        </div>
+
+        <div class="content-body hidden-xs col-sm-12 col-md-12 col-lg-12">
+            <?php echo $this->Post()->getMinViewPostImages($post) ?>
+            <?php echo $this->BlogPost()->getPartialDetail($post) . $this->BlogPost()->getShowMoreLinkForPost($post) ?>
+        </div>
+        <?php echo $this->Post()->getMinViewPostFooter($post, false, true) ?>
+    </div>
+<?php endforeach; endif ?>

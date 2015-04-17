@@ -1,0 +1,17 @@
+
+<div id="my-likes" class="content">
+    <span class='h9'>পছন্দের যত পোস্ট</span>
+    <img src="<?php echo $this->basePath("img/glyphicons_group.png") ?>" alt='ফেভারিট পোস্ট' />
+    <hr />
+
+    <?php if (empty($this->favoritePosts)) : ?>
+
+    <p class="no-record-found">No favorite has been found.</p>
+
+    <?php else : foreach ($this->favoritePosts AS $post) : ?>
+
+    <?php echo $this->BlogPost()->getTitleWithLink($post) ?>
+    <hr />
+
+    <?php endforeach; endif ?>
+</div>

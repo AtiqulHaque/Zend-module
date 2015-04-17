@@ -1,0 +1,19 @@
+ <div class="box-header">
+        <h2><i class="icon icon-user icon-white"></i><?php echo $this->translate('Friend requests');?></h2>
+    </div>
+    <div class="box-content">
+        <div class="span24 all_friend_requests">
+            <?php if (!empty($this->friendRequest)) : foreach($this->friendRequest AS $eachRequest): ?>
+            <div class="span6 image_profile request-box" id="friend_id_<?php echo $eachRequest['user_id']?>">
+                <a href="#"><img src="<?php echo $this->Profile()->getImage($eachRequest) ?>">
+                   <?php echo $this->Profile()->getDisplayName($eachRequest) ?></a>
+                <small><?php echo $this->DateTimeEnToBn()->timeSince($eachRequest['created']);?></small>
+                <span class="pull-right">
+                    <button class="btn btn-mini btn-primary accept-all-request" type="button"><?php echo $this->translate('Accept');?></button>
+                    <button class="btn btn-mini btn-primary subscribe-all" type="button"><?php echo $this->translate('Subscribe')?></button>
+                    <button class="btn btn-mini all-request-cancel"><?php echo $this->translate('Cancel');?></button>
+                </span>
+            </div>
+            <?php endforeach; endif;?>
+        </div>
+    </div>

@@ -1,0 +1,62 @@
+<?php //var_dump($this->isFriends);?>
+<div class='user-tips-wrap'>
+    <div class='personal-cover'>
+        <img src='<?php echo $this->Profile()->getBannerImage($this->userDetails,'banner_image_source','banner_small')?>' />
+        <div class='back-shadow'></div>
+    </div>
+    <div class='personal-tips'>
+        <img src='<?php echo $this->Profile()->getImage($this->userDetails,'image_source','profile')?>' alt=''>
+        <div class='name'><?php echo $this->Profile()->getDisplayName($this->userDetails)?></div>
+        <div class='profession'>
+            <?php echo empty($professions[$userDetails['profession']])? $this->translate('Undefined Workplace') : $professions[$userDetails['profession']] ;?>
+        </div>
+
+    </div>
+    <ul class='activities nav nav-tabs nav-justified'>
+        <?php if(!empty($this->mutualFriends)):?>
+        <li>
+            <div><?php echo $this->mutualFriends; ?></div>
+            <div>মিউচুয়াল</div>
+        </li>
+        <?php endif ?>
+        <li>
+            <div><?php echo $this->userDetails['friend_count']?></div>
+            <div>বন্ধু</div>
+        </li>
+        <li>
+            <div><?php echo $this->userDetails['follower_count']?></div>
+            <div>অনুসারী</div>
+        </li>
+        <li>
+            <div><?php echo $this->userDetails['post_count']?></div>
+            <div>পোস্ট</div>
+        </li>
+    </ul>
+    <ul class='action nav nav-tabs nav-justified'>
+        <!-- ============= if already Friend ========== -->
+        <?php if($this->isFriends):?>
+         <li>
+            <div class='dropdown'>
+                <div type='button' class='btn btn-default circle'>
+                    <i class='icon-ok-sign'></i> বন্ধু
+                </div>
+            </div>
+        </li>
+        <?php else :?>
+        <!-- ============================== -->
+        <!-- ~~~~~~~~~~~~~~~~ if not friend ~~~~~~~~~~~~~~~ -->
+        <li>
+            <div class='dropdown'>
+                <button type='button' class='btn btn-default'>বন্ধু </button>
+            </div>
+        </li>
+        <?php endif ?>
+        <li>
+            <button type='button' class='btn btn-default'>অনুসরণ </button>
+        </li>
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <li>
+            <button type='button' class='btn btn-default'>বার্তা </button>
+        </li>
+    </ul>
+</div>

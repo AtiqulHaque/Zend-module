@@ -1,0 +1,14 @@
+<?php $form = $this->form->setAttribute('action', $this->url('write-about-mood'))->prepare();
+echo $this->form()->openTag($form);
+echo $this->NBFormRow($form->get('title')) ?>
+<div class="action-box bg1 bdt bds2">
+    <div class="pull-right">
+        <?php echo $this->formSelect($form->get('status')); ?>
+        <?php echo $this->formSubmit($form->get('submit')) ?>
+        <?php if (!$this->isEdit): ?>
+            <button class="cancel-mood" type="button"><?php echo $this->translate('Cancel') ?></button>
+        <?php endif ?>
+        <?php echo $this->formHidden($form->get('mood_id')) ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag($form);

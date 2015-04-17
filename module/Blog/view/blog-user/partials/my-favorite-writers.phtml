@@ -1,0 +1,18 @@
+
+<div id="my-favorites" class="content">
+    <span class='h9'> আমার যত ফেভারিট</span>
+    <img src="<?php echo $this->basePath("img/glyphicons_group.png") ?>" alt='Favorite Writers' />
+    <hr />
+
+    <?php if (empty($this->favoriteWriters)) : ?>
+
+    <p class="no-record-found">No favorite has been found.</p>
+
+    <?php else : foreach ($this->favoriteWriters AS $writer) : ?>
+
+    <?php echo $this->BlogPost()->getProfileImage($writer) ?>
+    <?php echo $this->BlogPost()->getProfileLink($writer) ?>
+    <hr />
+
+    <?php endforeach; endif ?>
+</div>

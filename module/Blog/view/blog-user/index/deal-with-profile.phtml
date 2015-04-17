@@ -1,0 +1,39 @@
+<?php $isUserCurrentUser = (isset($this->userDetail['user_id']) && $this->sessionContainer()->getData('user_id') == $this->userDetail['user_id']);
+if (!$isUserCurrentUser) :
+    echo $this->partial('blog-user/index/partials/anonymous-user-navbar', array('userDetail' => $this->userDetail));
+endif ?>
+<div class="row">
+    <div class="left-column col-xs-6 col-sm-6 col-md-5 col-lg-5">
+        <div id="friend-suggestions" data-username="<?php echo $this->username ?>"></div>
+
+        <?php if (!empty($this->allPicturesForProfile)) : ?>
+        <?php echo $this->partial('blog-user/index/profile/photo-frame', array(
+             'allPicturesForProfile'=>$this->allPicturesForProfile,
+             'targetPath' => $this->targetPath
+        )) ?>
+        <?php endif ?>
+
+        <?php if (!empty($this->allFriendsForProfile)) : ?>
+        <?php echo $this->partial('blog-user/index/profile/friends-album', array(
+            'allFriendsForProfile'=>$this->allFriendsForProfile,
+            'countAllFriends' => $this->countAllFriends
+        )) ?>
+        <?php endif ?>
+    </div><!-- End of right-column -->
+
+    <div class="right-column col-xs-6 col-sm-6 col-md-7 col-lg-7" id="idOfProfileWallAjaxLoading" data-username="<?php echo $this->username ?>">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="tile-body">
+                <div class="row">
+                    <?php echo $this->partial('blog-user/index/partials/user_wall_left',array(
+                        'latestAnything'    =>  $this->latestAnything,
+                        'moodView'          =>  $this->moodView,
+                        'blogView'          =>  $this->blogView,
+                        'reportForm'        =>  $this->reportForm,
+                        'setBlogViewAsDefault' => true
+                    )); ?>
+                </div>
+            </div><!--  End of tile-body  -->
+        </div>
+    </div><!-- End of left-column -->
+</div>

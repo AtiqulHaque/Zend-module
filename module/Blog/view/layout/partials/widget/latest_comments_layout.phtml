@@ -1,0 +1,37 @@
+<div class="row-fluid">
+    <div class="box span24">
+
+        <div class="box-header bg-sky-blue no-pad">
+            <div class="sticky_bg">
+                <div class="select_text">
+                    <h2><?php echo $this->translate('Recent Comments') ?></h2>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="box-content">
+            <?php if (empty($this->latestComments)) : ?>
+            <p class="no-record-found"><?php echo $this->translate('No recent comment has been found.') ?></p>
+            <?php else : foreach ($this->latestComments AS $comment) : ?>
+
+            <div class="single-comment" style="padding: 0px 10px;">
+                <div class="comment-detail">
+                    <?php echo $this->Text()->word_limiter($this->Image()->removeImageTag($comment['details']), 15) ?>
+                </div>
+                <a href="<?php echo $this->url('specific-post', array('permalink' => $comment['post_permalink'])) ?>" class="post-title">
+                    <?php echo $this->Text()->word_limiter($this->Image()->removeImageTag($comment['post_title']), 50) ?>
+                </a>
+                <div class="commenter-detail">
+                    <a href="<?php echo $this->url('public-profile', array('username' => $comment['username'])) ?>">
+                        <?php echo $this->Post()->getUserInfoLinkWithPopUpPost($comment, 'left', $this->professions) ?>
+                    </a>
+                    <small><?php echo $this->translate('Has been commented');?>
+                        <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($comment['comment_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($comment['comment_created']) ?></span>
+                   </small>
+                </div>
+            </div>
+            <?php endforeach; endif ?>
+        </div>
+    </div>
+</div>

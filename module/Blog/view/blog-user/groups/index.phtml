@@ -1,0 +1,42 @@
+<div class="row-fluid">
+    <div class="span8">
+        <span class='h8'>
+            <a href="<?php echo $this->url('my-groups'); ?>"><?php
+                echo ($name = $this->Profile()->getDisplayName($this->userDetail)) . " -এর গ্রুপ"; ?>
+            </a>
+        </span>
+        <hr>
+
+        <table class="table table-bordered">
+
+            <?php if (empty($this->userGroups)) : ?>
+            <tr>
+                <td colspan="2"><?php echo $name . ' has no groups.' ?></td>
+            </tr>
+            <?php else : ?>
+            <tr>
+                <td>Group Name</td>
+                <td>Group Type</td>
+                <td>Created Date</td>
+            </tr>
+            <?php foreach ($this->userGroups AS $group) : ?>
+            <tr>
+                <td><a href='<?php echo $this->url('all-groups', array('groupName' => $group['blog_group_permalink'])) ?>'><?php echo $group['blog_group'] ?></a></td>
+                <td><?php echo $group['group_type'] ?></td>
+                <td><?php echo $group['create_date'] ?></td>
+            </tr>
+            <?php endforeach; endif ?>
+        </table>
+        <!--/right contain -->
+    </div>
+
+    <div class="span4">
+        <?php echo $this->partial('blog-user/partials/my-activities.phtml', array(
+            'favoriteWriters' => $this->favoriteWriters,
+            'favoritePosts' => $this->favoritePosts
+        )) ?>
+    </div>
+
+
+    <!--/end right contain -->
+</div>

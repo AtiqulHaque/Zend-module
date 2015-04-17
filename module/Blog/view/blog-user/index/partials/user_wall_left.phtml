@@ -1,0 +1,34 @@
+<?php if (!empty($this->moodView) && !empty($this->blogView)) : ?>
+    <div class="social-header tab">
+        <span class="title">
+        <?php if (empty($this->setBlogViewAsDefault)) : ?>
+            <a class="active" data-writing-area="mood-area" href="#"><?php echo $this->translate('Mood') ?></a> |
+            <a data-writing-area="blog-post-area" href="#"><?php echo $this->translate('Blog') ?></a>
+        <?php else : ?>
+            <a data-writing-area="blog-post-area" href="#"><?php echo $this->translate('Blog') ?></a> |
+            <a class="active" data-writing-area="mood-area" href="#"><?php echo $this->translate('Mood') ?></a>
+        <?php endif ?>
+        </span>
+    </div>
+    <div class="writing-area">
+        <div class="status-area bd bds2 arrowTop mood-area for-post">
+            <?php echo $this->moodView ?>
+        </div>
+
+        <div class="blog-post-area bdh bds2 arrowTop">
+            <?php echo $this->blogView ?>
+        </div>
+    </div>
+<?php endif ?>
+
+<div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="tile-body">
+        <div class="row" id="userwallContainer">
+            <?php echo $this->latestAnything ?>
+        </div>
+
+        <?php echo $this->partial('layout/partials/single-comment-complain-form', array(
+            'reportForm' => $this->reportForm
+        )) ?>
+    </div>
+</div>

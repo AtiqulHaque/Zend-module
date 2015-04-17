@@ -1,0 +1,12 @@
+<div class="static-column col-xs-12 col-sm-5 col-md-3 col-lg-3">
+<div class="static-menu">
+    <ul>
+        <li<?php echo (empty($this->pageNav) || $this->pageNav != 'terms-and-conditions') ? '' : ' class="active"' ?>><a href="<?php echo $this->url('page', array('permalink' => 'terms-and-conditions')) ?>"><?php echo $this->translate('Terms & Conditions') ?></a></li>
+        <li<?php echo (empty($this->pageNav) || $this->pageNav != 'privacy-policy') ? '' : ' class="active"' ?>><a href="<?php echo $this->url('page', array('permalink' => 'privacy-policy')) ?>"><?php echo $this->translate('Privacy Policy') ?></a></li>
+        <li<?php echo (empty($this->pageNav) || $this->pageNav != 'about-us') ? '' : ' class="active"' ?>><a href="<?php echo $this->url('page', array('permalink' => 'about-us')) ?>"><?php echo $this->translate('About Us') ?></a></li>
+        <li<?php echo (empty($this->pageNav) || $this->pageNav != 'contact-us') ? '' : ' class="active"' ?>><a href="<?php echo $this->url('contact-us') ?>"><?php echo $this->translate('Contact Us') ?></a></li>
+        <li<?php echo (empty($this->pageNav) || $this->pageNav != 'faq') ? '' : ' class="active"' ?>><a href="<?php echo $this->url('show-fag-category-question') ?>"><?php echo $this->translate('FAQ') ?></a></li>
+        <li<?php echo (empty($this->pageNav) || $this->pageNav != 'help') ? '' : ' class="active"' ?>><a href="<?php echo $this->url('contact-us') ?>"><?php echo $this->translate('Help') ?></a></li>
+    </ul>
+</div>
+</div>

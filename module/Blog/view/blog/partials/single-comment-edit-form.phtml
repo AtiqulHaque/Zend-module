@@ -1,0 +1,20 @@
+<?php $form = $this->commentForm;
+$form->setAttribute('action', $this->url('edit-comment', array(
+        'id' => $this->commentOn['comment_id'])
+));
+$form->prepare();?>
+            <?php  echo $this->form()->openTag($form) ?>
+            <?php $element = $form->get('comment') ?>
+            <?php echo $this->formTextarea($element->setAttribute('id',"comments-edit-".$this->commentOn['comment_id'])) ?>
+            <?php echo $this->formElementErrors($element) ?>
+            <div class="action-box">
+                <?php $submit = $form->get('submit')->setValue('Edit Comment');
+                echo $this->formSubmit($submit->setAttribute('class','edit-comment '. $submit->getAttribute('class').''.($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))); ?>
+                <a href="javascript:void(0)"
+                   class="cancel-edit-commenting btn btn-small"
+                   rel='<?php echo $this->commentOn['comment_id'] ?>'>
+                    <?php echo $this->translate('Cancel') ?>
+                </a>
+                <?php echo $this->formHidden($form->get('comment_for')->setValue($this->commentOn['comment_for'])) ?>
+            </div>
+<?php echo $this->form()->closeTag(); ?>

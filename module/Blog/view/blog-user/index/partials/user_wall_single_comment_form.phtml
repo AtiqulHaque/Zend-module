@@ -1,0 +1,36 @@
+<div class="comments-here">
+    <div class="comments-area for-post col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <img class="commentator" src="<?php echo $this->basePath($this->sessionContainer()->getData('profile_image', 'img/profile_image/male_default_small.png')) ?>" alt="">
+        <div class="comments-bubble writing-area">
+            <?php $form = $this->commentForm->setAttribute('action', $this->url('save-comment-for-userwall', array(
+                'permalink' => $this->commentOn['permalink'],
+                'username' => $this->sessionContainer()->getData('username'))
+            ))->prepare() ?>
+            <?php echo $this->form()->openTag($form) ?>
+            <?php $element = $form->get('comment') ?>
+            <div class="tinyMce-wrap bd bds2">
+                <?php if (empty($this->formForReply)) : ?>
+                    <?php $element->setAttribute('placeholder', $this->translate('Write Comment')) ?>
+                <?php else : ?>
+                    <?php $element->setAttribute('placeholder', $this->translate('Write Reply')) ?>
+                <?php endif ?>
+                <?php echo $this->formTextarea($element->setAttribute('id', 'comment_'.$this->commentIn)) ?>
+            </div>
+            <?php echo $this->formElementErrors($element) ?>
+            <div style="display: none;" class="action-box">
+                <div class="pull-right">
+                    <?php if (empty($this->formForReply)) : ?>
+                    <?php $submit = $form->get('submit')->setValue('Write Comment') ?>
+                    <?php echo $this->formSubmit($submit->setAttribute('class', 'btn btn-black btn-xs add-comment')) ?>
+                    <?php else : ?>
+                    <?php $submit = $form->get('submit')->setValue('Write Reply') ?>
+                    <?php echo $this->formSubmit($submit->setAttribute('class', 'btn btn-black btn-xs add-reply')) ?>
+                    <?php endif ?>
+                    <?php echo $this->FormButton($form->get('cancel')->setAttribute('class', 'btn btn-gray btn-xs cancel-comment')) ?>
+                    <?php echo $this->formHidden($form->get('comment_for')->setValue($this->commentFor)) ?>
+                </div>
+            </div>
+            <?php echo $this->form()->closeTag() ?>
+        </div>
+    </div>
+</div>

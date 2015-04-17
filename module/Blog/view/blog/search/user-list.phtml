@@ -1,0 +1,62 @@
+<?php $count = count($this->users) ?>
+<div class="tile-header">
+    "<?php echo $this->criteria ?>" <?php echo $this->translate('Search Result') ?>
+    <div class="searc-count">
+        <?php echo $this->translate('# of Total Result') ?>
+        <?php echo $this->Number()->convert($count) ?>
+        <?php echo $this->translate('#') ?>
+    </div>
+</div>
+
+<div class="tile-body">
+    <div class="row">
+        <div class="mid-column col-xs-12 col-sm-5 col-md-6 col-lg-6">
+            <?php if (empty($this->users)) : ?>
+                <p class="no-record-found"><?php echo $this->translate('No user has been found.') ?></p>
+            <?php else : ?>
+            <div class="tile usp-post-list hidden-xs col-sm-12 col-md-12 col-lg-12">
+                <div class="tile-body">
+                    <div class="row">
+                        <?php $i = 0; foreach ($this->users AS $user) : ?>
+
+                        <div class="tile-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                            <div class="content-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <a class="author-icon imgJar" href="<?php echo $this->url('public-profile', array('username' => $user['username'])) ?>">
+                                    <img src="<?php echo $this->Profile()->getImage($user) ?>" alt="Profile Image" />
+                                </a>
+                                <div class="title">
+                                    <?php echo $this->translate('Name') ?> : <a href="<?php echo $this->url('public-profile', array('username' => $user['username'])) ?>"><?php echo $this->Profile()->getDisplayName($user) ?></a>
+                                </div>
+                                <small>
+                                    <?php echo $this->translate('Country') ?> : <?php echo $user['country'] ?><br />
+                                    <?php echo $this->translate('District') ?> : <?php echo $user['district'] ?><br />
+                                    <?php echo $this->translate('User') ?>
+                                    <?php echo $this->DateTimeEnToBn()->ShowDateOnly($user['admit_date']) ?>
+                                    <?php echo $this->translate('Is in Nokkhotro till') . $this->translate('.') ?>
+                                </small>
+                            </div>
+
+                        </div><!--  End of tile-container -->
+                        <?php $i++; if ($i == floor($count / 2)) : ?>
+                    </div>
+                </div><!--  End of tile-body  -->
+            </div><!--    End of tile    -->
+        </div>
+
+        <div class="mid-column col-xs-12 col-sm-5 col-md-6 col-lg-6">
+            <div class="tile usp-post-list hidden-xs col-sm-12 col-md-12 col-lg-12">
+                <div class="tile-body">
+                    <div class="row">
+                        <?php endif ?>
+                        <?php endforeach; endif ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php echo $this->paginator()->slide($this->paginator, array_merge($this->paginatorOptions, array(
+            'class' => 'search-user',
+            'rel' => 'user'
+        ))) ?>
+    </div>
+</div><!--  End of tile-body  -->

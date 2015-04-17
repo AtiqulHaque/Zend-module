@@ -1,0 +1,29 @@
+<?php //$adsPositions = array(3, 10); $count = 0 ?>
+<?php foreach($this->recentPosts AS $post) : ?>
+    <?php if(empty($post['isHidden'])) : ?>
+        <div class="tile-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="content-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <?php echo $this->Profile()->getUserImageWithLink($post) ?>
+                <div class="title">
+                    <a href=""><?php echo $this->BlogPost()->getPostTitle($post, true, 1) ?></a>
+                </div>
+                <?php echo $this->Post()->getNewSummaryPost($post, $this->categories, $this->professions,$post['publicly_published_time']) ?>
+            </div>
+
+            <div class="content-body hidden-xs col-sm-12 col-md-12 col-lg-12">
+                <?php echo $this->Post()->getMinViewPostImages($post);?>
+                <?php echo $this->BlogPost()->getPartialDetail($post) . $this->BlogPost()->getShowMoreLinkForPost($post); ?>
+            </div>
+
+            <?php echo $this->Post()->getMinViewPostFooter($post);?>
+        </div>
+    <?php else :?>
+        <?php echo $this->Post()->getContentHideLink(\NBlog\Model\WritingType::POST, $post['permalink']) ?>
+    <?php endif ?>
+
+<!--    --><?php //++$count; if (in_array($count, $adsPositions)) : ?>
+<!--        <div class="row-fluid ads-zone" data-item="3" data-dimension="horizontal"></div>-->
+<!--    --><?php //endif?>
+
+<?php endforeach ?>
+<?php echo $this->paginator()->slide($this->paginator, $this->paginatorOptions);

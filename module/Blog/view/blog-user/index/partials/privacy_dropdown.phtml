@@ -1,0 +1,21 @@
+<?php $icons = array(
+    \NBlog\Model\Setting::PUBLIC_PRIVACY => 'globe',
+    \NBlog\Model\Setting::FRIEND_PRIVACY => 'group',
+    \NBlog\Model\Setting::PRIVATE_PRIVACY => 'lock'
+) ?>
+<div class="btn-group privacy">
+    <div class="btn-group">
+        <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button">
+            <i id="privacy-icn" class="icon-<?php echo empty($icons[$this->privacyElement->getValue()]) ? '' : $icons[$this->privacyElement->getValue()] ?>"></i>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <?php $options = $this->privacyOptions;
+            foreach($options AS $key => $value) : ?>
+                <li data-rel="<?php echo $key ?>"><a href="#"><i class="icon-<?php echo $icons[$key] ?>"></i><?php echo $value ?></a></li>
+            <?php endforeach ?>
+        </ul>
+        <?php echo $this->formHidden($this->privacyElement) ?>
+    </div>
+    <button data-zone="writeAble" class="btn btn-default edit-this-field" type="button" disabled=""><i class=" icon-edit"></i></button>
+</div>

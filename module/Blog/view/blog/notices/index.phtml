@@ -1,0 +1,58 @@
+<div class="row-fluid">
+
+    <?php echo $this->partial('blog/partials/left-sidebar-of-widgets', array(
+        'recentBlogPosts' => $this->recentBlogPosts, 'recentComments' => $this->recentComments
+    )) ?>
+
+    <div class="span12">
+        <div class="row-fluid">
+            <div class="box span24">
+
+                <div class="box-header">
+                    <div class="selected_post_bg">
+                        <img src="<?php echo $this->basePath('img/user/widget_notice_bg.png')?>">
+                        <div class="select_text">
+                            <h2><a href="#"><?php echo $this->translate('All Notices') ?> </a></h2>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="box-content">
+                    <?php if (empty($this->notices)) : ?>
+                    <p class="no-record-found"><?php echo $this->translate('No notice has been found.') ?></p>
+                    <?php else : foreach ($this->notices AS $notice) : ?>
+                    <div class="single-notice">
+                        <div class="notice-header">
+                            <img src="<?php echo $this->basePath('img/nblog-profile-icon.png') ?>" />
+                            <h4 class="notice-title">
+                                <a href="<?php echo $this->url('notice-specify', array('permalink' => $notice['permalink'])) ?>">
+                                    <?php echo $notice['title'] ?>
+                                </a>
+                            </h4>
+
+                            <div class="notice-details">
+                                <?php echo $this->translate('Blog Admin') ?><i class="icon icon-time"></i><?php echo $this->DateTimeEnToBn()->ShowDateOnly($notice['notice_updated']) ?>
+                            </div>
+                        </div>
+
+                        <div class="notice-body">
+                            <?php echo $this->BlogPost()->getPartialDetailForNotice($notice) . $this->BlogPost()->getShowMoreLinkForNotice($notice); ?>
+                        </div>
+
+                        <div class="notice-summary">
+                            <i class="icon icon-comment"></i><?php echo $this->number()->convert($notice['total_comments']) ?> <?php echo $this->translate('Comment') ?>
+                        </div>
+                    </div>
+                    <?php endforeach; endif ?>
+                </div>
+                <?php echo $this->paginator()->slide($this->paginator, $this->paginatorOptions) ?>
+            </div>
+        </div>
+    </div>
+
+    <?php echo $this->partial('blog/partials/right-sidebar-of-widgets', array(
+        'categoryLists' => $this->categoryLists, 'topBloggers' => $this->topBloggers,
+        'topCommentPosters' => $this->topCommentPosters, 'newBloggers' => $this->newBloggers,
+        'blogTrends' => $this->blogTrends , 'professions'=> $this->professions
+    )) ?>
+</div>

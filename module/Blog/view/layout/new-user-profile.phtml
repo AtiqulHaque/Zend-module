@@ -1,0 +1,119 @@
+<?php echo $this->doctype() ?>
+<html>
+<head>
+    <?php echo $this->partial('layout/partials/meta-info', array(
+        'metaInfo' => $this->metaInfo,
+        'layout' => 'user-layout',
+    )) ?>
+
+    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'href' => $this->basePath('img/favicon.png')))
+        ->appendStylesheet($this->basePath('css/bootstrap.min.css'))
+        ->appendStylesheet($this->basePath('css/font-awesome.min.css'))
+        ->appendStylesheet($this->basePath('vendors/alertify/alertify.css'))
+        ->appendStylesheet($this->basePath('vendors/fine-upload/fineuploader-3.5.0.css'))
+        ->appendStylesheet($this->basePath('vendors/perfect-scrollbar-0.4.5/min/perfect-scrollbar-0.4.5.min.css'))
+        ->appendStylesheet($this->basePath('vendors/fancybox/css/jquery.fancybox.css?v=2.1.5'))
+        ->appendStylesheet($this->basePath('css/global.css'))
+        ->appendStylesheet($this->basePath('css/custom.css'))
+        ->appendStylesheet($this->basePath('css/user/social-template.css'))
+        ->appendStylesheet($this->basePath('css/user/friends-request-widgets.css'))
+        ->appendStylesheet($this->basePath('css/user/custom.css'));
+
+    echo $this->partial('layout/partials/js-translation', array('segments' => array('global', 'user/module', 'user/custom')));
+    echo $this->headScript()
+        ->prependFile($this->basePath('js/jquery-1.10.2.min.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/jquery.validate.min.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/bootstrap.min.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/respond.min.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/responsiveslides.min.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/fine-upload/jquery.fineuploader-3.5.0.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/jscrop/mootools-1.2.4-core-yc.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/jscrop/drag.plugin.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/jscrop/drag2crop.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/perfect-scrollbar-0.4.5/min/perfect-scrollbar-0.4.5.with-mousewheel.min.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/fancybox/js/jquery.fancybox.pack.js?v=2.1.5'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/tinymce/tinymce.min.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/keyboard/phoneticunicode.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/keyboard/probhatunicode.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/keyboard/inscriptunicode.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/keyboard/unijoy.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/keyboard/phonetic_int.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/keyboard/banglakeyboard.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/alertify/alertify.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/handlebars.js'), 'text/javascript')
+        ->appendFile($this->basePath('vendors/jquery-flexiblearea/jquery.flexibleArea.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/global.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/user/module.js'), 'text/javascript')
+        ->appendFile($this->basePath('node-chat/socket.io.min.js'), 'text/javascript')
+        ->appendFile($this->basePath('node-chat/nodeClient.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/user/userwallChat.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/user/social-template.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/user/custom.js'), 'text/javascript')
+        ->appendFile($this->basePath('js/globalchat.js'), 'text/javascript') ?>
+</head>
+<body>
+<?php echo $this->partial('layout/partials/handlebars-templates')?>
+
+<div class="loading-cover">
+    <div class="global-loading">
+        <i class="icon-spinner icon-spin icon-large"></i><?php echo $this->translate('Loading ...') ?>
+    </div>
+</div>
+<div class="row wrap">
+    <?php echo $this->partial('layout/partials/top-navigation', array(
+        'keyboardLayouts' => $this->keyboardLayouts,
+        'draftOrderCount' => $this->draftOrderCount,
+        'countFriendRequests' => $this->countFriendRequests,
+        'friendRequestList' => $this->friendRequestList,
+        'lastMessageCount' => $this->lastMessageCount,
+        'lastTopMessageShow' => $this->lastTopMessageShow,
+        'noOfUnreadNotifications' => $this->noOfUnreadNotifications,
+        'notificationList' => $this->notificationList,
+        'loginView' => $this->loginView,
+        'className' => ''
+    )) ?>
+
+    <div class="top-gap"></div>
+
+    <div class="shape-shifter slick">
+        <div class="content-area">
+            <?php echo $this->partial('layout/partials/left-side-menu') ?>
+
+            <?php $isUserCurrentUser = (isset($this->userDetail['user_id']) && $this->sessionContainer()->getData('user_id') == $this->userDetail['user_id']) ?>
+            <div class="content-box bd<?php echo $isUserCurrentUser ? '' : ' pt0' ?>">
+                <?php if ($isUserCurrentUser) : ?>
+                <div class="row">
+                    <div class="social-nav bg1 bd col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <ul>
+                            <li><a href="<?php echo $this->url('my-all-posts', array('username' => 'me')) ?>"><?php echo $this->translate('My Posts') ?></a></li>
+                            <li><a href="<?php echo $this->url('friends-subscribers-followers', array('username' => 'me')) ?>"><?php echo $this->translate('Friends and Favorite Bloggers') ?></a></li>
+                            <li><a href="<?php echo $this->url('show-user-pictures', array('username' => 'me')) ?>"><?php echo $this->translate('My Pictures') ?></a></li>
+                            <li><a href="<?php echo $this->url('chat-history') ?>"><?php echo $this->translate('Message') ?></a></li>
+                            <li><a href="<?php echo $this->url('view-all-orders') ?>"><?php echo $this->translate('Purchases') ?></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <?php endif ?>
+
+                <?php if (empty($this->disableBanner)) : ?>
+                <div class="row">
+                    <?php echo $this->partial('layout/partials/profile-banner',array(
+                        'userDetail' => $this->userDetail,
+                        'friendInfo' => $this->friendInfo
+                    )) ?>
+                </div>
+                <?php endif ?>
+
+                <?php echo $this->content ?>
+            </div>
+        </div>
+        <?php echo $this->partial('layout/partials/footer', array(
+            'phoneVerifierForm' => $this->phoneVerifierForm,
+            'codeVerifierForm' => $this->codeVerifierForm,
+            'disableCategory' => $this->disableFooterCategory,
+            'isChatEnable' => (isset($this->isChatEnable) ? $this->isChatEnable : true)
+        )) ?>
+    </div>
+</div>
+</body>
+</html>

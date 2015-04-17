@@ -1,0 +1,17 @@
+<div id="getFriendsOfUsers" class="friends-action" data-username="<?php echo $this->userDetail['username'] ?>">
+    <button class="btn btn-default bg1" type="button" data-type="<?php echo \NBlog\Model\FriendsAndFollowersConfig::FRIENDS ?>">
+        <?php echo $this->translate('Friends') ?> <span class="count"><?php echo $this->Number()->convert($this->totalFriends) ?></span>
+    </button>
+    <button class="btn btn-default bg1" type="button" data-type="<?php echo \NBlog\Model\FriendsAndFollowersConfig::SUBSCRIBERS ?>">
+        <?php echo $this->translate('Favorite Bloggers') ?> <span class="count"><?php echo $this->Number()->convert($this->totalFollowing) ?></span>
+    </button>
+    <button class="btn btn-default bg1" type="button" data-type="<?php echo \NBlog\Model\FriendsAndFollowersConfig::FOLLOWERS ?>">
+        <?php echo $this->translate('Subscriber') ?> <span class="count"><?php echo $this->Number()->convert($this->totalFollower) ?></span>
+    </button>
+    <?php $isUserCurrentUser = (isset($this->userDetail['user_id']) && $this->sessionContainer()->getData('user_id') == $this->userDetail['user_id']);
+    if ($isUserCurrentUser) : ?>
+    <button class="btn btn-default bg1" type="button" data-type="<?php echo \NBlog\Model\FriendsAndFollowersConfig::REQUESTS ?>">
+        <?php echo $this->translate('Request') ?> <span class="count"><?php echo $this->Number()->convert($this->totalRequests) ?></span>
+    </button>
+    <?php endif ?>
+</div>

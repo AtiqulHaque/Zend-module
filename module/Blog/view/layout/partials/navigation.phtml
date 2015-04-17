@@ -1,0 +1,9 @@
+
+<ul class="nav nav-pills">
+    <li><a href="<?php echo $this->url('home') ?>">প্রথম পাতা</a></li>
+    <?php if (!empty($this->categories)) : foreach ($this->categories as $category) : ?>
+        <li>
+            <a href="<?php echo $this->url('category', array('permalink' => $category['permalink'])) ?>"><?php echo $category['name'] ?></a>
+        </li>
+    <?php endforeach; endif; ?>
+</ul>

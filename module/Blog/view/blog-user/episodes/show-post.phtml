@@ -1,0 +1,64 @@
+
+<h3>
+    <?php echo $this->NBEscapeHtml($this->episodicPost['title']) ?>
+    <a href="<?php echo $this->url('edit-my-episodic-post', array('episodePermalink' => $this->episode['permalink'], 'permalink' => $this->episodicPost['permalink'])) ?>"
+       class="btn btn-success pull-right"><?php echo $this->translate('Update Episodic Post') ?></a>
+</h3>
+<span class="postmeta">
+    <?php echo $this->DateTimeEnToBn()->ShowDateOnly($this->episodicPost['moderated']) ?> <?php echo $this->translate('At the date last updated') ?>&raquo;
+    <?php echo ($this->episodicPost['post_status'] == \NBlog\Model\WritingStatus::PUBLISHED) ? $this->translate('Published') : $this->translate('Unpublished') ?> &raquo;
+    <?php echo $this->translate('Division') ?> :: <?php echo $this->BlogPost()->getCategoryLink($this->episodicPost, $this->categories, ' : ') ?>
+</span>
+<hr />
+<p class="mypostdetails">
+    <?php echo $this->NBEscapeHtml($this->episodicPost['details'], true) ?>
+</p>
+<p class="postmeta">
+    <?php if ($this->episodicPost['post_status'] == \NBlog\Model\WritingStatus::PUBLISHED) : ?>
+    <i class="icon icon-comment"></i>
+    <?php echo (empty($this->episodicPost['total_comments'])) ? $this->translate('No comment found') : '<span class="commentCount">'.$this->Number()->convert($this->episodicPost['total_comments']).'</span>'.$this->translate('Much times been commented') ?>
+    <i class="icon icon-edit"></i><a href='#' id='show-comment-box'><?php echo $this->translate('Write Comment') ?></a>
+    <?php endif ?>
+
+    <?php if ($this->episodicPost['post_status'] != \NBlog\Model\WritingStatus::TRASH) : ?>
+        <i class="icon icon-trash"></i>
+        <a href="<?php echo $this->url('trash-my-episodic-post', array('episodePermalink' => $this->episode['permalink'], 'permalink' => $this->episodicPost['permalink'])) ?>"
+           id='trash-episodic-post'> <?php echo $this->translate('Trash This') ?></a>
+
+        <script type="text/javascript">
+            $(function() {
+                $('#trash-episodic-post').on('click', function() {
+                    if (confirm('Do you really want to trash?')) {
+                        $.post($(this).attr('href'), function(response) {
+                            if (response.status == 'success') {
+                                window.location = '';
+                            } else {
+                                alert(response.data);
+                            }
+                        }, 'json');
+                    }
+                    return false;
+                });
+            });
+        </script>
+
+    <?php else : ?>
+        <i class="icon icon-ok"></i>
+        <a href="<?php echo $this->url('restore-my-episodic-post', array('episodePermalink' => $this->episode['permalink'], 'permalink' => $this->episodicPost['permalink'])) ?>">
+            <?php echo $this->translate('Restore This') ?>
+        </a>
+    <?php endif ?>
+</p>
+
+<?php if ($this->episodicPost['post_status'] == \NBlog\Model\WritingStatus::PUBLISHED) : ?>
+<?php echo $this->partial('blog-user/partials/comments-panel', array(
+    'creator' => $this->episodicPost['episode_created_by'],
+    'commentOn' => $this->episodicPost,
+    'comments' => $this->comments,
+    'commentFor' => \NBlog\Model\WritingType::POST,
+    'blockedBloggers' => $this->blockedBloggers,
+    'reportStatuses' => $this->reportStatuses,
+    'commentForm' => $this->commentForm,
+    'reportForm' => $this->reportForm
+)) ?>
+<?php endif ?>

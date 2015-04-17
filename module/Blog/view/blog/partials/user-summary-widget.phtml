@@ -1,0 +1,33 @@
+<div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="tile-body">
+        <div class="row">
+            <div class="usp-cover col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <img src="<?php echo $this->Profile()->getImage($this->writing, 'image_source', 'profile') ?>">
+                <div class="usp-title-info">
+                    <div class="usp-name">
+                        <?php echo $this->Profile()->getDisplayName($this->writing) ?>
+                    </div>
+                    <div class="usp-from">
+                        <?php echo $this->writing['district'];?>
+                        <?php echo empty($this->writing['country']) ? '' :' , ' .$this->writing['country'];?>
+                    </div>
+                </div>
+
+                <div class="usp-short-info">
+                    <ul>
+                        <li><a href="javascript:;"><span><?php echo $this->Number()->convert($this->writing['friend_count']); ?></span><span>বন্ধু</span></a></li>
+                        <li><a href="javascript:;"><span><?php echo $this->Number()->convert($this->writing['post_count']); ?></span><span>লেখা</span></a></li>
+                        <li><a href="javascript:;"><span><?php echo $this->Number()->convert($this->otherPostInfoByUser['totalCommentsByUser']); ?></span><span>মন্তব্য</span></a></li>
+                        <li><a href="javascript:;"><span><?php echo $this->Number()->convert($this->otherPostInfoByUser['totalLikesByUser']); ?></span><span>পছন্দ</span></a></li>
+                        <li><a href="javascript:;"><span><?php echo $this->Number()->convert($this->otherPostInfoByUser['countBeingFavorite']); ?></span><span>অনুসরন</span></a></li>
+                        <li><a href="javascript:;"><span><?php echo $this->Number()->convert($this->otherPostInfoByUser['countWritingsBeingFavorite']); ?></span><span>অনুসারি</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="usp-status col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <?php echo $this->NBEscapeHtml($this->writing['biography'], true) ?>
+            </div>
+        </div>
+    </div><!--  End of tile-body  -->
+</div>

@@ -1,0 +1,75 @@
+<h3>
+    <?php echo $this->translate('My favorite bloggers') ?>
+    (<?php echo $this->Number()->convert($this->countFavoriteWriters) ?> <?php echo $this->translate('# of Persons') ?>)
+</h3>
+
+<form action="<?php echo $this->url('cancel-favorite-bulky') ?>" method="POST">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th class="optional"></th>
+            <th><?php echo $this->translate('Blog Title') ?></th>
+            <th class="optional"><?php echo $this->translate('Blogger Information') ?></th>
+            <th class="optional">&nbsp;</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <?php if (empty($this->favoriteWriters)) : ?>
+
+        <tr>
+            <td colspan="4"><p class="no-record-found"><?php echo $this->translate('No blogger has been favorited.') ?></p></td>
+        </tr>
+
+        <?php else : foreach ($this->favoriteWriters AS $blogger) : ?>
+
+        <tr>
+            <td class="optional"><input type="checkbox" name='bloggerIds[]' value="<?php echo $blogger['user_id'] ?>" class="blogger_ids" /></td>
+            <td><a href="<?php echo $this->url('public-profile', array('username' => $blogger['username'])) ?>"><?php echo $this->Profile()->getDisplayName($blogger) ?></a></td>
+            <td>
+                <span class="postmeta">
+                    <img src="<?php echo $this->Profile()->getImage($blogger) ?>" width="60" height="60"><br />
+                    <?php echo $this->translate('Total Posts') ?>: <?php echo $this->Number()->convert($blogger['post_count']) . $this->translate('#') ?> <br />
+                    <?php echo $this->translate('Total Comments') ?>: <?php echo $this->Number()->convert($blogger['comment_count']) . $this->translate('#') ?>
+                </span>
+            </td>
+            <td><input type="button" value="<?php echo $this->translate('Undo Favorite') ?>" class="btn btn-primary do-only-one" /></td>
+        </tr>
+
+        <?php endforeach; endif ?>
+        </tbody>
+    </table>
+
+    <?php if (!empty($this->favoriteWriters)) : ?>
+
+    <div class="pagination pagination-centered">
+        <div class="form-inline pull-left">
+            <input type="submit" value="<?php echo $this->translate('Undo Favorite Together') ?>" class="btn btn-primary" />
+            <input type="hidden" name='urlFrom' value="<?php echo $_SERVER['REQUEST_URI'] ?>" />
+            <input type="hidden" name='type' value="<?php echo \BlogUser\Model\FavoriteType::WRITER ?>" />
+            <?php echo $this->paginator()->slide($this->paginator, array_merge($this->paginatorOptions, array('linksOnly' => true, 'class' => 'pull-right'))) ?>
+        </div>
+    </div>
+
+    <?php endif ?>
+
+</form>
+
+<script type='text/javascript'>
+    (function($) {
+        $('#select-all').on('click', function() {
+            $(this).parent().parent().parent()
+                    .find("input[type='checkbox']").attr('checked', $(this).is(':checked'));
+        });
+
+        $('.post_ids').on(function() {
+            $('#select-all').attr('checked', $(this).is(':checked') &&
+                    ! ($(this).parent().parent().siblings("tr").children("tr > td > input[type='checkbox']").not(':checked').length));
+        });
+
+        $('.do-only-one').click(function() {
+            $(this).parent().parent().find("td > input[type='checkbox']").attr('checked', true);
+            $(this).parents('form:first').submit();
+        });
+    })(jQuery);
+</script>

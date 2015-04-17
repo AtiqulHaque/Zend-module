@@ -1,0 +1,41 @@
+<h3>
+    <?php echo $this->translate('People who favorite me') ?>
+    (<?php echo $this->Number()->convert($this->countBeingFavoriteWriters) ?>
+    <?php echo $this->translate('Person') ?>)
+</h3>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th class="optional">&nbsp;</th>
+        <th><?php echo $this->translate('Blogger Name') ?></th>
+        <th class="optional"><?php echo $this->translate('Blogger Information') ?></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php if (empty($this->beingFavoriteWriters)) : ?>
+
+    <tr>
+        <td colspan="3"><p class="no-record-found"><?php echo $this->translate('No blogger has favorited.') ?></p></td>
+    </tr>
+
+    <?php else : foreach ($this->beingFavoriteWriters AS $blogger) : ?>
+
+    <tr>
+        <td class="optional">&nbsp;</td>
+        <td><a href="<?php echo $this->url('public-profile', array('username' => $blogger['username'])) ?>"><?php echo $this->Profile()->getDisplayName($blogger) ?></a></td>
+        <td>
+            <span class="postmeta">
+                <img src="<?php echo $this->Profile()->getImage($blogger) ?>" width="60" height="60" class="pull-left">
+                <span>
+                    <?php echo $this->translate('Total Posts') ?>: <?php echo $this->Number()->convert($blogger['post_count']) . $this->translate('#') ?><br />
+                    <?php echo $this->translate('Total Comments') ?>: <?php echo $this->Number()->convert($blogger['comment_count']) . $this->translate('#') ?>
+                </span>
+            </span>
+        </td>
+    </tr>
+
+    <?php endforeach; endif ?>
+    </tbody>
+</table>

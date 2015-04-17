@@ -1,0 +1,69 @@
+
+<?php echo $this->partial('blog-user/partials/writing-links', array('nav'=>'discussion')) ?>
+<h3><?php echo $this->translate('Update Discussion') ?></h3>
+
+<?php $form = $this->form->setAttribute('action', $this->url('edit-my-discussion'))->prepare();
+echo $this->form()->openTag($form);
+echo $this->NBFormRow($form->get('title'));
+echo $this->NBFormRow($form->get('details'));
+echo $this->partial('blog-user/partials/category-list-in-form', array('form' => $form, 'categories' => $this->categories,'domId'=>'discussion-category'));
+echo $this->NBFormRow($form->get('agree'), 'append', true); ?>
+
+<div class="form-actions">
+    <?php echo $this->formSelect($form->get('status')); ?>
+    <?php echo $this->formSubmit($form->get('submit')); ?>
+    <?php echo $this->formButton($form->get('cancel')->setAttribute('onClick', "window.location='{$this->url('my-discussions')}'; return false;")); ?>
+    <?php echo $this->formRow($form->get('discussion_id')); ?>
+</div>
+<?php echo $this->form()->closeTag();
+
+echo $this->partial('blog-user/partials/select-box-modifier') ?>
+
+<script type="text/javascript">
+    $(function() {
+        $("#discussion-form").submit(function() {
+            tinyMCE.triggerSave();
+        }).validate({
+            rules: {
+                'title': { required: true },
+                'details': { required: true },
+                'category_id[]': { required: true },
+                'status': { required: true },
+                'agree': { required: true }
+            },
+            messages: {
+                'title': {required: '<?php echo $this->translate('Please enter discussion title.') ?>'},
+                'details': {required: '<?php echo $this->translate('Please enter discussion description.') ?>'},
+                'category_id[]': {required: '<?php echo $this->translate('Please select a category of the discussion.') ?>'},
+                'status': {required: '<?php echo $this->translate('Please enter discussion status.') ?>'},
+                'agree': {required: '<?php echo $this->translate('You must agree to the terms of use.') ?>'}
+            },
+            errorPlacement: function ($error, $element) {
+                if ($element.attr('type') == 'checkbox') {
+                    $element.parents('.controls').append($error);
+                } else if ($element.is('textarea')) {
+                    $error.insertAfter($element.next());
+                } else {
+                    $error.insertAfter($element);
+                }
+            },
+            focusInvalid : function() {
+                var toFocus = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
+                if (toFocus.is("textarea")) {
+                    tinyMCE.get(toFocus.attr("id")).focus();
+                } else {
+                    toFocus.filter(":visible").focus();
+                }
+            },
+            submitHandler: function(form) {
+                if ($(form).find('[name="status"]').val() == '<?php echo \NBlog\Model\WritingStatus::DRAFT ?>') {
+                    form.submit();
+                } else if (typeof checkUserSMSVerified == 'function' && !checkUserSMSVerified()) {
+                    (typeof registerSmsVerification == 'function') && registerSmsVerification($(form).find('input[type="submit"]'));
+                } else {
+                    form.submit();
+                }
+            }
+        });
+    });
+</script>

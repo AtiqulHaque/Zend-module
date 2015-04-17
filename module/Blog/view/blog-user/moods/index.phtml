@@ -1,0 +1,53 @@
+<div class="row-fluid">
+    <div class="box span24">
+        <div class="box-header">
+            <h2><?php echo $this->translate('My Mood Statuses') ?></h2>
+        </div>
+
+        <div class="box-content">
+
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th class="optional"></th>
+                    <th class="optional"><?php echo $this->translate('Mood Status') ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if (empty($this->moods)) : ?>
+                <tr>
+                    <td colspan="2"><p class="no-record-found"><?php echo $this->translate('No mood has been found.') ?></p></td>
+                </tr>
+                <?php else: foreach ($this->moods AS $mood) : ?>
+                <tr>
+                    <td class="optional"><input type="checkbox" name='moodIds[]' value="<?php echo $mood['mood_id'] ?>" /></td>
+                    <td>
+                        <?php echo $this->NBEscapeHtml($mood['title']) ?>
+                        <span class="label label-inverse">
+                            <small style="font-size: 12px;">
+                                <span data-toggle="tooltip" title="<?php echo $this->DateTimeEnToBn()->ShowDate($mood['mood_created']) ?>"><?php echo $this->DateTimeEnToBn()->timeSince($mood['mood_created']) ?></span>
+                                <?php echo $this->translate('Written') ?>
+                            </small>
+                        </span>
+                    </td>
+                </tr>
+                <?php endforeach; endif ?>
+                </tbody>
+            </table>
+
+            <?php if (!empty($this->moods)) : ?>
+            <div class="pagination pagination-centered">
+                <?php echo $this->paginator()->slide($this->paginator, $this->paginatorOptions) ?>
+            </div>
+            <?php endif ?>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .box-content table th {
+        background: #3B5990;
+        border-left: #CCC 1px solid;
+        color: #000;
+    }
+</style>

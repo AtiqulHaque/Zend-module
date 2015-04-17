@@ -1,0 +1,33 @@
+<?php foreach ((array)$this->posts AS $post) : ?>
+    <?php if (empty($post['isHidden'])) : ?>
+        <div class="tile-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="content-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <?php if (empty($this->hideUserInfo)) : ?>
+                <?php echo $this->Profile()->getUserImageWithLink($post) ?>
+                <div class="title">
+                    <?php echo $this->BlogPost()->getPostTitle($post, true, 1) ?>
+                </div>
+                <?php echo $this->Post()->getNewSummaryPost($post, $this->categories, $this->professions, $post['publicly_published_time']) ?>
+                <?php else : ?>
+                <div class="title">
+                    <?php echo $this->BlogPost()->getPostTitle($post, true, 1) ?>
+                </div>
+                <?php echo $this->Post()->getNewSummaryPostWithoutName($post, $this->categories) ?>
+                <?php endif ?>
+            </div>
+
+            <?php if (empty($this->hideSummary)) : ?>
+            <div class="content-body hidden-xs col-sm-12 col-md-12 col-lg-12">
+                <?php echo $this->Post()->getMinViewPostImages($post) ?>
+                <?php echo $this->BlogPost()->getPartialDetail($post) . $this->BlogPost()->getShowMoreLinkForPost($post) ?>
+            </div>
+            <?php endif ?>
+
+            <?php if (empty($this->hideUserActivity)) : ?>
+            <?php echo $this->Post()->getMinViewPostFooter($post) ?>
+            <?php endif ?>
+        </div>
+    <?php else : ?>
+        <?php echo $this->Post()->getContentHideLink(\NBlog\Model\WritingType::POST, $post['permalink']) ?>
+    <?php endif ?>
+<?php endforeach ?>

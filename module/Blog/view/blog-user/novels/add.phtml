@@ -1,0 +1,24 @@
+
+<div class="row-fluid">
+    <div class="span12">
+        <span class='h7'>Write Novel Name:</span>
+    </div>
+</div>
+<hr>
+
+<?php echo $this->flashMessenger($this->errorMsg) ?>
+<div class="well1">
+    <div class="row-fluid">
+        <div class="span9">
+            <?php $form = $this->novelForm->setAttribute('action', $this->url('add-my-novel'))->prepare();
+            echo $this->form()->openTag($form);
+            echo $this->formRow($form->get('novel_name')) ?>
+
+            <div class="form-actions">
+                <?php echo $this->formSubmit($form->get('submit')); ?>
+                <?php echo $this->formSubmit($form->get('cancel')); ?>
+            </div>
+            <?php echo $this->form()->closeTag(); ?>
+        </div>
+    </div>
+</div>

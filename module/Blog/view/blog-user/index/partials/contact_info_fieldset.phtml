@@ -1,0 +1,139 @@
+<?php $privacyFieldset = $this->form->get('privacy') ?>
+<div id="contact_info_privacy_table">
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="country_id"><?php echo $this->translate('Country') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->contactInfoFieldset->get('country_id'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->userDetail['country']) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::COUNTRY_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="country_id"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <!-- <div class="form-group error-occurred"> -->
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="division_id"><?php echo $this->translate('Division') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->contactInfoFieldset->get('division_id'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->userDetail['division']) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::DIVISION_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="division_id"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <!-- <div class="form-group error-occurred"> -->
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="district_id"><?php echo $this->translate('District') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->contactInfoFieldset->get('district_id'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->userDetail['district']) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::DISTRICT_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="district_id"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <!-- <div class="form-group error-occurred"> -->
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="station_id"><?php echo $this->translate('Police Station') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->contactInfoFieldset->get('station_id'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->userDetail['police_station']) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::POLICE_STATION_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="station_id"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="zip_code">জিপ কোড :</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->contactInfoFieldset->get('zip_code'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->userDetail['post_office']) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::ZIP_CODE),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="zip_code"> <?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="present_address"><?php echo $this->translate('Present Address') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->contactInfoFieldset->get('present_address'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->NBEscapeHtml($this->userDetail['present_address'])) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::PERMANENT_ADDRESS),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="present_address"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="website"><?php echo $this->translate('Website') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->contactInfoFieldset->get('website'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->userDetail['website']) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::WEBSITE_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="website"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="email"><?php echo $this->translate('Email Address') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->contactInfoFieldset->get('email'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->userDetail['email'] ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::EMAIL_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="email"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 col-lg-3 control-label" for="mobile_number"><?php echo $this->translate('Mobile Number') ?>:</label>
+        <div class="col-md-9 col-lg-9">
+            <?php $element = $this->contactInfoFieldset->get('mobile_number'); ?>
+            <?php echo $this->formElement($element) ?>
+            <label class="control-label for-display display-show"><?php echo $this->Text()->getNotNullText($this->userDetail['mobile_number']) ?></label>
+            <?php echo $this->partial('blog-user/index/partials/privacy_dropdown', array(
+                'privacyElement' => $privacyFieldset->get(\NBlog\Model\Setting::MOBILE_PRIVACY),
+                'privacyOptions' => $this->privacyOptions
+            )) ?>
+            <label class="error" generated="true" for="mobile_number"><?php echo $this->formElementErrors($element); ?></label>
+        </div>
+    </div>
+
+    <div id="go-to-action" class="form-group display-hide">
+        <div class="col-md-offset-2 col-lg-offset-2 col-md-10 col-lg-10">
+            <?php echo $this->formSubmit($this->form->get('submit')->setAttributes(array(
+                'name' => $this->contactInfoFieldset->getName().'_submit', 'onclick' => 'cancelDisabledField();'))) ?>
+            <?php echo $this->formElement($this->form->get('cancel')); ?>
+        </div>
+    </div>
+</div>

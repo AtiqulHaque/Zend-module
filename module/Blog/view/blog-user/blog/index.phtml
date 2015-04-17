@@ -1,0 +1,131 @@
+<?php $isUserCurrentUser = (isset($this->userDetail['user_id']) && $this->sessionContainer()->getData('user_id') == $this->userDetail['user_id']);
+if (!$isUserCurrentUser) :
+    echo $this->partial('blog-user/index/partials/anonymous-user-navbar', array('userDetail' => $this->userDetail));
+endif ?>
+<div class="row">
+    <?php echo $this->partial('blog-user/blog/partials/nav-social-writing-area', array(
+        'status' => $this->status,
+        'totalPublishedPosts' => $this->totalPublishedPosts,
+        'totalPendingPosts' => $this->totalPendingPosts,
+        'totalBouncedPosts' => $this->totalBouncedPosts,
+        'totalTrashPosts' => $this->totalTrashPosts,
+        'totalDraftPosts' => $this->totalDraftPosts,
+        'totalUnpublishedPosts' => $this->totalUnpublishedPosts,
+        'totalFavoritePosts' => $this->totalFavoritePosts,
+        'totalPosts' => $this->totalPosts,
+        'totalCommentsPosts' => $this->totalCommentsPosts,
+        'isUserCurrentUser' => $isUserCurrentUser
+    )); ?>
+</div>
+
+<div id="forMyPostPage" class="row forMyPostPage" data-username="<?php echo $this->userDetail['username'] ?>">
+    <div id="myPostList" class=" col-xs-6 col-sm-6 col-md-5 col-lg-5">
+        <div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="tile-body">
+                <div class="row" >
+                    <div class="tile cut-margin-top col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="tile-body">
+                            <div class="row">
+                                <div class="tile-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                    <div class="content-body myPostType col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                        <div class="row">
+                                            <div class="type-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                                <div class="btn-group">
+
+                                                    <div id="other-query-selections" class="btn-group type-group query-selection">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                            <?php echo $this->translate('Serialized') ?>
+                                                            <i class="icon-angle-down"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::SEQUENCE?>'><?php echo $this->translate('Serialized') ?></a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::MOST_VIEWED?>'><?php echo $this->translate('Maximum Read') ?></a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::MOST_COMMENTED?>'><?php echo $this->translate('Maximum Comments') ?></a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::MOST_FAVORITED; ?>'><?php echo $this->translate('Been Favorited Mostly') ?></a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::LAST_UPDATED;?>'><?php echo $this->translate('Last update') ?></a></li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div id="comments-query-selections" class="btn-group type-group query-selection">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                            <?php echo $this->translate('Serialized') ?>
+                                                            <i class="icon-angle-down"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::THREADED_COMMENTS?>'><?php echo $this->translate('Serialized') ?></a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::SEQUENCE_COMMENTS?>'>Sequence Comments</a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::LAST_UPDATED_COMMENTS;?>'><?php echo $this->translate('Last update') ?></a></li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="btn-group type-group limit-selection">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                            <?php echo $this->translate('All') ?>
+                                                            <i class="icon-angle-down"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::LAST_SEVEN_DAYS?>'> ৭ দিন</a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::LAST_FIFTEEN_DAYS?>'>১৫ দিন</a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::LAST_MONTH?>'>১ মাস</a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::LAST_THREE_MONTHS?>'>৩ মাস </a></li>
+                                                            <li><a href="javascript:void(0);" data-type='<?php echo \NBlog\Model\PostType::ALL_DAYS?>'>সকল</a></li>
+                                                        </ul>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                <ul id="post-list-container" class="type-list">
+
+                                                </ul>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                <div id="myPostsPagination" class="type-pagi">
+                                                    <a class="prev"><i class="icon-arrow-left"></i></a>
+
+                                                    <div class="body">
+                                                        <input type="text" value="1" class="currentPage" id="currentPagesMyPosts"/>
+                                                        / <span class="total-page">125</span>
+                                                    </div>
+                                                    <a class="next"><i class="icon-arrow-right"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--  End of tile-container -->
+
+                            </div>
+
+                        </div>
+                        <!--  End of tile-body  -->
+                    </div><!--    End of tile    -->
+
+
+                </div>
+            </div><!--  End of tile-body  -->
+        </div><!--    End of tile    -->
+
+    </div><!-- End of left-column -->
+
+    <div id="single-posts-views" class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
+        <div class="tile col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="tile-body">
+                <div class="row" id="userwallContainer">
+
+                </div>
+            </div>
+        </div>
+    </div><!-- End of right-column -->
+</div>

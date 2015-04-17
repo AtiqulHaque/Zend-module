@@ -1,0 +1,44 @@
+<ul class="nav nav-pills nav-justified subChildTab">
+    <?php foreach($this->voteCategories AS $key => $categories) : ?>
+        <li<?php echo ($key > 1) ? '' : ' class="active"' ?>>
+            <a href="#contest-result-part-<?php echo $this->episode ?>-<?php echo $key ?>" data-toggle="tab"
+               title="<?php echo $this->voteCategories[$key]['items'] ?>">
+                <?php echo $categories['title'] ?>
+            </a>
+        </li>
+    <?php endforeach ?>
+    <?php if (isset($this->topFiveTab)) : ?>
+        <li><a href="#contest-result-part-<?php echo $this->episode ?>-<?php echo \NBlog\Model\VoteConfig::TOP_CRITICS_FLAG ?>" data-toggle="tab"><?php echo $this->translate('Top Five critics') ?></a></li>
+    <?php endif ?>
+</ul>
+<div class="tab-content">
+    <?php $blogPosts = $this->blogPosts;
+    if (empty($blogPosts)) : ?>
+        <p class="text-center"><?php echo $this->translate('Result of this category of this episode has not been published yet.') ?></p>
+    <?php else :
+    ksort($blogPosts);
+    foreach($blogPosts AS $categoryId => $posts) : ?>
+        <div class="tab-pane fade<?php echo $categoryId > 1 ? '' : ' in active' ?>"
+             id="contest-result-part-<?php echo $this->episode ?>-<?php echo $categoryId ?>">
+            <?php if (!empty($this->voteCategories[$categoryId])) : ?>
+                <p class="text-center text-info">
+                    <?php echo $this->voteCategories[$categoryId]['items'] ?>
+                </p>
+            <?php endif ?>
+
+            <?php foreach($posts AS $post) : ?>
+                <div class="tile-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="content-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <?php echo $this->Profile()->getUserImageWithLink($post) ?>
+                        <div class="title">
+                            <?php echo $this->BlogPost()->getPostTitle($post, true, 1) ?>
+                        </div>
+                        <?php echo $this->Post()->getNewSummaryPost($post, $this->categories, $this->professions, $post['publicly_published_time']) ?>
+                    </div>
+                    <?php echo $this->Post()->getMinViewPostFooter($post, false, true) ?>
+                </div>
+            <?php endforeach ?>
+        </div>
+    <?php endforeach ?>
+    <?php endif ?>
+</div>

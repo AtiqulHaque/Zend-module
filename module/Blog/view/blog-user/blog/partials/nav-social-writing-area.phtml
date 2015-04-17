@@ -1,0 +1,64 @@
+<div id="sub-navigation" class="sub-navi bdh bds2 type-group bg1 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <ul>
+        <?php if ($this->isUserCurrentUser) : ?>
+        <?php if (!empty($this->totalPosts)) : ?>
+        <li>
+            <a class="get-post-type <?php echo ($this->status == '') ? 'active' : ''; ?>" href="javascript:void(0)" data-type='post-status-'>
+                <?php echo $this->translate('All writings') ?>
+            </a>
+        </li>
+        <?php endif ?>
+        <?php if(!empty($this->totalFavoritePosts)):?>
+        <li>
+            <a class="get-post-type" href="javascript:void(0)" data-type='post-status-<?php echo \NBlog\Model\WritingStatus::FAVORITED?>'>
+                <?php echo $this->translate('Favorite Posts') ?>
+            </a>
+        </li>
+        <?php endif ?>
+        <?php if(!empty($this->totalCommentsPosts)):?>
+        <li>
+            <a class="get-post-type" href="javascript:void(0)" data-type='post-status-<?php echo \NBlog\Model\WritingStatus::MY_COMMENTS?>'>
+               <?php echo $this->translate('My comment');?></a>
+        </li>
+        <?php endif ?>
+        <?php if(!empty($this->totalDraftPosts)):?>
+        <li>
+            <a class="get-post-type" href="javascript:void(0)" data-type='post-status-<?php echo \NBlog\Model\WritingStatus::DRAFT?>'>
+                <?php echo $this->translate('Draft Posts') ?>
+            </a>
+        </li>
+        <?php endif ?>
+        <?php if(!empty($this->totalUnpublishedPosts)):?>
+        <li>
+            <a class="get-post-type" href="javascript:void(0)" data-type='post-status-<?php echo \NBlog\Model\WritingStatus::QUEUE_POST ?>'>
+                <?php echo $this->translate('Pending Posts') ?>
+            </a>
+        </li>
+        <?php endif ?>
+        <?php if(!empty($this->totalBouncedPosts)):?>
+        <li>
+            <a class="get-post-type" href="javascript:void(0)" data-type='post-status-<?php echo \NBlog\Model\WritingStatus::BOUNCE?>'>
+                <?php echo $this->translate('Bounced Posts') ?>
+            </a>
+        </li>
+        <?php endif ?>
+
+        <?php else : ?>
+
+        <li>
+            <a class="get-post-type <?php echo ($this->status == '') ? 'active' : ''; ?>" href="javascript:void(0)" data-type='post-status-'>
+                <?php echo $this->translate('All writings') ?>
+            </a>
+        </li>
+        <li>
+            <a class="get-post-type" href="javascript:void(0)" data-type='post-status-<?php echo \NBlog\Model\WritingStatus::FAVORITED?>'>
+                <?php echo $this->translate('Favorite Posts') ?>
+            </a>
+        </li>
+        <li>
+            <a class="get-post-type" href="javascript:void(0)" data-type='post-status-<?php echo \NBlog\Model\WritingStatus::MY_COMMENTS?>'>
+               <?php echo $this->translate('User Commented Posts') ?></a>
+        </li>
+        <?php endif ?>
+    </ul>
+</div>

@@ -1,0 +1,54 @@
+<div class="content-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <?php echo $this->Profile()->getUserImageWithLink($this->post) ?>
+    <div class="title">
+        <a href=""><?php echo $this->BlogPost()->getPostTitle($this->post,true,1);?></a>
+    </div>
+    <?php echo $this->Post()->getNewSummaryPost($this->post, $this->categories, $this->professions,$this->post['publicly_published_time']) ?>
+    <div class="font-sizer">
+        <span class="zoomIn">A</span>
+        <span class="zoomOut">A</span>
+    </div>
+</div>
+<div class="content-body summary-view col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <?php echo $this->NBEscapeHtml($this->post['details'], true) ?>
+    <?php echo $this->Post()->getEpisodeLink($this->episode) ?>
+</div>
+<div class="content-footer col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <?php echo $this->Post()->getMinViewPostFooter($this->post,true);?>
+
+    <?php if ($this->isSelectedForVote) : ?>
+        <div class="row vote-summary">
+            <?php if ($this->isVotingEnabled) : ?>
+                <?php if ($this->sessionContainer()->getData('username')) : ?>
+
+                    <?php if (empty($this->isCheckVoteForUser)) : ?>
+                    <button class="btn btn-link vote-for-post<?php echo ($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms') ?>"
+                            data-rel='<?php echo $this->post['permalink'] ?>'><?php echo $this->translate('Give vote') ?>
+                    </button>
+                    <?php else: ?>
+                    <?php echo $this->translate('You have voted') ?>
+                    <?php endif ?>
+
+                <?php else : ?>
+                    <a href='javascript:void(0);' class='to-open-login-box'><?php echo $this->translate('Give vote') ?></a>
+
+                <?php endif ?>
+            <?php endif ?>
+            <img src="<?php echo $this->basePath('img/competition/vote.png') ?>" />
+            <span id='vote-count'><?php echo $this->number()->convert($this->voteCount) ?></span>
+        </div>
+    <?php endif ?>
+</div>
+<style type="text/css">
+    div.vote-summary,
+    div.vote-summary button,
+    a.vote-summary {
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+    }
+    div.vote-summary img, a.vote-summary img {
+        height: 25px;
+        width: 50px;
+    }
+</style>

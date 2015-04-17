@@ -1,0 +1,56 @@
+<?php if ($this->status == \NBlog\Model\WritingStatus::MY_COMMENTS):?>
+
+    <?php if (empty($this->blogPosts)): ?>
+        <p class="no-record-found" style="padding: 10px; text-align: center;"><?php echo $this->translate('No Comments') ?></p>
+    <?php else :foreach ($this->blogPosts AS $post): ?>
+
+        <li data-samplepost="sample-post-1" data-title="<?php echo $post['permalink']; ?>">
+            <div class="comments">
+                <?php echo $post['comments']?>
+            </div>
+            <div class="thread-view" style="display: none;">
+                <?php if (!empty($post['otherComments'])) : foreach($post['otherComments'] AS $comments) : ?>
+                    <div class="comments">
+                        <?php echo $comments['comments']?>
+                    </div>
+                <?php endforeach; endif ?>
+            </div>
+
+            <div class="publish-info">
+                <small>
+                    <?php echo $this->Profile()->getUserImageWithLink($post) ?>
+                    <?php echo $this->post()->getNewUserInfoLinkWithPopUpPost($post, $this->categories, $this->professions, $post['publicly_published_time']) .' '.$this->translate("'s") ?>
+                    <a href="javascript:void(0)"> <?php echo $post['title'] ?> </a>
+                    <?php echo $this->translate('In the writing') ?>
+                </small>
+            </div>
+            <?php if (!empty($post['otherCommentCount']) && $post['otherCommentCount'] > 1) : ?>
+                <div class="thread-view-action">
+                    <a href="javascript:void(0)"><?php echo $this->translate('Withal'). ' ' . $this->Number()->convert($post['otherCommentCount']-1) . ' ' . $this->translate('Much times been commented') ?> ... </a>
+                </div>
+            <?php endif ?>
+
+            <div class="clr-area">
+                <?php echo $this->Post()->getMinViewPostFooter($post) ?>
+            </div>
+        </li>
+
+    <?php endforeach; endif; ?>
+
+<?php else : ?>
+
+    <?php if (empty($this->blogPosts)) : ?>
+        <p class="no-record-found" style="padding: 10px; text-align: center;"><?php echo $this->translate('No Posts') ?></p>
+    <?php else : foreach ($this->blogPosts AS $post): ?>
+        <li data-title="<?php echo $post['permalink']; ?>">
+            <div class="title"><?php echo $post['title']; ?></div>
+            <div class="publish-info">
+                <?php echo $this->post()->getNewSummaryPostWithoutName($post, $this->categories); ?>
+            </div>
+            <div class="clr-area">
+                <?php echo $this->Post()->getMinViewPostFooter($post) ?>
+            </div>
+        </li>
+    <?php endforeach; endif ?>
+
+<?php endif ?>

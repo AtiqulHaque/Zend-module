@@ -1,0 +1,10 @@
+<?php if(!empty($this->LikePosts)):?>
+<ul>
+    <?php foreach($this->LikePosts AS $likes): ?>
+    <li>
+        <img src='<?php echo $this->Profile()->getImage($likes) ?>' alt=''>
+        <span> <?php echo $this->Profile()->getDisplayName($likes)?> </span>
+    </li>
+    <?php endforeach ?>
+</ul>
+<?php endif ?>

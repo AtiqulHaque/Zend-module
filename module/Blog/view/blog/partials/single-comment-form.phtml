@@ -1,0 +1,26 @@
+<?php $form = $this->commentForm;
+$form->setAttribute('action', $this->url('save-comment', array(
+        'permalink' => $this->commentOn['permalink'],
+        'username' => $this->sessionContainer()->getData('username'))
+));
+$form->prepare();?>
+    <div class="comments-area for-post col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <img class="commentator" src="<?php echo $this->Profile()->getImage($this->userDetails) ?>" alt="">
+        <div class="comments-bubble">
+            <?php  echo $this->form()->openTag($form) ?>
+            <?php $element = $form->get('comment') ?>
+            <?php echo $this->formTextarea($element) ?>
+            <?php echo $this->formElementErrors($element) ?>
+            <div class="action-box">
+                <?php $submit = $form->get('submit')->setValue('Write Comment');
+                echo $this->formSubmit($submit->setAttribute('class','add-comment '. $submit->getAttribute('class').''.($this->sessionContainer()->getData('isSmsVerified') ? '' : ' verify-sms'))); ?>
+                <a href="javascript:void(0)"
+                   class="cancel-commenting btn btn-small"
+                   rel='<?php echo $this->comment['comment_id'] ?>'>
+                    <?php echo $this->translate('Cancel') ?>
+                </a>
+                <?php echo $this->formHidden($form->get('comment_for')->setValue($this->commentFor)) ?>
+            </div>
+        </div>
+    </div>
+<?php echo $this->form()->closeTag(); ?>

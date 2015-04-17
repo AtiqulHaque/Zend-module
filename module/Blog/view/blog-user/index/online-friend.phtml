@@ -1,0 +1,18 @@
+<div class="well display stats">
+    <h4>Chat Panel</h4>
+    <input type="hidden" value="" id="chat_partner"/>
+    <input type="hidden" value="" id="user"/>
+    <ul id='friend_select'>
+        <?php if (empty($this->friends)) :
+        echo "<li>None</li>";
+        else : foreach ($this->friends as $key => $friend) : ?>
+        <li class="single-friend" style="cursor: pointer;">
+            <img class='friend-image' src="<?php echo $this->Profile()->getImage($friend) ?>" />
+            <a class="online-chat" rel='<?php echo $friend['friend_user_id'] ?>'>
+                <?php echo $this->Profile()->getDisplayName($friend) ?>
+                <img src="<?php echo $this->basePath('img/online-user-sign.png') ?>">
+            </a>
+        </li>
+        <?php endforeach; endif ?>
+    </ul>
+</div>

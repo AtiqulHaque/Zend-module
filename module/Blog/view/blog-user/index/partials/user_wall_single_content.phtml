@@ -1,0 +1,47 @@
+<?php if (!empty($this->latestAnything)) : foreach ($this->latestAnything AS $eachContent) : ?>
+    <?php switch ($eachContent['writing_type']) {
+
+        case \NBlog\Model\WritingType::MOOD:
+            echo $this->partial('blog-user/index/partials/user_wall_single_content_mood',array(
+                'eachContent' => $eachContent,
+                'categories'  => $this->categories,
+                'professions' => $this->professions,
+                'currentUser' => $this->sessionContainer()->getData('user_id'),
+                'isCurrentUserPost' => ($this->sessionContainer()->getData('user_id') == $eachContent['user_id']),
+                'commentsData' => array (
+                    'commentOn'         => $eachContent,
+                    'comments'          => $eachContent['comments'],
+                    'commentFor'        => $eachContent['writing_type'],
+                    'commentForm'       => $this->commentForm,
+                    'reportForm'        => $this->reportForm,
+                    'reportMessages'    => $this->reportMessages,
+                    'blockedBloggers'   => $this->blockedBloggers
+                ),
+                'commentForm'           => $this->commentForm
+            ));
+            break;
+
+        case \NBlog\Model\WritingType::POST:
+        default :
+            echo $this->partial('blog-user/index/partials/user_wall_single_content_post',array(
+                'eachContent' => $eachContent,
+                'categories'  => $this->categories,
+                'professions' => $this->professions,
+                'singleMyPost' => $this->singleMyPost,
+                'isEdit'      => false,
+                'currentUser' => $this->sessionContainer()->getData('user_id'),
+                'isCurrentUserPost' => ($this->sessionContainer()->getData('user_id') == $eachContent['user_id'])?true:false,
+                'commentsData'=> array (
+                    'commentOn'         => $eachContent,
+                    'comments'          => $eachContent['comments'],
+                    'commentFor'        => $eachContent['writing_type'],
+                    'commentForm'       => $this->commentForm,
+                    'reportForm'        => $this->reportForm,
+                    'reportMessages'    => $this->reportMessages,
+                    'blockedBloggers'   => $this->blockedBloggers
+                ),
+                'commentForm'       => $this->commentForm,
+            ));
+            break;
+    }
+endforeach; endif;

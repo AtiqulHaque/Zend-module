@@ -1,0 +1,69 @@
+<div class="row">
+    <div class="chat-box-wraper col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+            <div class="chat-list-area col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="row">
+                    <div class="chat-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="dropdown pull-right">
+                            <button data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn dropdown-toggle drop-btn">
+                                <i class="icon-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chat-search-area bg1 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="chat-search">
+                            <input type="text" name="chat-search" id="chat-search" class="">
+                            <button class="btn btn-default" type="button"><i class="icon-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="chat-list col-xs-8 col-sm-8 col-md-12 col-lg-12">
+                        <ul></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-history col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                <div class="row">
+                    <div class="chat-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="current-chat-type current-chat-user left-shift"></div>
+                        <div class="delete-msg-cancel-button del-msg">
+                            <input type="button" id="delete-message-btn" value="Delete Message" class="btn"/>
+                        </div>
+                        <div class="delete-msg-button del-msg">
+                            <input type="button" id="delete-msg-cancel-btn" value="Cancel" class="btn"/>
+                        </div>
+                        <div class="dropdown pull-right">
+                            <button data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn dropdown-toggle drop-btn">
+                                <i class="icon-cog"></i>
+                            </button>
+                            <ul aria-labelledby="dropdownMenu1" role="menu" class="dropdown-menu">
+                                <li id="delete-message" role="presentation">
+                                    <a href="#" tabindex="-1" role="menuitem"><?php echo $this->translate('Delete Message');?></a></li>
+
+                                <li id="delete-conversation" role="presentation">
+                                    <a href="#" tabindex="-1" role="menuitem"><?php echo $this->translate('Delete Conversation');?></a></li>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div  class="chat-view-area col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    </div>
+
+                    <div class="writing-area col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="status-area for-post">
+                            <form action="#" method="post" name="mood-form" id="mood-form">
+                                <textarea id="status" class="comments-editor" placeholder='আপনি কি ভাবছেন ...'></textarea>
+                                <div class="action-box bg1">
+                                    <div class="pull-right">
+                                        <input name="submit" type="submit" id="add-message" class="btn btn-black btn-xs" value="প্রেরণ করুন">
+                                    </div>
+                                </div>
+                            </form>
+                        </div><!-- End of status-area -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

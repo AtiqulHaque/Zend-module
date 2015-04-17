@@ -1,0 +1,46 @@
+<div class="tile-header">
+    "<?php echo $this->criteria ?>" <?php echo $this->translate('Search Result') ?>
+    <div class="searc-count">
+        <?php echo $this->translate('# of Total Result') ?>
+        <?php echo $this->Number()->convert(count($this->posts)) ?>
+        <?php echo $this->translate('#') ?>
+    </div>
+</div>
+<div class="tile-body">
+    <div class="row">
+        <?php if (empty($this->posts)) : ?>
+        <p class="no-record-found"><?php echo $this->translate('No post has been found.') ?></p>
+        <?php else : foreach ($this->posts AS $post) : ?>
+
+        <div class="tile-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="content-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <a class="author-icon imgJar" href="<?php echo $this->url('public-profile', array('username' => $post['username'])) ?>">
+                    <img src="<?php echo $this->Profile()->getImage($post) ?>" alt="Profile Image" />
+                </a>
+                <div class="title">
+                    <?php echo $this->BlogPost()->getPostTitle($post, true, 1); ?>
+                </div>
+                <small>
+                    <a href="<?php echo $this->url('public-profile', array('username' => $post['username'])) ?>"><?php echo $this->Profile()->getDisplayName($post) ?></a>
+                    <abbr title="<?php echo $this->DateTimeEnToBn()->ShowDate($post['publicly_published_time']) ?>">
+                        <?php echo $this->DateTimeEnToBn()->timeSince($post['publicly_published_time']) ?>
+                    </abbr>
+
+                    <?php echo $this->Post()->getPostCategoryLinkWithPopUp($post, $this->categories) ?>
+                    <?php echo $this->translate('Has written in categories') . $this->translate('.') ?>
+                </small>
+            </div>
+            <!-- Content-body is hidden for Mobile-device -->
+            <div class="content-body hidden-xs col-sm-12 col-md-12 col-lg-12">
+                <?php echo $this->BlogPost()->getPartialDetail($post)?>
+            </div>
+            <?php echo $this->Post()->getMinViewPostFooter($post) ?>
+        </div><!--  End of tile-container -->
+
+        <?php endforeach; endif ?>
+        <?php echo $this->paginator()->slide($this->paginator, array_merge($this->paginatorOptions, array(
+            'class' => 'search-post',
+            'rel' => 'post'
+        ))) ?>
+    </div>
+</div><!--  End of tile-body  -->

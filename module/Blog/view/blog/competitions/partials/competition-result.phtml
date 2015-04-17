@@ -1,0 +1,42 @@
+<?php if (empty($this->votingResult)) : ?>
+    <img src="<?php echo $this->basePath('img/competition/result-not-published.jpg') ?>"
+         alt="<?php echo $this->translate('Result has been published yet.') ?>" style="display: block; margin: auto; padding: 10px" />
+<?php else :
+$episodeForResult = \NBlog\Model\VoteConfig::EPISODE_1 == $this->activeEpisode ? $this->activeEpisode : ($this->activeEpisode - 1);
+if ($this->episodeCount > 1) : ?>
+<ul class="nav nav-pills nav-justified subTab">
+    <?php for($episode = 1; $episode <= $this->episodeCount; ++$episode) : ?>
+        <li<?php echo $episode != $episodeForResult ? '' : ' class="active"' ?>>
+            <a href="#contest-result-part-<?php echo $episode ?>" data-toggle="tab">
+                <?php echo $this->translate('Competition episode') ?> <?php echo $this->Number()->convert($episode) ?>
+            </a>
+        </li>
+    <?php endfor ?>
+</ul>
+<div class="tab-content">
+    <?php for($episode = 1; $episode <= $this->episodeCount; ++$episode) : ?>
+        <div class="tab-pane fade<?php echo $episode != $episodeForResult ? '' : ' in active' ?>"
+             id="contest-result-part-<?php echo $episode ?>">
+            <?php echo $this->partial('blog/competitions/partials/episode-wise-result', array(
+                'episode' => $episode,
+                'voteCategories' => $this->voteCategories,
+                'topFiveTab' => $this->topFiveTab,
+                'blogPosts' => empty($this->votingResult[$episode]) ? array() : $this->votingResult[$episode],
+                'categories' => $this->categories,
+                'professions' => $this->professions,
+            )) ?>
+        </div>
+    <?php endfor ?>
+</div>
+<?php else :
+    $episode = \NBlog\Model\VoteConfig::EPISODE_1;
+    echo $this->partial('blog/competitions/partials/episode-wise-result', array(
+        'episode' => $episode,
+        'voteCategories' => $this->voteCategories,
+        'topFiveTab' => $this->topFiveTab,
+        'blogPosts' => empty($this->votingResult[$episode]) ? array() : $this->votingResult[$episode],
+        'categories' => $this->categories,
+        'professions' => $this->professions,
+    )) ?>
+<?php endif ?>
+<?php endif ?>

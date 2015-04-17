@@ -1,0 +1,28 @@
+<div class="sidebar-block-chat" id="<?php echo $this->uniqueId ?>">
+    <span class="chat-header">
+        <img class="chat_image" src="<?php echo $this->basePath('img/chat-sign.png') ?>">
+        <small><b><?php echo $this->Profile()->getDisplayName($this->partnerDetail) ?></b></small>
+        <span class="chat-options">
+            <a class='chat-display on' href="#"></a>
+            <a class='chat-close' href="#"></a>
+        </span>
+    </span>
+
+    <div class="chat-container">
+        <input type="hidden" id="from" name="from" value="<?php echo $this->userDetail['user_id'] ?>">
+        <input type="hidden" id="to" name="to" value="<?php echo $this->partnerDetail['user_id'] ?>">
+
+        <div id="message_container">
+            <?php if (!empty($this->conversation)) : foreach ($this->conversation AS $sentence) : ?>
+            <div class="chat_block">
+                <img src="<?php echo $this->Profile()->getImage($this->partnerDetail) ?>" />
+                <small><b><?php echo $this->Profile()->getDisplayName($this->partnerDetail) ?>: </b><?php $sentence['message'] ?></small>
+            </div>
+            <?php endforeach; endif ?>
+        </div>
+        <div class="msg-send-area">
+            <textarea id="message" name='message'></textarea>
+            <button class="btn send-button">Send</button>
+        </div>
+    </div>
+</div>
